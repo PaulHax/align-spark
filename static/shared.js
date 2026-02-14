@@ -140,7 +140,7 @@ export function renderScenarioDescription(container, scenario) {
     <div class="scenario-intro">${intro}</div>
     ${choiceParts.length > 0 ? `
       <div class="scenario-choices-group">
-        <div class="choices-label">The Options</div>
+        <div class="choices-label">The Choices</div>
         <div class="scenario-choices">
           ${choiceParts.map((p, i) => `<div class="scenario-choice-card"><span class="choice-letter">${String.fromCharCode(65 + i)}</span>${p}</div>`).join("")}
         </div>

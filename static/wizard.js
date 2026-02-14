@@ -18,7 +18,6 @@ const TOTAL_STEPS = 5;
 
 const state = {
   currentStep: 0,
-  highestCompleted: -1,
   scenarioId: SCENARIOS[0].id,
   presetId: PRESETS[0].id,
   values: { ...PRESETS[0].values },
@@ -127,7 +126,6 @@ const updateStepIndicator = () => {
   els.dots.forEach((dot, i) => {
     dot.classList.toggle("active", i === state.currentStep);
     dot.classList.toggle("completed", i < state.currentStep);
-    dot.classList.toggle("disabled", i > state.highestCompleted + 1 && i !== state.currentStep);
   });
 
   els.labels.forEach((label, i) => {
@@ -172,12 +170,8 @@ const onEnterStep = async (step) => {
 
 const goToStep = async (step) => {
   if (step < 0 || step >= TOTAL_STEPS) return;
-  if (step > state.highestCompleted + 1 && step !== state.currentStep) return;
 
   state.currentStep = step;
-  if (step > state.highestCompleted) {
-    state.highestCompleted = step;
-  }
 
   slideToStep(step);
   updateStepIndicator();

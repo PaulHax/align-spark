@@ -65,18 +65,6 @@ const renderAligned = (id, values) => {
   `;
 };
 
-const showBaselineWithSpinner = async () => {
-  baselineBlock.classList.add("visible");
-  await simulateThinking(baselineBlock, 500);
-  renderBaseline(state.scenarioId);
-};
-
-const showAlignedWithSpinner = async () => {
-  alignedBlock.classList.add("visible");
-  await simulateThinking(alignedBlock, 500);
-  renderAligned(state.scenarioId, state.values);
-};
-
 const enterSplitMode = () => {
   splitLeft.classList.add("dark");
   splitGrid.classList.add("split-open");
@@ -137,31 +125,52 @@ const onScenarioSelect = (id) => {
   buildScenarioSelector(scenarioStrip, id, onScenarioSelect);
 };
 
-const advanceStage = async () => {
-  if (state.stage >= 3) return;
+const backBtn = $("[data-back-btn]");
 
-  state.stage += 1;
+const exitSplitMode = () => {
+  splitLeft.classList.remove("dark");
+  splitGrid.classList.remove("split-open");
+};
 
-  if (state.stage === 2) {
-    nextBtn.disabled = true;
-    await showBaselineWithSpinner();
-    nextBtn.disabled = false;
+const goToStage = async (stage) => {
+  state.stage = stage;
+
+  backBtn.toggleAttribute("hidden", stage <= 1);
+  nextBtn.toggleAttribute("hidden", stage >= 3);
+  actionsBar.classList.toggle("hidden", stage >= 3);
+
+  if (stage <= 1) {
+    baselineBlock.classList.remove("visible");
+    exitSplitMode();
+    scenarioStrip.classList.remove("visible");
   }
 
-  if (state.stage === 3) {
-    actionsBar.classList.add("hidden");
+  if (stage === 2) {
+    exitSplitMode();
+    scenarioStrip.classList.remove("visible");
+    baselineBlock.classList.add("visible");
+    await simulateThinking(baselineBlock, 500);
+    renderBaseline(state.scenarioId);
+  }
+
+  if (stage >= 3) {
+    baselineBlock.classList.add("visible");
+    renderBaseline(state.scenarioId);
     enterSplitMode();
     buildValuesPanel();
-    await showAlignedWithSpinner();
+    alignedBlock.classList.add("visible");
+    await simulateThinking(alignedBlock, 500);
+    renderAligned(state.scenarioId, state.values);
     scenarioStrip.classList.add("visible");
     buildScenarioSelector(scenarioStrip, state.scenarioId, onScenarioSelect);
-    state.stage = 4;
   }
 };
 
+nextBtn.addEventListener("click", () => goToStage(state.stage + 1));
+backBtn.addEventListener("click", () => goToStage(state.stage - 1));
+
 const init = () => {
   renderScenario(state.scenarioId);
-  nextBtn.addEventListener("click", advanceStage);
 };
 
 init();

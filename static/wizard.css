@@ -88,15 +88,6 @@ body {
   color: #fff;
 }
 
-.step-dot.disabled {
-  cursor: default;
-  opacity: 0.5;
-}
-
-.step-dot.disabled:hover {
-  border-color: var(--border);
-  color: var(--muted);
-}
 
 .step-labels {
   display: flex;
@@ -181,6 +172,15 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 10px;
+  margin-bottom: 20px;
+}
+
+.scenario-selector .scenario-card {
+  padding: 12px 16px;
+}
+
+.scenario-selector .scenario-card-title {
+  font-size: 0.85rem;
 }
 
 .baseline-result {
