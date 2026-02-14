@@ -25,7 +25,7 @@ body {
 
 .section-inner {
   width: 100%;
-  max-width: 900px;
+  max-width: 1080px;
   padding: 80px 0;
 }
 
@@ -72,11 +72,10 @@ body {
 .hero-inner {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   text-align: center;
   min-height: calc(100vh - 56px);
-  padding: 60px 0 40px;
+  padding: 15vh 0 40px;
   position: relative;
 }
 
@@ -97,6 +96,7 @@ body {
   line-height: 1.15;
   margin-bottom: 24px;
   max-width: 700px;
+  min-height: 2.3em;
 }
 
 .hero-description {
