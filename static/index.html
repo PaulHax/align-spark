@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ALIGN Demo - Static</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.2.1/dist-cdn/styles/webawesome.css"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="brand">
+        <div class="brand-mark">ALIGN</div>
+        <div class="brand-subtitle">LLMs have bias. You have values.</div>
+      </div>
+      <div class="brand-meta">
+        <div class="kitware">Kitware</div>
+      </div>
+    </header>
+
+    <main class="container">
+      <wa-card class="section-card intro">
+        <div class="section-label">Why alignment matters</div>
+        <p class="section-copy">
+          AI decision aids are increasingly deployed in high-stakes contexts, but humans won't
+          delegate to systems they can't trust. Current language models have fixed, opaque value
+          systems baked in from training data.
+        </p>
+        <p class="section-copy">
+          ALIGN enables dynamic, personalized alignment of LLM decision-makers to specific human
+          values and an interactive UI for comparing the results. Pick a scenario below, choose a
+          value profile, and see how the decision changes.
+        </p>
+      </wa-card>
+
+      <wa-card class="section-card">
+        <div class="section-header">
+          <span class="section-title">Scenario</span>
+          <span class="section-caption">Pick a dilemma to explore</span>
+        </div>
+        <div class="split-grid">
+          <div class="panel list-panel" data-scenario-list></div>
+          <div class="panel content-panel">
+            <div class="scenario-copy" data-scenario-description></div>
+          </div>
+        </div>
+      </wa-card>
+
+      <wa-card class="section-card">
+        <div class="section-header">
+          <span class="section-title">Values</span>
+          <span class="section-caption">Select a profile</span>
+        </div>
+        <div class="split-grid">
+          <div class="panel list-panel" data-profile-list></div>
+          <div class="panel content-panel">
+            <div class="profile-tagline" data-profile-tagline></div>
+            <div class="sliders" data-sliders></div>
+            <div class="baseline-message" data-baseline-message hidden>
+              <wa-callout variant="neutral">
+                <strong>No explicit value framework.</strong>
+                <div class="baseline-sub">
+                  The baseline language model uses implicit biases from training data.
+                </div>
+              </wa-callout>
+            </div>
+          </div>
+        </div>
+      </wa-card>
+
+      <wa-card class="section-card decision">
+        <div class="section-header">
+          <span class="section-title">Decision</span>
+        </div>
+        <div class="decision-grid">
+          <div class="decision-column">
+            <div class="eyebrow">Baseline Language Model</div>
+            <div class="decision-title" data-baseline-decision></div>
+            <div class="decision-copy" data-baseline-justification></div>
+          </div>
+          <div class="decision-status">
+            <div class="status-line"></div>
+            <wa-badge class="status-pill" variant="neutral" data-status-badge>Changed</wa-badge>
+            <div class="status-line"></div>
+          </div>
+          <div class="decision-column aligned" data-aligned-panel>
+            <div class="aligned-header">
+              <span class="eyebrow">Aligned Decision Model</span>
+              <span class="profile-label" data-aligned-profile></span>
+            </div>
+            <div class="decision-title" data-aligned-decision></div>
+            <div class="decision-copy" data-aligned-justification></div>
+            <div class="chip-row" data-kdma-chips></div>
+          </div>
+        </div>
+      </wa-card>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

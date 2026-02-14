@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ALIGN Design Showcase — Accordion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.2.1/dist-cdn/styles/webawesome.css"
+    />
+    <link rel="stylesheet" href="./shared.css" />
+    <link rel="stylesheet" href="./accordion.css" />
+  </head>
+  <body>
+    <nav class="showcase-nav">
+      <div class="nav-brand">ALIGN <span>Design Showcase</span></div>
+      <div class="nav-tabs">
+        <a href="wizard.html" class="nav-tab">Wizard</a>
+        <a href="scroll.html" class="nav-tab">Scroll</a>
+        <a href="accordion.html" class="nav-tab active">Accordion</a>
+        <a href="split.html" class="nav-tab">Split Screen</a>
+        <a href="slides.html" class="nav-tab">Slide Deck</a>
+      </div>
+    </nav>
+
+    <main class="accordion-layout">
+      <div class="timeline-track" id="timeline-track"></div>
+
+      <div class="panels-container" id="panels-container">
+        <div class="panel-wrapper" data-panel="1">
+          <div class="timeline-dot" data-dot="1">
+            <span class="dot-number">1</span>
+          </div>
+          <wa-details id="panel-1" open>
+            <div slot="summary" class="panel-header">
+              <span class="panel-title">The Dilemma</span>
+              <span class="panel-status" data-status="1"></span>
+            </div>
+            <div class="panel-body">
+              <div class="scenario-selector-section">
+                <div class="section-label">Choose a scenario</div>
+                <div id="scenario-selector"></div>
+              </div>
+              <div class="scenario-description" id="scenario-description"></div>
+            </div>
+          </wa-details>
+        </div>
+
+        <div class="panel-wrapper" data-panel="2">
+          <div class="timeline-dot" data-dot="2">
+            <span class="dot-number">2</span>
+          </div>
+          <wa-details id="panel-2" disabled>
+            <div slot="summary" class="panel-header">
+              <span class="panel-title">Baseline Response</span>
+              <span class="panel-status" data-status="2"></span>
+            </div>
+            <div class="panel-body" id="baseline-body"></div>
+          </wa-details>
+        </div>
+
+        <div class="panel-wrapper" data-panel="3">
+          <div class="timeline-dot" data-dot="3">
+            <span class="dot-number">3</span>
+          </div>
+          <wa-details id="panel-3" disabled>
+            <div slot="summary" class="panel-header">
+              <span class="panel-title">Your Values</span>
+              <span class="panel-status" data-status="3"></span>
+            </div>
+            <div class="panel-body">
+              <div class="section-label">Start with a preset</div>
+              <div id="preset-chips"></div>
+              <div id="value-sliders"></div>
+            </div>
+          </wa-details>
+        </div>
+
+        <div class="panel-wrapper" data-panel="4">
+          <div class="timeline-dot" data-dot="4">
+            <span class="dot-number">4</span>
+          </div>
+          <wa-details id="panel-4" disabled>
+            <div slot="summary" class="panel-header">
+              <span class="panel-title">Aligned Response</span>
+              <span class="panel-status" data-status="4"></span>
+            </div>
+            <div class="panel-body" id="aligned-body"></div>
+          </wa-details>
+        </div>
+
+        <div class="panel-wrapper" data-panel="5">
+          <div class="timeline-dot" data-dot="5">
+            <span class="dot-number">5</span>
+          </div>
+          <wa-details id="panel-5" disabled>
+            <div slot="summary" class="panel-header">
+              <span class="panel-title">Explore</span>
+              <span class="panel-status" data-status="5"></span>
+            </div>
+            <div class="panel-body">
+              <div class="explore-grid">
+                <div class="explore-controls">
+                  <div class="section-label">Scenario</div>
+                  <div id="explore-scenario-selector"></div>
+                  <div class="section-label" style="margin-top: 24px;">Values</div>
+                  <div id="explore-preset-chips"></div>
+                  <div id="explore-value-sliders"></div>
+                </div>
+                <div class="explore-results" id="explore-results"></div>
+              </div>
+            </div>
+          </wa-details>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="./accordion.js"></script>
+  </body>
+</html>

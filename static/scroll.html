@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ALIGN Design Showcase — Scroll</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.2.1/dist-cdn/styles/webawesome.css"
+    />
+    <link rel="stylesheet" href="./shared.css" />
+    <link rel="stylesheet" href="./scroll.css" />
+  </head>
+  <body>
+    <nav class="showcase-nav">
+      <div class="nav-brand">ALIGN <span>Design Showcase</span></div>
+      <div class="nav-tabs">
+        <a href="wizard.html" class="nav-tab">Wizard</a>
+        <a href="scroll.html" class="nav-tab active">Scroll</a>
+        <a href="accordion.html" class="nav-tab">Accordion</a>
+        <a href="split.html" class="nav-tab">Split Screen</a>
+        <a href="slides.html" class="nav-tab">Slide Deck</a>
+      </div>
+    </nav>
+
+    <main class="scroll-page">
+      <section class="scroll-section hero-section" data-section="hero">
+        <div class="section-inner hero-inner">
+          <div class="hero-eyebrow">Scenario</div>
+          <h1 class="hero-title" data-hero-title></h1>
+          <div class="hero-scenarios" data-hero-scenarios></div>
+          <div class="hero-description" data-hero-description></div>
+          <div class="scroll-indicator">
+            <span class="scroll-indicator-text">Scroll to explore</span>
+            <svg class="scroll-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <section class="scroll-section baseline-section" data-section="baseline">
+        <div class="section-inner">
+          <div class="section-eyebrow">Step 1</div>
+          <h2 class="section-heading">Baseline Decision</h2>
+          <p class="section-subtitle">What the unaligned language model decides.</p>
+          <div class="baseline-card" data-baseline-card></div>
+        </div>
+      </section>
+
+      <section class="scroll-section values-section" data-section="values">
+        <div class="section-inner">
+          <div class="section-eyebrow">Step 2</div>
+          <h2 class="section-heading">Set Your Values</h2>
+          <p class="section-subtitle">Choose a preset or fine-tune the value dimensions.</p>
+          <div class="values-presets" data-values-presets></div>
+          <div class="values-sliders" data-values-sliders></div>
+        </div>
+      </section>
+
+      <section class="scroll-section aligned-section" data-section="aligned">
+        <div class="section-inner aligned-inner">
+          <div class="section-eyebrow">Step 3</div>
+          <h2 class="section-heading">Aligned Decision</h2>
+          <p class="section-subtitle">See how your value alignment changes the outcome.</p>
+          <div class="aligned-layout">
+            <div class="sticky-baseline" data-sticky-baseline></div>
+            <div class="aligned-comparison" data-aligned-comparison></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scroll-section sandbox-section" data-section="sandbox">
+        <div class="section-inner">
+          <div class="section-eyebrow">Explore</div>
+          <h2 class="section-heading">Sandbox</h2>
+          <p class="section-subtitle">Change scenarios and values to see decisions update in real-time.</p>
+          <div class="sandbox-layout">
+            <div class="sandbox-controls">
+              <div class="sandbox-group">
+                <h3 class="sandbox-label">Scenario</h3>
+                <div data-sandbox-scenarios></div>
+              </div>
+              <div class="sandbox-group">
+                <h3 class="sandbox-label">Value Profile</h3>
+                <div data-sandbox-presets></div>
+                <div data-sandbox-sliders></div>
+              </div>
+            </div>
+            <div class="sandbox-results" data-sandbox-results></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="./scroll.js"></script>
+  </body>
+</html>

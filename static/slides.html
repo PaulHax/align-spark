@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ALIGN Design Showcase — Slide Deck</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.2.1/dist-cdn/styles/webawesome.css"
+    />
+    <link rel="stylesheet" href="./shared.css" />
+    <link rel="stylesheet" href="./slides.css" />
+  </head>
+  <body>
+    <nav class="showcase-nav">
+      <div class="nav-brand">ALIGN <span>Design Showcase</span></div>
+      <div class="nav-tabs">
+        <a href="wizard.html" class="nav-tab">Wizard</a>
+        <a href="scroll.html" class="nav-tab">Scroll</a>
+        <a href="accordion.html" class="nav-tab">Accordion</a>
+        <a href="split.html" class="nav-tab">Split Screen</a>
+        <a href="slides.html" class="nav-tab active">Slide Deck</a>
+      </div>
+    </nav>
+
+    <div class="slides-viewport">
+      <div class="slides-stack">
+
+        <section class="slide slide-dark slide-title" data-slide="0">
+          <div class="slide-inner">
+            <h1 class="title-hero">ALIGN</h1>
+            <p class="title-tagline">LLMs have bias. You have values.</p>
+          </div>
+        </section>
+
+        <section class="slide slide-dark" data-slide="1">
+          <div class="slide-inner">
+            <div class="slide-eyebrow">The Scenario</div>
+            <h2 class="slide-heading" data-scenario-title></h2>
+            <p class="slide-body" data-scenario-description></p>
+          </div>
+        </section>
+
+        <section class="slide slide-dark" data-slide="2">
+          <div class="slide-inner">
+            <div class="slide-eyebrow">Baseline Decision</div>
+            <div class="baseline-container" data-baseline-result></div>
+          </div>
+        </section>
+
+        <section class="slide slide-dark slide-dramatic" data-slide="3">
+          <div class="slide-inner">
+            <h2 class="dramatic-text">But whose values?</h2>
+          </div>
+        </section>
+
+        <section class="slide slide-light" data-slide="4">
+          <div class="slide-inner">
+            <div class="slide-eyebrow">Define Your Values</div>
+            <h2 class="slide-heading">Choose a value profile</h2>
+            <div class="values-panel">
+              <div data-presets></div>
+              <div data-sliders></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide slide-dark" data-slide="5">
+          <div class="slide-inner">
+            <div class="slide-eyebrow">Side by Side</div>
+            <h2 class="slide-heading">How alignment changes the outcome</h2>
+            <div class="comparison-container" data-comparison-result></div>
+          </div>
+        </section>
+
+        <section class="slide slide-light" data-slide="6">
+          <div class="slide-inner">
+            <div class="slide-eyebrow">Explore</div>
+            <h2 class="slide-heading">Try different values</h2>
+            <div class="values-panel">
+              <div data-explore-presets></div>
+              <div data-explore-sliders></div>
+            </div>
+            <div class="explore-comparison" data-explore-comparison></div>
+          </div>
+        </section>
+
+        <section class="slide slide-light" data-slide="7">
+          <div class="slide-inner">
+            <div class="slide-eyebrow">Switch It Up</div>
+            <h2 class="slide-heading">Try another scenario</h2>
+            <div class="scenario-grid" data-scenario-selector></div>
+          </div>
+        </section>
+
+      </div>
+
+      <button class="slide-arrow slide-arrow-left" data-arrow-left aria-label="Previous slide">&#8249;</button>
+      <button class="slide-arrow slide-arrow-right" data-arrow-right aria-label="Next slide">&#8250;</button>
+
+      <div class="slide-dots" data-dots></div>
+    </div>
+
+    <script type="module" src="./slides.js"></script>
+  </body>
+</html>

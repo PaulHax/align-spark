@@ -1,0 +1,259 @@
+import {
+  SCENARIOS,
+  PRESETS,
+  decide,
+  simulateThinking,
+  buildPresetChips,
+  buildValueControls,
+  setSliderValues,
+  buildScenarioSelector,
+  renderDecisionComparison,
+  renderScenarioDescription,
+  getScenario,
+  getPreset,
+} from "./shared.js";
+
+const state = {
+  selectedScenario: SCENARIOS[0].id,
+  selectedPreset: PRESETS[0].id,
+  values: { ...PRESETS[0].values },
+  revealed: new Set(),
+  baselineShown: false,
+};
+
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => [...document.querySelectorAll(sel)];
+
+const renderHero = () => {
+  const scenario = getScenario(state.selectedScenario);
+  $("[data-hero-title]").textContent = scenario.title;
+  renderScenarioDescription($("[data-hero-description]"), scenario);
+  buildScenarioSelector(
+    $("[data-hero-scenarios]"),
+    state.selectedScenario,
+    handleScenarioChange
+  );
+};
+
+const renderBaselineCard = (container) => {
+  const result = decide(state.selectedScenario, "baseline");
+  container.innerHTML = `
+    <div class="eyebrow">Baseline Language Model</div>
+    <div class="decision-choice">${result.decision}</div>
+    <div class="decision-rationale">${result.justification}</div>
+  `;
+};
+
+const renderStickyBaseline = () => {
+  const result = decide(state.selectedScenario, "baseline");
+  $("[data-sticky-baseline]").innerHTML = `
+    <div class="mini-eyebrow">Baseline Decision</div>
+    <div class="mini-choice">${result.decision}</div>
+  `;
+};
+
+const renderAlignedComparison = () => {
+  const baseline = decide(state.selectedScenario, "baseline");
+  const aligned = decide(state.selectedScenario, "aligned", state.values);
+  renderDecisionComparison($("[data-aligned-comparison]"), baseline, aligned);
+};
+
+const renderSandbox = () => {
+  const baseline = decide(state.selectedScenario, "baseline");
+  const aligned = decide(state.selectedScenario, "aligned", state.values);
+  renderDecisionComparison($("[data-sandbox-results]"), baseline, aligned);
+};
+
+const handleScenarioChange = (id) => {
+  state.selectedScenario = id;
+  renderHero();
+  renderBaselineCard($("[data-baseline-card]"));
+  renderStickyBaseline();
+  renderAlignedComparison();
+};
+
+const handlePresetSelect = (presetId) => {
+  state.selectedPreset = presetId;
+  const preset = getPreset(presetId);
+  state.values = { ...preset.values };
+  buildPresetChips(
+    $("[data-values-presets]"),
+    state.selectedPreset,
+    handlePresetSelect
+  );
+  setSliderValues($("[data-values-sliders]"), state.values);
+  renderAlignedComparison();
+};
+
+const handleValuesChange = (newValues) => {
+  state.values = newValues;
+  state.selectedPreset = null;
+  buildPresetChips(
+    $("[data-values-presets]"),
+    state.selectedPreset,
+    handlePresetSelect
+  );
+  renderAlignedComparison();
+};
+
+const handleSandboxScenarioChange = (id) => {
+  state.selectedScenario = id;
+  buildScenarioSelector(
+    $("[data-sandbox-scenarios]"),
+    state.selectedScenario,
+    handleSandboxScenarioChange
+  );
+  renderHero();
+  renderBaselineCard($("[data-baseline-card]"));
+  renderStickyBaseline();
+  renderAlignedComparison();
+  renderSandbox();
+};
+
+const handleSandboxPresetSelect = (presetId) => {
+  state.selectedPreset = presetId;
+  const preset = getPreset(presetId);
+  state.values = { ...preset.values };
+  buildPresetChips(
+    $("[data-sandbox-presets]"),
+    state.selectedPreset,
+    handleSandboxPresetSelect
+  );
+  setSliderValues($("[data-sandbox-sliders]"), state.values);
+  buildPresetChips(
+    $("[data-values-presets]"),
+    state.selectedPreset,
+    handlePresetSelect
+  );
+  setSliderValues($("[data-values-sliders]"), state.values);
+  renderAlignedComparison();
+  renderSandbox();
+};
+
+const handleSandboxValuesChange = (newValues) => {
+  state.values = newValues;
+  state.selectedPreset = null;
+  buildPresetChips(
+    $("[data-sandbox-presets]"),
+    state.selectedPreset,
+    handleSandboxPresetSelect
+  );
+  buildPresetChips(
+    $("[data-values-presets]"),
+    state.selectedPreset,
+    handlePresetSelect
+  );
+  setSliderValues($("[data-values-sliders]"), state.values);
+  renderAlignedComparison();
+  renderSandbox();
+};
+
+const applyStaggerToSliders = (container) => {
+  const rows = [...container.querySelectorAll(".slider-row")];
+  rows.forEach((row, i) => {
+    row.classList.add("slider-row-reveal");
+    row.style.transitionDelay = `${i * 0.15}s`;
+  });
+  requestAnimationFrame(() => {
+    rows.forEach((row) => row.classList.add("visible"));
+  });
+};
+
+const revealSection = async (sectionName) => {
+  if (state.revealed.has(sectionName)) return;
+  state.revealed.add(sectionName);
+
+  const section = $(`[data-section="${sectionName}"]`);
+  const revealEls = [...section.querySelectorAll(".reveal")];
+  revealEls.forEach((el) => el.classList.add("visible"));
+
+  if (sectionName === "baseline" && !state.baselineShown) {
+    state.baselineShown = true;
+    const card = $("[data-baseline-card]");
+    await simulateThinking(card, 500);
+    renderBaselineCard(card);
+  }
+
+  if (sectionName === "values") {
+    applyStaggerToSliders($("[data-values-sliders]"));
+  }
+};
+
+const setupRevealElements = () => {
+  $$("[data-section]").forEach((section) => {
+    const sectionName = section.dataset.section;
+    if (sectionName === "hero" || sectionName === "sandbox") return;
+
+    const inner = section.querySelector(".section-inner");
+    const children = [...inner.children];
+    children.forEach((child) => child.classList.add("reveal"));
+  });
+};
+
+const setupObserver = () => {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const sectionName = entry.target.dataset.section;
+        revealSection(sectionName);
+      });
+    },
+    { threshold: 0.3 }
+  );
+
+  $$("[data-section]").forEach((section) => {
+    const sectionName = section.dataset.section;
+    if (sectionName === "hero" || sectionName === "sandbox") return;
+    observer.observe(section);
+  });
+};
+
+const initValues = () => {
+  buildPresetChips(
+    $("[data-values-presets]"),
+    state.selectedPreset,
+    handlePresetSelect
+  );
+  buildValueControls(
+    $("[data-values-sliders]"),
+    state.values,
+    handleValuesChange
+  );
+};
+
+const initAligned = () => {
+  renderStickyBaseline();
+  renderAlignedComparison();
+};
+
+const initSandbox = () => {
+  buildScenarioSelector(
+    $("[data-sandbox-scenarios]"),
+    state.selectedScenario,
+    handleSandboxScenarioChange
+  );
+  buildPresetChips(
+    $("[data-sandbox-presets]"),
+    state.selectedPreset,
+    handleSandboxPresetSelect
+  );
+  buildValueControls(
+    $("[data-sandbox-sliders]"),
+    state.values,
+    handleSandboxValuesChange
+  );
+  renderSandbox();
+};
+
+const init = () => {
+  renderHero();
+  renderBaselineCard($("[data-baseline-card]"));
+  initValues();
+  initAligned();
+  initSandbox();
+  setupRevealElements();
+  setupObserver();
+};
+
+init();

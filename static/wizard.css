@@ -1,0 +1,348 @@
+:root {
+  --surface: #ffffff;
+  --surface-alt: #f4f7f9;
+  --ink: #1b2533;
+  --muted: #5b6775;
+  --border: #d5dde6;
+}
+
+body {
+  background: linear-gradient(170deg, #f8fbfd 0%, #eef3f8 40%, #e8eef5 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.wizard-container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 32px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 56px);
+}
+
+.step-indicator {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 12px;
+  margin-bottom: 8px;
+}
+
+.step-track {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  right: 12px;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.step-track-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  width: 0%;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.step-dot {
+  position: relative;
+  z-index: 1;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 0;
+}
+
+.step-dot:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.step-dot.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 0 4px var(--accent-light);
+}
+
+.step-dot.completed {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.step-dot.disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.step-dot.disabled:hover {
+  border-color: var(--border);
+  color: var(--muted);
+}
+
+.step-labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 4px;
+  margin-bottom: 28px;
+}
+
+.step-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-align: center;
+  width: 64px;
+  transition: color 0.3s;
+}
+
+.step-label.active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.steps-viewport {
+  flex: 1;
+  overflow: hidden;
+  border-radius: var(--radius, 18px);
+}
+
+.steps-track {
+  display: flex;
+  width: 500%;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.step {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.step-content {
+  background: var(--surface);
+  border-radius: var(--radius, 18px);
+  border: 1px solid var(--border);
+  padding: 40px 48px;
+  box-shadow: 0 8px 32px rgba(8, 31, 56, 0.06);
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+}
+
+.step-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.step-title {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.step-subtitle {
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 28px;
+}
+
+.scenario-description-box {
+  margin-bottom: 24px;
+}
+
+.scenario-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.baseline-result {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.baseline-decision-card {
+  background: var(--surface-alt);
+  border-radius: 14px;
+  padding: 28px 32px;
+  border: 1px solid var(--border);
+}
+
+.baseline-decision-card .eyebrow {
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.baseline-decision-card .decision-choice {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+
+.baseline-decision-card .decision-rationale {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+.values-presets {
+  margin-bottom: 24px;
+}
+
+.values-sliders {
+  max-width: 500px;
+}
+
+.comparison-result {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.sandbox-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.sandbox-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.sandbox-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sandbox-heading {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.sandbox-results {
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.wizard-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0 0;
+}
+
+.wiz-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.wiz-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 2px 8px var(--accent-light);
+}
+
+.wiz-btn-next {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.wiz-btn-next:hover {
+  filter: brightness(0.85);
+  color: #fff;
+  box-shadow: 0 4px 12px var(--accent-light);
+}
+
+.wiz-btn-arrow {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.wiz-btn[hidden] {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .wizard-container {
+    padding: 20px 16px 16px;
+  }
+
+  .step-content {
+    padding: 28px 24px;
+    min-height: 300px;
+  }
+
+  .step-title {
+    font-size: 1.3rem;
+  }
+
+  .sandbox-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .step-dot {
+    width: 28px;
+    height: 28px;
+    font-size: 0.7rem;
+  }
+
+  .step-labels {
+    display: none;
+  }
+}

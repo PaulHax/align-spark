@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ALIGN Design Showcase — Wizard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.2.1/dist-cdn/styles/webawesome.css"
+    />
+    <link rel="stylesheet" href="./shared.css" />
+    <link rel="stylesheet" href="./wizard.css" />
+  </head>
+  <body>
+    <nav class="showcase-nav">
+      <div class="nav-brand">ALIGN <span>Design Showcase</span></div>
+      <div class="nav-tabs">
+        <a href="wizard.html" class="nav-tab active">Wizard</a>
+        <a href="scroll.html" class="nav-tab">Scroll</a>
+        <a href="accordion.html" class="nav-tab">Accordion</a>
+        <a href="split.html" class="nav-tab">Split Screen</a>
+        <a href="slides.html" class="nav-tab">Slide Deck</a>
+      </div>
+    </nav>
+
+    <div class="wizard-container">
+      <div class="step-indicator">
+        <div class="step-track">
+          <div class="step-track-fill"></div>
+        </div>
+        <button class="step-dot active" data-step="0"><span>1</span></button>
+        <button class="step-dot" data-step="1"><span>2</span></button>
+        <button class="step-dot" data-step="2"><span>3</span></button>
+        <button class="step-dot" data-step="3"><span>4</span></button>
+        <button class="step-dot" data-step="4"><span>5</span></button>
+      </div>
+
+      <div class="step-labels">
+        <span class="step-label active" data-step="0">Scene</span>
+        <span class="step-label" data-step="1">Baseline</span>
+        <span class="step-label" data-step="2">Values</span>
+        <span class="step-label" data-step="3">Comparison</span>
+        <span class="step-label" data-step="4">Sandbox</span>
+      </div>
+
+      <div class="steps-viewport">
+        <div class="steps-track">
+
+          <section class="step" data-step-panel="0">
+            <div class="step-content">
+              <div class="step-eyebrow">Step 1 of 5</div>
+              <h2 class="step-title">Choose a Scenario</h2>
+              <p class="step-subtitle">Select a dilemma to explore how AI alignment affects decisions.</p>
+              <div class="scenario-selector" data-scene-selector></div>
+              <div class="scenario-description-box" data-scene-description></div>
+            </div>
+          </section>
+
+          <section class="step" data-step-panel="1">
+            <div class="step-content">
+              <div class="step-eyebrow">Step 2 of 5</div>
+              <h2 class="step-title">Baseline Decision</h2>
+              <p class="step-subtitle">See what the unaligned language model decides.</p>
+              <div class="baseline-result" data-baseline-result></div>
+            </div>
+          </section>
+
+          <section class="step" data-step-panel="2">
+            <div class="step-content">
+              <div class="step-eyebrow">Step 3 of 5</div>
+              <h2 class="step-title">Set Your Values</h2>
+              <p class="step-subtitle">Choose a preset profile or fine-tune the value dimensions.</p>
+              <div class="values-presets" data-values-presets></div>
+              <div class="values-sliders" data-values-sliders></div>
+            </div>
+          </section>
+
+          <section class="step" data-step-panel="3">
+            <div class="step-content">
+              <div class="step-eyebrow">Step 4 of 5</div>
+              <h2 class="step-title">Compare Decisions</h2>
+              <p class="step-subtitle">See how your value alignment changes the outcome.</p>
+              <div class="comparison-result" data-comparison-result></div>
+            </div>
+          </section>
+
+          <section class="step" data-step-panel="4">
+            <div class="step-content">
+              <div class="step-eyebrow">Step 5 of 5</div>
+              <h2 class="step-title">Sandbox</h2>
+              <p class="step-subtitle">Explore freely. Change scenarios and values to see decisions update in real-time.</p>
+              <div class="sandbox-layout">
+                <div class="sandbox-controls">
+                  <div class="sandbox-section">
+                    <h3 class="sandbox-heading">Scenario</h3>
+                    <div data-sandbox-scenarios></div>
+                  </div>
+                  <div class="sandbox-section">
+                    <h3 class="sandbox-heading">Value Profile</h3>
+                    <div data-sandbox-presets></div>
+                    <div data-sandbox-sliders></div>
+                  </div>
+                </div>
+                <div class="sandbox-results" data-sandbox-results></div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+
+      <div class="wizard-nav">
+        <button class="wiz-btn wiz-btn-back" data-nav-back>
+          <span class="wiz-btn-arrow">&larr;</span> Back
+        </button>
+        <button class="wiz-btn wiz-btn-next" data-nav-next>
+          Next <span class="wiz-btn-arrow">&rarr;</span>
+        </button>
+      </div>
+    </div>
+
+    <script type="module" src="./wizard.js"></script>
+  </body>
+</html>
