@@ -108,6 +108,57 @@ export function buildScenarioSelector(container, currentId, onSelect) {
   });
 }
 
+export function buildScenarioAccordion(container, scenarios, currentId, onSelect) {
+  container.innerHTML = "";
+
+  scenarios.forEach((scenario) => {
+    const details = document.createElement("wa-details");
+    details.setAttribute("summary", scenario.title);
+    details.dataset.scenarioId = scenario.id;
+    if (scenario.id === currentId) details.setAttribute("open", "");
+
+    const descHtml = scenario.description
+      .split("\n")
+      .filter((p) => p.trim())
+      .map((p) => `<p>${p}</p>`)
+      .join("");
+
+    const choicesHtml = scenario.choices
+      .map(
+        (c, i) =>
+          `<div class="scenario-choice-card"><span class="choice-letter">${String.fromCharCode(65 + i)}</span>${c.label}</div>`,
+      )
+      .join("");
+
+    details.innerHTML = `
+      <div class="accordion-scenario-body">
+        <div class="accordion-scenario-description">${descHtml}</div>
+        ${choicesHtml ? `<div class="scenario-choices">${choicesHtml}</div>` : ""}
+      </div>
+    `;
+    container.appendChild(details);
+  });
+
+  let activeId = currentId;
+
+  container.addEventListener("wa-show", (e) => {
+    const target = e.target.closest("wa-details");
+    if (!target) return;
+    activeId = target.dataset.scenarioId;
+    container.querySelectorAll("wa-details").forEach((d) => {
+      if (d !== target && d.open) d.open = false;
+    });
+    onSelect(activeId);
+  });
+
+  container.addEventListener("wa-hide", (e) => {
+    const target = e.target.closest("wa-details");
+    if (target && target.dataset.scenarioId === activeId) {
+      e.preventDefault();
+    }
+  });
+}
+
 export function renderDecisionComparison(container, baseline, aligned) {
   const changed = baseline.choiceId !== aligned.choiceId;
   container.innerHTML = `

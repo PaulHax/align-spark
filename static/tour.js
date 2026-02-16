@@ -8,10 +8,8 @@ import {
   buildValueControls,
   setSliderValues,
   getCurrentValues,
-  buildScenarioSelector,
-  renderScenarioDescription,
+  buildScenarioAccordion,
   renderDecisionComparison,
-  getScenario,
   getPreset,
 } from "./shared.js";
 
@@ -32,27 +30,20 @@ const nextBtn = $("[data-next-btn]");
 const backBtn = $("[data-back-btn]");
 
 const renderScenarioWithPicker = (id) => {
-  const scenario = getScenario(id);
   scenarioZone.innerHTML = `
     <div class="tour-scenario-content">
       <div class="scenario-eyebrow">Choose a Scenario</div>
-      <div class="selector-cards"></div>
-      <div class="scenario-title">${scenario.title}</div>
-      <div class="scenario-description-container"></div>
+      <div class="scenario-accordion-container"></div>
     </div>
   `;
-  buildScenarioSelector(
-    scenarioZone.querySelector(".selector-cards"),
+  buildScenarioAccordion(
+    scenarioZone.querySelector(".scenario-accordion-container"),
+    SCENARIOS,
     id,
     (newId) => {
       state.scenarioId = newId;
-      renderScenarioWithPicker(newId);
       if (state.stage >= 3) renderDecisions(false);
     },
-  );
-  renderScenarioDescription(
-    scenarioZone.querySelector(".scenario-description-container"),
-    scenario,
   );
 };
 
