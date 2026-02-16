@@ -159,12 +159,27 @@ export function buildScenarioAccordion(container, scenarios, currentId, onSelect
   });
 }
 
+const ADM_DISPLAY_NAMES = {
+  phase2_pipeline_zeroshot_comparative_regression: "Comparative Regression",
+};
+
+function formatLlm(result) {
+  return result.llmBackbone?.split("/").pop() || "";
+}
+
+function formatAdm(result) {
+  return ADM_DISPLAY_NAMES[result.admName] || result.admName || "";
+}
+
 export function renderDecisionComparison(container, baseline, aligned) {
   const changed = baseline.choiceId !== aligned.choiceId;
+  const baselineLlm = formatLlm(baseline);
+  const alignedAdm = formatAdm(aligned);
+  const alignedLlm = formatLlm(aligned);
   container.innerHTML = `
     <div class="decision-comparison">
       <div class="decision-col">
-        <div class="eyebrow">Baseline Language Model</div>
+        <div class="eyebrow">Baseline${baselineLlm ? ` · ${baselineLlm}` : ""}</div>
         <div class="decision-choice">${baseline.decision}</div>
         <div class="decision-rationale">${baseline.justification}</div>
       </div>
@@ -174,7 +189,7 @@ export function renderDecisionComparison(container, baseline, aligned) {
         <div class="divider-line"></div>
       </div>
       <div class="decision-col">
-        <div class="eyebrow">Aligned Decision</div>
+        <div class="eyebrow">Value Aligned · ${alignedAdm} ${alignedLlm}</div>
         <div class="decision-choice">${aligned.decision}</div>
         <div class="decision-rationale">${aligned.justification}</div>
       </div>

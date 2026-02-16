@@ -73,9 +73,14 @@ export async function decide(scenarioId, _decider, values) {
     };
   }
 
+  const { name: admName, llm_backbone: llmBackbone } =
+    manifest.experiments[bestKey].parameters.adm;
+
   return {
     choiceId: result.choice_id,
     decision: result.choice_label,
     justification: result.justification,
+    admName,
+    llmBackbone,
   };
 }
