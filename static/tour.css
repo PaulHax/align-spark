@@ -30,7 +30,7 @@
 
 .tour-grid.stage-3 {
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
+  grid-template-rows: min-content 1fr;
   overflow: visible;
 }
 
