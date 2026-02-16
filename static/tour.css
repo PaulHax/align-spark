@@ -1,8 +1,7 @@
 .tour-container {
-  height: calc(100vh - 56px);
+  min-height: calc(100vh - 56px);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 .tour-grid {
@@ -28,11 +27,16 @@
 
 .tour-grid.stage-3 {
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 3fr 2fr;
+  grid-template-rows: auto auto;
+  overflow: visible;
 }
 
 .tour-zone {
   overflow: hidden;
+}
+
+.tour-grid.stage-3 .tour-zone {
+  overflow: visible;
 }
 
 .tour-scenario {
@@ -50,6 +54,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   overflow-y: auto;
+  padding-bottom: 16px;
 }
 
 .tour-scenario-content {
@@ -93,7 +98,7 @@
 }
 
 .tour-decisions-content {
-  padding: 24px 40px;
+  padding: 16px 40px;
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
@@ -110,12 +115,12 @@
 }
 
 .tour-scenario .scenario-eyebrow {
-  text-transform: uppercase;
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
   font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
   color: var(--accent);
-  margin-bottom: 8px;
 }
 
 .tour-scenario .scenario-title {
@@ -131,7 +136,6 @@
   font-family: "Space Grotesk", "Segoe UI", sans-serif;
   font-weight: 600;
   font-size: 0.85rem;
-  text-transform: uppercase;
   letter-spacing: 0.06em;
   margin-bottom: 12px;
   color: var(--accent);
@@ -174,7 +178,6 @@
   font-family: "Space Grotesk", "Segoe UI", sans-serif;
   font-weight: 600;
   font-size: 0.85rem;
-  text-transform: uppercase;
   letter-spacing: 0.06em;
   margin-bottom: 12px;
   color: var(--accent);
@@ -188,47 +191,19 @@
   font-size: 0.85rem;
 }
 
+.tour-decisions .eyebrow {
+  text-transform: none;
+}
+
 .tour-decisions .decisions-heading {
   font-family: "Space Grotesk", "Segoe UI", sans-serif;
   font-weight: 600;
   font-size: 0.85rem;
-  text-transform: uppercase;
   letter-spacing: 0.06em;
   margin-bottom: 16px;
   color: var(--accent);
   padding-top: 16px;
   border-top: 1px solid var(--border);
-}
-
-.tour-back-float {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  z-index: 10;
-  padding: 6px 14px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--muted);
-  font-family: "Space Grotesk", "Segoe UI", sans-serif;
-  font-weight: 500;
-  font-size: 0.78rem;
-  cursor: pointer;
-  opacity: 0;
-  transform: translateX(-8px);
-  transition: opacity 0.3s ease, transform 0.3s ease, color 0.2s, border-color 0.2s;
-  pointer-events: none;
-}
-
-.tour-back-float.visible {
-  opacity: 1;
-  transform: translateX(0);
-  pointer-events: auto;
-}
-
-.tour-back-float:hover {
-  border-color: var(--accent);
-  color: var(--accent);
 }
 
 .tour-actions {
@@ -238,10 +213,6 @@
   gap: 12px;
   background: var(--surface);
   border-top: 1px solid var(--border);
-}
-
-.tour-actions.hidden {
-  display: none;
 }
 
 .tour-btn {
@@ -260,9 +231,14 @@
   color: #fff;
 }
 
-.tour-btn-next:hover {
+.tour-btn-next:hover:not(:disabled) {
   filter: brightness(0.85);
   box-shadow: 0 4px 16px var(--accent-light);
+}
+
+.tour-btn-next:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 
 .tour-btn-back {

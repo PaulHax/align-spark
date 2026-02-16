@@ -123,7 +123,7 @@ export function renderDecisionComparison(container, baseline, aligned) {
         <div class="divider-line"></div>
       </div>
       <div class="decision-col">
-        <div class="eyebrow">Aligned Decision ${modelBadgeHTML()}</div>
+        <div class="eyebrow">Aligned Decision</div>
         <div class="decision-choice">${aligned.decision}</div>
         <div class="decision-rationale">${aligned.justification}</div>
       </div>

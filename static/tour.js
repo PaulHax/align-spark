@@ -4,7 +4,6 @@ import {
   decide,
   ready,
   simulateThinking,
-  modelBadgeHTML,
   buildPresetChips,
   buildValueControls,
   setSliderValues,
@@ -31,46 +30,32 @@ const decisionsZone = $("[data-zone='decisions']");
 const actionsBar = $("[data-actions]");
 const nextBtn = $("[data-next-btn]");
 const backBtn = $("[data-back-btn]");
-const backFloat = $("[data-back-float]");
 
-const renderScenario = (id) => {
+const renderScenarioWithPicker = (id) => {
   const scenario = getScenario(id);
   scenarioZone.innerHTML = `
     <div class="tour-scenario-content">
-      <div class="scenario-eyebrow">Scenario</div>
+      <div class="scenario-eyebrow">Choose a Scenario</div>
+      <div class="selector-cards"></div>
       <div class="scenario-title">${scenario.title}</div>
       <div class="scenario-description-container"></div>
     </div>
   `;
-  renderScenarioDescription(
-    scenarioZone.querySelector(".scenario-description-container"),
-    scenario,
-  );
-};
-
-const renderScenarioWithSelector = (id) => {
-  const scenario = getScenario(id);
-  scenarioZone.innerHTML = `
-    <div class="tour-scenario-content">
-      <div class="scenario-eyebrow">Scenario</div>
-      <div class="scenario-title">${scenario.title}</div>
-      <div class="scenario-description-container"></div>
-      <div class="tour-scenario-selector">
-        <div class="selector-heading">Switch Scenario</div>
-        <div class="selector-cards"></div>
-      </div>
-    </div>
-  `;
-  renderScenarioDescription(
-    scenarioZone.querySelector(".scenario-description-container"),
-    scenario,
-  );
   buildScenarioSelector(
     scenarioZone.querySelector(".selector-cards"),
     id,
-    onScenarioSelect,
+    (newId) => {
+      state.scenarioId = newId;
+      renderScenarioWithPicker(newId);
+      if (state.stage >= 3) renderDecisions(false);
+    },
+  );
+  renderScenarioDescription(
+    scenarioZone.querySelector(".scenario-description-container"),
+    scenario,
   );
 };
+
 
 const buildValuesPanel = () => {
   valuesZone.innerHTML = `
@@ -95,7 +80,7 @@ const buildValuesPanel = () => {
 const renderDecisions = async (showSpinner = true) => {
   decisionsZone.innerHTML = `
     <div class="tour-decisions-content">
-      <div class="decisions-heading">Decision Comparison ${modelBadgeHTML()}</div>
+      <div class="decisions-heading">Decision Comparison</div>
       <div class="comparison-container"></div>
     </div>
   `;
@@ -132,12 +117,6 @@ const onValuesChange = (newValues) => {
   if (state.stage >= 3) renderDecisions(false);
 };
 
-const onScenarioSelect = (id) => {
-  state.scenarioId = id;
-  renderScenarioWithSelector(id);
-  renderDecisions(false);
-};
-
 const goToStage = async (stage) => {
   state.stage = stage;
 
@@ -145,25 +124,22 @@ const goToStage = async (stage) => {
   if (stage >= 2) grid.classList.add("stage-2");
   if (stage >= 3) grid.classList.add("stage-3");
 
-  backFloat.classList.toggle("visible", stage > 1);
   backBtn.toggleAttribute("hidden", stage <= 1);
-  nextBtn.toggleAttribute("hidden", stage >= 3);
-  actionsBar.classList.toggle("hidden", stage >= 3);
+  nextBtn.disabled = stage >= 3;
+
+  renderScenarioWithPicker(state.scenarioId);
 
   if (stage === 1) {
-    renderScenario(state.scenarioId);
     valuesZone.innerHTML = "";
     decisionsZone.innerHTML = "";
   }
 
   if (stage === 2) {
-    renderScenario(state.scenarioId);
     buildValuesPanel();
     decisionsZone.innerHTML = "";
   }
 
   if (stage === 3) {
-    renderScenarioWithSelector(state.scenarioId);
     buildValuesPanel();
     await renderDecisions(true);
   }
@@ -171,7 +147,6 @@ const goToStage = async (stage) => {
 
 nextBtn.addEventListener("click", () => goToStage(state.stage + 1));
 backBtn.addEventListener("click", () => goToStage(state.stage - 1));
-backFloat.addEventListener("click", () => goToStage(state.stage - 1));
 
 ready.then(() => {
   state.scenarioId = SCENARIOS[0].id;
