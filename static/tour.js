@@ -10,6 +10,7 @@ import {
   getCurrentValues,
   buildScenarioAccordion,
   renderDecisionComparison,
+  getScenario,
   getPreset,
 } from "./shared.js";
 
@@ -81,7 +82,7 @@ const renderDecisions = async (showSpinner = true) => {
   }
   const baseline = await decide(state.scenarioId, "baseline");
   const aligned = await decide(state.scenarioId, "aligned", state.values);
-  renderDecisionComparison(container, baseline, aligned);
+  renderDecisionComparison(container, baseline, aligned, getScenario(state.scenarioId));
 };
 
 const onPresetSelect = (presetId) => {

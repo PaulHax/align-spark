@@ -80,9 +80,6 @@
 
 .tour-values-content {
   padding: 40px;
-  max-width: 640px;
-  margin: 0 auto;
-  width: 100%;
   opacity: 0;
   transform: translateX(20px);
   transition:
@@ -193,6 +190,13 @@
   letter-spacing: 0.06em;
   margin-bottom: 12px;
   color: var(--accent);
+}
+
+.tour-values .presets-container,
+.tour-values .sliders-container {
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .tour-values .presets-container {

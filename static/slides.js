@@ -81,7 +81,7 @@ const renderBaseline = async (container) => {
 const renderComparison = async (container) => {
   const baseline = await decide(state.scenarioId, "baseline");
   const aligned = await decide(state.scenarioId, "aligned", state.values);
-  renderDecisionComparison(container, baseline, aligned);
+  renderDecisionComparison(container, baseline, aligned, getScenario(state.scenarioId));
 };
 
 const renderPresetsAndSliders = (presetsEl, slidersEl, onChange) => {

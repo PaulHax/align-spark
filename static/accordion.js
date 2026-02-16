@@ -43,7 +43,7 @@ const renderBaselineResult = (result) => {
 
 const renderAlignedResult = (baseline, aligned) => {
   const body = $("#aligned-body");
-  renderDecisionComparison(body, baseline, aligned);
+  renderDecisionComparison(body, baseline, aligned, getScenario(state.selectedScenario));
 };
 
 const handleScenarioSelect = async (scenarioId) => {
@@ -96,7 +96,7 @@ const runExplore = async () => {
 
   const baseline = await decide(state.selectedScenario, "baseline");
   const aligned = await decide(state.selectedScenario, "aligned", state.values);
-  renderDecisionComparison(container, baseline, aligned);
+  renderDecisionComparison(container, baseline, aligned, getScenario(state.selectedScenario));
 };
 
 const handleExploreScenarioSelect = (scenarioId) => {
@@ -158,7 +158,7 @@ const initExplorePanel = async () => {
 
   const baseline = await decide(state.selectedScenario, "baseline");
   const aligned = await decide(state.selectedScenario, "aligned", state.values);
-  renderDecisionComparison($("#explore-results"), baseline, aligned);
+  renderDecisionComparison($("#explore-results"), baseline, aligned, getScenario(state.selectedScenario));
 };
 
 const init = async () => {

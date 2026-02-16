@@ -226,10 +226,25 @@ body {
   font-weight: 600;
 }
 
+.decision-col .decision-model-info {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
 .decision-col .decision-choice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-size: 1rem;
   font-weight: 600;
   color: var(--ink);
+}
+
+.decision-choice-letter {
+  width: 32px;
+  height: 32px;
+  font-size: 0.9rem;
 }
 
 .decision-col .decision-rationale {

@@ -56,13 +56,13 @@ const renderStickyBaseline = async () => {
 const renderAlignedComparison = async () => {
   const baseline = await decide(state.selectedScenario, "baseline");
   const aligned = await decide(state.selectedScenario, "aligned", state.values);
-  renderDecisionComparison($("[data-aligned-comparison]"), baseline, aligned);
+  renderDecisionComparison($("[data-aligned-comparison]"), baseline, aligned, getScenario(state.selectedScenario));
 };
 
 const renderSandbox = async () => {
   const baseline = await decide(state.selectedScenario, "baseline");
   const aligned = await decide(state.selectedScenario, "aligned", state.values);
-  renderDecisionComparison($("[data-sandbox-results]"), baseline, aligned);
+  renderDecisionComparison($("[data-sandbox-results]"), baseline, aligned, getScenario(state.selectedScenario));
 };
 
 const handleScenarioChange = async (id) => {

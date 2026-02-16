@@ -171,7 +171,14 @@ function formatAdm(result) {
   return ADM_DISPLAY_NAMES[result.admName] || result.admName || "";
 }
 
-export function renderDecisionComparison(container, baseline, aligned) {
+function choiceLetterHTML(choiceId, scenario) {
+  if (!scenario) return "";
+  const idx = scenario.choices.findIndex((c) => c.id === choiceId);
+  if (idx < 0) return "";
+  return `<span class="choice-letter decision-choice-letter">${String.fromCharCode(65 + idx)}</span>`;
+}
+
+export function renderDecisionComparison(container, baseline, aligned, scenario) {
   const changed = baseline.choiceId !== aligned.choiceId;
   const baselineLlm = formatLlm(baseline);
   const alignedAdm = formatAdm(aligned);
@@ -179,8 +186,9 @@ export function renderDecisionComparison(container, baseline, aligned) {
   container.innerHTML = `
     <div class="decision-comparison">
       <div class="decision-col">
-        <div class="eyebrow">Baseline${baselineLlm ? ` · ${baselineLlm}` : ""}</div>
-        <div class="decision-choice">${baseline.decision}</div>
+        <div class="eyebrow">Baseline Language Model</div>
+        <div class="decision-model-info">${baselineLlm}</div>
+        <div class="decision-choice">${choiceLetterHTML(baseline.choiceId, scenario)}${baseline.decision}</div>
         <div class="decision-rationale">${baseline.justification}</div>
       </div>
       <div class="comparison-divider">
@@ -189,8 +197,9 @@ export function renderDecisionComparison(container, baseline, aligned) {
         <div class="divider-line"></div>
       </div>
       <div class="decision-col">
-        <div class="eyebrow">Value Aligned · ${alignedAdm} ${alignedLlm}</div>
-        <div class="decision-choice">${aligned.decision}</div>
+        <div class="eyebrow">Value Aligned Decider</div>
+        <div class="decision-model-info">${alignedAdm} · ${alignedLlm}</div>
+        <div class="decision-choice">${choiceLetterHTML(aligned.choiceId, scenario)}${aligned.decision}</div>
         <div class="decision-rationale">${aligned.justification}</div>
       </div>
     </div>
