@@ -69,7 +69,13 @@ const buildValuesPanel = () => {
   );
 };
 
+const getDetailsOpenState = () => {
+  const details = decisionsZone.querySelectorAll(".decision-rationale-details");
+  return [details[0]?.open ?? false, details[1]?.open ?? false];
+};
+
 const renderDecisions = async (showSpinner = true) => {
+  const openState = getDetailsOpenState();
   decisionsZone.innerHTML = `
     <div class="tour-decisions-content">
       <div class="decisions-heading">Decision Comparison</div>
@@ -82,7 +88,7 @@ const renderDecisions = async (showSpinner = true) => {
   }
   const baseline = await decide(state.scenarioId, "baseline");
   const aligned = await decide(state.scenarioId, "aligned", state.values);
-  renderDecisionComparison(container, baseline, aligned, getScenario(state.scenarioId));
+  renderDecisionComparison(container, baseline, aligned, getScenario(state.scenarioId), openState);
 };
 
 const onPresetSelect = (presetId) => {

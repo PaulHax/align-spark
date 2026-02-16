@@ -247,6 +247,21 @@ body {
   font-size: 0.9rem;
 }
 
+.decision-rationale-details {
+  margin-top: 8px;
+}
+
+.decision-rationale-details::part(header) {
+  padding: 8px 0;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.decision-rationale-details::part(content) {
+  padding: 0 0 8px;
+}
+
 .decision-col .decision-rationale {
   font-size: 0.85rem;
   line-height: 1.6;
@@ -274,6 +289,8 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.04em;
   white-space: nowrap;
+  min-width: 5.5em;
+  text-align: center;
 }
 
 .comparison-badge.changed {

@@ -178,18 +178,20 @@ function choiceLetterHTML(choiceId, scenario) {
   return `<span class="choice-letter decision-choice-letter">${String.fromCharCode(65 + idx)}</span>`;
 }
 
-export function renderDecisionComparison(container, baseline, aligned, scenario) {
+export function renderDecisionComparison(container, baseline, aligned, scenario, openState) {
   const changed = baseline.choiceId !== aligned.choiceId;
   const baselineLlm = formatLlm(baseline);
   const alignedAdm = formatAdm(aligned);
   const alignedLlm = formatLlm(aligned);
+  const baseOpen = openState?.[0] ? " open" : "";
+  const alignedOpen = openState?.[1] ? " open" : "";
   container.innerHTML = `
     <div class="decision-comparison">
       <div class="decision-col">
         <div class="eyebrow">Baseline Language Model</div>
         <div class="decision-model-info">${baselineLlm}</div>
         <div class="decision-choice">${choiceLetterHTML(baseline.choiceId, scenario)}${baseline.decision}</div>
-        <div class="decision-rationale">${baseline.justification}</div>
+        <wa-details summary="Justification" appearance="plain" class="decision-rationale-details"${baseOpen}><div class="decision-rationale">${baseline.justification}</div></wa-details>
       </div>
       <div class="comparison-divider">
         <div class="divider-line"></div>
@@ -200,7 +202,7 @@ export function renderDecisionComparison(container, baseline, aligned, scenario)
         <div class="eyebrow">Value Aligned Decider</div>
         <div class="decision-model-info">${alignedAdm} · ${alignedLlm}</div>
         <div class="decision-choice">${choiceLetterHTML(aligned.choiceId, scenario)}${aligned.decision}</div>
-        <div class="decision-rationale">${aligned.justification}</div>
+        <wa-details summary="Justification" appearance="plain" class="decision-rationale-details"${alignedOpen}><div class="decision-rationale">${aligned.justification}</div></wa-details>
       </div>
     </div>
   `;
