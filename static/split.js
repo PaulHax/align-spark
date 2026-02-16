@@ -2,6 +2,7 @@ import {
   SCENARIOS,
   PRESETS,
   decide,
+  ready,
   simulateThinking,
   modelBadgeHTML,
   buildPresetChips,
@@ -16,9 +17,9 @@ import {
 
 const createState = () => ({
   stage: 1,
-  scenarioId: SCENARIOS[0].id,
-  presetId: PRESETS[0].id,
-  values: { ...PRESETS[0].values },
+  scenarioId: null,
+  presetId: null,
+  values: {},
 });
 
 const state = createState();
@@ -44,8 +45,8 @@ const renderScenario = (id) => {
   renderScenarioDescription(scenarioBlock.querySelector(".scenario-description-container"), scenario);
 };
 
-const renderBaseline = (id) => {
-  const result = decide(id, "baseline");
+const renderBaseline = async (id) => {
+  const result = await decide(id, "baseline");
   baselineBlock.innerHTML = `
     <div class="block-heading">Baseline Decision</div>
     <div class="baseline-decision">${result.decision}</div>
@@ -53,9 +54,9 @@ const renderBaseline = (id) => {
   `;
 };
 
-const renderAligned = (id, values) => {
-  const baseline = decide(id, "baseline");
-  const aligned = decide(id, "aligned", values);
+const renderAligned = async (id, values) => {
+  const baseline = await decide(id, "baseline");
+  const aligned = await decide(id, "aligned", values);
   const changed = baseline.choiceId !== aligned.choiceId;
   alignedBlock.innerHTML = `
     <div class="block-heading">Aligned Decision ${modelBadgeHTML()}</div>
@@ -94,9 +95,9 @@ const onValuesChange = (newValues) => {
   updateAligned();
 };
 
-const updateAligned = () => {
+const updateAligned = async () => {
   alignedBlock.classList.add("visible");
-  renderAligned(state.scenarioId, state.values);
+  await renderAligned(state.scenarioId, state.values);
 };
 
 const buildValuesPanel = () => {
@@ -117,11 +118,11 @@ const buildValuesPanel = () => {
   );
 };
 
-const onScenarioSelect = (id) => {
+const onScenarioSelect = async (id) => {
   state.scenarioId = id;
   renderScenario(id);
-  renderBaseline(id);
-  renderAligned(id, state.values);
+  await renderBaseline(id);
+  await renderAligned(id, state.values);
   buildScenarioSelector(scenarioStrip, id, onScenarioSelect);
 };
 
@@ -150,17 +151,17 @@ const goToStage = async (stage) => {
     scenarioStrip.classList.remove("visible");
     baselineBlock.classList.add("visible");
     await simulateThinking(baselineBlock, 500);
-    renderBaseline(state.scenarioId);
+    await renderBaseline(state.scenarioId);
   }
 
   if (stage >= 3) {
     baselineBlock.classList.add("visible");
-    renderBaseline(state.scenarioId);
+    await renderBaseline(state.scenarioId);
     enterSplitMode();
     buildValuesPanel();
     alignedBlock.classList.add("visible");
     await simulateThinking(alignedBlock, 500);
-    renderAligned(state.scenarioId, state.values);
+    await renderAligned(state.scenarioId, state.values);
     scenarioStrip.classList.add("visible");
     buildScenarioSelector(scenarioStrip, state.scenarioId, onScenarioSelect);
   }
@@ -169,8 +170,9 @@ const goToStage = async (stage) => {
 nextBtn.addEventListener("click", () => goToStage(state.stage + 1));
 backBtn.addEventListener("click", () => goToStage(state.stage - 1));
 
-const init = () => {
+ready.then(() => {
+  state.scenarioId = SCENARIOS[0].id;
+  state.presetId = PRESETS[0].id;
+  state.values = { ...PRESETS[0].values };
   renderScenario(state.scenarioId);
-};
-
-init();
+});

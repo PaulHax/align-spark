@@ -7,9 +7,9 @@ import "https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.2.1/dist-cdn/compo
 import "https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.2.1/dist-cdn/components/button/button.js";
 import "https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.2.1/dist-cdn/components/badge/badge.js";
 
-import { SCENARIOS, PRESETS, DIMENSIONS, decide } from "./align-engine.js";
+import { SCENARIOS, PRESETS, DIMENSIONS, decide, ready } from "./align-engine.js";
 
-export { SCENARIOS, PRESETS, DIMENSIONS, decide };
+export { SCENARIOS, PRESETS, DIMENSIONS, decide, ready };
 
 const LEVEL_LABELS = { 0: "Low", 50: "Medium", 100: "High" };
 const LEVEL_TO_STRING = { 0: "low", 50: "medium", 100: "high" };

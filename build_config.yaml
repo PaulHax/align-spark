@@ -1,0 +1,51 @@
+# Which scenes to extract from experiments.
+# Each entry selects a specific probe from a specific scenario.
+# Omit this section entirely to include ALL scenes from ALL experiments.
+scenes:
+  - scenario_id: "June2025-AF-train"
+    scene_id: "Probe 1"
+    title: "Enemy POW vs. Allied Soldier"
+  - scenario_id: "June2025-MF-train"
+    scene_id: "Probe 1"
+    title: "Shooter vs. Victim"
+  - scenario_id: "June2025-PS-train"
+    scene_id: "Probe 1"
+    title: "Exposed Casualty Under Fire"
+  - scenario_id: "June2025-SS-train"
+    scene_id: "Probe 1"
+    title: "Current Patient vs. Screams"
+
+# Override auto-generated dimension labels and descriptions.
+# Keys are KDMA type IDs from experiment data.
+dimensions:
+  merit:
+    label: "Merit"
+    description: "How much moral character and past actions affect triage priority"
+  affiliation:
+    label: "Affiliation"
+    description: "How much group loyalty and unit membership affect triage priority"
+  personal_safety:
+    label: "Personal Safety"
+    description: "How much self-preservation affects willingness to take risks"
+  search:
+    label: "Search"
+    description: "How much urgency to find unknown casualties affects current treatment"
+
+# Value presets for the frontend UI.
+presets:
+  - id: medic
+    label: "By-the-Book Medic"
+    tagline: "Severity first, stay focused"
+    values: {merit: low, affiliation: low, personal_safety: low, search: low}
+  - id: brothers
+    label: "Band of Brothers"
+    tagline: "Take care of your own"
+    values: {merit: low, affiliation: high, personal_safety: medium, search: low}
+  - id: judge
+    label: "Moral Judge"
+    tagline: "Character matters"
+    values: {merit: high, affiliation: low, personal_safety: low, search: medium}
+  - id: survivor
+    label: "Cautious Survivor"
+    tagline: "Don't be the next casualty"
+    values: {merit: low, affiliation: low, personal_safety: high, search: high}

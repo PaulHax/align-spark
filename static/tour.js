@@ -2,6 +2,7 @@ import {
   SCENARIOS,
   PRESETS,
   decide,
+  ready,
   simulateThinking,
   modelBadgeHTML,
   buildPresetChips,
@@ -17,9 +18,9 @@ import {
 
 const state = {
   stage: 1,
-  scenarioId: SCENARIOS[0].id,
-  presetId: PRESETS[0].id,
-  values: { ...PRESETS[0].values },
+  scenarioId: null,
+  presetId: null,
+  values: {},
 };
 
 const $ = (sel) => document.querySelector(sel);
@@ -102,8 +103,8 @@ const renderDecisions = async (showSpinner = true) => {
   if (showSpinner) {
     await simulateThinking(container, 500);
   }
-  const baseline = decide(state.scenarioId, "baseline");
-  const aligned = decide(state.scenarioId, "aligned", state.values);
+  const baseline = await decide(state.scenarioId, "baseline");
+  const aligned = await decide(state.scenarioId, "aligned", state.values);
   renderDecisionComparison(container, baseline, aligned);
 };
 
@@ -172,4 +173,9 @@ nextBtn.addEventListener("click", () => goToStage(state.stage + 1));
 backBtn.addEventListener("click", () => goToStage(state.stage - 1));
 backFloat.addEventListener("click", () => goToStage(state.stage - 1));
 
-goToStage(1);
+ready.then(() => {
+  state.scenarioId = SCENARIOS[0].id;
+  state.presetId = PRESETS[0].id;
+  state.values = { ...PRESETS[0].values };
+  goToStage(1);
+});

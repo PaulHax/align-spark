@@ -2,6 +2,7 @@ import {
   SCENARIOS,
   PRESETS,
   decide,
+  ready,
   simulateThinking,
   modelBadgeHTML,
   buildPresetChips,
@@ -16,9 +17,9 @@ import {
 } from "./shared.js";
 
 const state = {
-  selectedScenario: SCENARIOS[0].id,
-  selectedPreset: PRESETS[0].id,
-  values: { ...PRESETS[0].values },
+  selectedScenario: null,
+  selectedPreset: null,
+  values: {},
   baselineResult: null,
   alignedResult: null,
 };
@@ -59,7 +60,7 @@ const handleScenarioSelect = async (scenarioId) => {
 const runBaseline = async () => {
   const body = $("#baseline-body");
   await simulateThinking(body);
-  state.baselineResult = decide(state.selectedScenario, "baseline");
+  state.baselineResult = await decide(state.selectedScenario, "baseline");
   renderBaselineResult(state.baselineResult);
 };
 
@@ -80,21 +81,21 @@ const handleValuesChanged = async (values) => {
 const runAligned = async () => {
   const body = $("#aligned-body");
   await simulateThinking(body);
-  state.alignedResult = decide(
+  state.alignedResult = await decide(
     state.selectedScenario,
     "aligned",
     state.values
   );
   renderAlignedResult(state.baselineResult, state.alignedResult);
-  initExplorePanel();
+  await initExplorePanel();
 };
 
 const runExplore = async () => {
   const container = $("#explore-results");
   await simulateThinking(container);
 
-  const baseline = decide(state.selectedScenario, "baseline");
-  const aligned = decide(state.selectedScenario, "aligned", state.values);
+  const baseline = await decide(state.selectedScenario, "baseline");
+  const aligned = await decide(state.selectedScenario, "aligned", state.values);
   renderDecisionComparison(container, baseline, aligned);
 };
 
@@ -138,7 +139,7 @@ const handleExploreValuesChanged = (values) => {
   runExplore();
 };
 
-const initExplorePanel = () => {
+const initExplorePanel = async () => {
   buildScenarioSelector(
     $("#explore-scenario-selector"),
     state.selectedScenario,
@@ -155,8 +156,8 @@ const initExplorePanel = () => {
     handleExploreValuesChanged
   );
 
-  const baseline = decide(state.selectedScenario, "baseline");
-  const aligned = decide(state.selectedScenario, "aligned", state.values);
+  const baseline = await decide(state.selectedScenario, "baseline");
+  const aligned = await decide(state.selectedScenario, "aligned", state.values);
   renderDecisionComparison($("#explore-results"), baseline, aligned);
 };
 
@@ -181,9 +182,14 @@ const init = async () => {
     handleValuesChanged
   );
 
-  state.baselineResult = decide(state.selectedScenario, "baseline");
+  state.baselineResult = await decide(state.selectedScenario, "baseline");
   renderBaselineResult(state.baselineResult);
-  initExplorePanel();
+  await initExplorePanel();
 };
 
-init();
+ready.then(() => {
+  state.selectedScenario = SCENARIOS[0].id;
+  state.selectedPreset = PRESETS[0].id;
+  state.values = { ...PRESETS[0].values };
+  init();
+});

@@ -2,6 +2,7 @@ import {
   SCENARIOS,
   PRESETS,
   decide,
+  ready,
   simulateThinking,
   modelBadgeHTML,
   buildPresetChips,
@@ -19,9 +20,9 @@ const TOTAL_SLIDES = 8;
 
 const state = {
   currentSlide: 0,
-  scenarioId: SCENARIOS[0].id,
-  presetId: PRESETS[0].id,
-  values: { ...PRESETS[0].values },
+  scenarioId: null,
+  presetId: null,
+  values: {},
   transitioning: false,
 };
 
@@ -68,8 +69,8 @@ const transitionTo = (index) => {
   }, 420);
 };
 
-const renderBaseline = (container) => {
-  const result = decide(state.scenarioId, "baseline");
+const renderBaseline = async (container) => {
+  const result = await decide(state.scenarioId, "baseline");
   container.innerHTML = `
     <div class="eyebrow">Baseline Language Model ${modelBadgeHTML()}</div>
     <div class="decision-choice">${result.decision}</div>
@@ -77,9 +78,9 @@ const renderBaseline = (container) => {
   `;
 };
 
-const renderComparison = (container) => {
-  const baseline = decide(state.scenarioId, "baseline");
-  const aligned = decide(state.scenarioId, "aligned", state.values);
+const renderComparison = async (container) => {
+  const baseline = await decide(state.scenarioId, "baseline");
+  const aligned = await decide(state.scenarioId, "aligned", state.values);
   renderDecisionComparison(container, baseline, aligned);
 };
 
@@ -131,7 +132,7 @@ const onEnterSlide = async (index) => {
   if (index === 2) {
     const container = $("[data-baseline-result]");
     await simulateThinking(container);
-    renderBaseline(container);
+    await renderBaseline(container);
   }
 
   if (index === 4) {
@@ -141,7 +142,7 @@ const onEnterSlide = async (index) => {
   if (index === 5) {
     const container = $("[data-comparison-result]");
     await simulateThinking(container);
-    renderComparison(container);
+    await renderComparison(container);
   }
 
   if (index === 6) {
@@ -150,7 +151,7 @@ const onEnterSlide = async (index) => {
       $("[data-explore-sliders]"),
       () => renderComparison($("[data-explore-comparison]"))
     );
-    renderComparison($("[data-explore-comparison]"));
+    await renderComparison($("[data-explore-comparison]"));
   }
 
   if (index === 7) {
@@ -207,7 +208,12 @@ dotsContainer.addEventListener("click", (e) => {
   if (dot) goToSlide(Number(dot.dataset.dot));
 });
 
-buildDots();
-slides[0].classList.add("active");
-updateArrows(0);
-onEnterSlide(0);
+ready.then(() => {
+  state.scenarioId = SCENARIOS[0].id;
+  state.presetId = PRESETS[0].id;
+  state.values = { ...PRESETS[0].values };
+  buildDots();
+  slides[0].classList.add("active");
+  updateArrows(0);
+  onEnterSlide(0);
+});

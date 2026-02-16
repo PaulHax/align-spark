@@ -2,6 +2,7 @@ import {
   SCENARIOS,
   PRESETS,
   decide,
+  ready,
   simulateThinking,
   modelBadgeHTML,
   buildPresetChips,
@@ -18,9 +19,9 @@ const TOTAL_STEPS = 5;
 
 const state = {
   currentStep: 0,
-  scenarioId: SCENARIOS[0].id,
-  presetId: PRESETS[0].id,
-  values: { ...PRESETS[0].values },
+  scenarioId: null,
+  presetId: null,
+  values: {},
 };
 
 const $ = (sel) => document.querySelector(sel);
@@ -57,8 +58,8 @@ const renderSceneSelector = () => {
   });
 };
 
-const renderBaselineDecision = (container) => {
-  const result = decide(state.scenarioId, "baseline");
+const renderBaselineDecision = async (container) => {
+  const result = await decide(state.scenarioId, "baseline");
   container.innerHTML = `
     <div class="baseline-decision-card">
       <div class="eyebrow">Baseline Language Model ${modelBadgeHTML()}</div>
@@ -85,13 +86,13 @@ const renderValuesSliders = () => {
   });
 };
 
-const renderComparison = (container) => {
-  const baseline = decide(state.scenarioId, "baseline");
-  const aligned = decide(state.scenarioId, "aligned", state.values);
+const renderComparison = async (container) => {
+  const baseline = await decide(state.scenarioId, "baseline");
+  const aligned = await decide(state.scenarioId, "aligned", state.values);
   renderDecisionComparison(container, baseline, aligned);
 };
 
-const renderSandbox = () => {
+const renderSandbox = async () => {
   buildScenarioSelector(els.sandboxScenarios, state.scenarioId, (id) => {
     state.scenarioId = id;
     renderSandbox();
@@ -116,7 +117,7 @@ const renderSandbox = () => {
     renderComparison(els.sandboxResults);
   });
 
-  renderComparison(els.sandboxResults);
+  await renderComparison(els.sandboxResults);
 };
 
 const updateStepIndicator = () => {
@@ -150,7 +151,7 @@ const onEnterStep = async (step) => {
 
   if (step === 1) {
     await simulateThinking(els.baselineResult);
-    renderBaselineDecision(els.baselineResult);
+    await renderBaselineDecision(els.baselineResult);
   }
 
   if (step === 2) {
@@ -160,11 +161,11 @@ const onEnterStep = async (step) => {
 
   if (step === 3) {
     await simulateThinking(els.comparisonResult);
-    renderComparison(els.comparisonResult);
+    await renderComparison(els.comparisonResult);
   }
 
   if (step === 4) {
-    renderSandbox();
+    await renderSandbox();
   }
 };
 
@@ -198,4 +199,9 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowLeft") goBack();
 });
 
-goToStep(0);
+ready.then(() => {
+  state.scenarioId = SCENARIOS[0].id;
+  state.presetId = PRESETS[0].id;
+  state.values = { ...PRESETS[0].values };
+  goToStep(0);
+});

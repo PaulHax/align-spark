@@ -2,6 +2,7 @@ import {
   SCENARIOS,
   PRESETS,
   decide,
+  ready,
   simulateThinking,
   buildPresetChips,
   buildValueControls,
@@ -14,9 +15,9 @@ import {
 } from "./shared.js";
 
 const state = {
-  selectedScenario: SCENARIOS[0].id,
-  selectedPreset: PRESETS[0].id,
-  values: { ...PRESETS[0].values },
+  selectedScenario: null,
+  selectedPreset: null,
+  values: {},
   revealed: new Set(),
   baselineShown: false,
 };
@@ -35,8 +36,8 @@ const renderHero = () => {
   );
 };
 
-const renderBaselineCard = (container) => {
-  const result = decide(state.selectedScenario, "baseline");
+const renderBaselineCard = async (container) => {
+  const result = await decide(state.selectedScenario, "baseline");
   container.innerHTML = `
     <div class="eyebrow">Baseline Language Model</div>
     <div class="decision-choice">${result.decision}</div>
@@ -44,35 +45,35 @@ const renderBaselineCard = (container) => {
   `;
 };
 
-const renderStickyBaseline = () => {
-  const result = decide(state.selectedScenario, "baseline");
+const renderStickyBaseline = async () => {
+  const result = await decide(state.selectedScenario, "baseline");
   $("[data-sticky-baseline]").innerHTML = `
     <div class="mini-eyebrow">Baseline Decision</div>
     <div class="mini-choice">${result.decision}</div>
   `;
 };
 
-const renderAlignedComparison = () => {
-  const baseline = decide(state.selectedScenario, "baseline");
-  const aligned = decide(state.selectedScenario, "aligned", state.values);
+const renderAlignedComparison = async () => {
+  const baseline = await decide(state.selectedScenario, "baseline");
+  const aligned = await decide(state.selectedScenario, "aligned", state.values);
   renderDecisionComparison($("[data-aligned-comparison]"), baseline, aligned);
 };
 
-const renderSandbox = () => {
-  const baseline = decide(state.selectedScenario, "baseline");
-  const aligned = decide(state.selectedScenario, "aligned", state.values);
+const renderSandbox = async () => {
+  const baseline = await decide(state.selectedScenario, "baseline");
+  const aligned = await decide(state.selectedScenario, "aligned", state.values);
   renderDecisionComparison($("[data-sandbox-results]"), baseline, aligned);
 };
 
-const handleScenarioChange = (id) => {
+const handleScenarioChange = async (id) => {
   state.selectedScenario = id;
   renderHero();
-  renderBaselineCard($("[data-baseline-card]"));
-  renderStickyBaseline();
-  renderAlignedComparison();
+  await renderBaselineCard($("[data-baseline-card]"));
+  await renderStickyBaseline();
+  await renderAlignedComparison();
 };
 
-const handlePresetSelect = (presetId) => {
+const handlePresetSelect = async (presetId) => {
   state.selectedPreset = presetId;
   const preset = getPreset(presetId);
   state.values = { ...preset.values };
@@ -82,10 +83,10 @@ const handlePresetSelect = (presetId) => {
     handlePresetSelect
   );
   setSliderValues($("[data-values-sliders]"), state.values);
-  renderAlignedComparison();
+  await renderAlignedComparison();
 };
 
-const handleValuesChange = (newValues) => {
+const handleValuesChange = async (newValues) => {
   state.values = newValues;
   state.selectedPreset = null;
   buildPresetChips(
@@ -93,10 +94,10 @@ const handleValuesChange = (newValues) => {
     state.selectedPreset,
     handlePresetSelect
   );
-  renderAlignedComparison();
+  await renderAlignedComparison();
 };
 
-const handleSandboxScenarioChange = (id) => {
+const handleSandboxScenarioChange = async (id) => {
   state.selectedScenario = id;
   buildScenarioSelector(
     $("[data-sandbox-scenarios]"),
@@ -104,13 +105,13 @@ const handleSandboxScenarioChange = (id) => {
     handleSandboxScenarioChange
   );
   renderHero();
-  renderBaselineCard($("[data-baseline-card]"));
-  renderStickyBaseline();
-  renderAlignedComparison();
-  renderSandbox();
+  await renderBaselineCard($("[data-baseline-card]"));
+  await renderStickyBaseline();
+  await renderAlignedComparison();
+  await renderSandbox();
 };
 
-const handleSandboxPresetSelect = (presetId) => {
+const handleSandboxPresetSelect = async (presetId) => {
   state.selectedPreset = presetId;
   const preset = getPreset(presetId);
   state.values = { ...preset.values };
@@ -126,11 +127,11 @@ const handleSandboxPresetSelect = (presetId) => {
     handlePresetSelect
   );
   setSliderValues($("[data-values-sliders]"), state.values);
-  renderAlignedComparison();
-  renderSandbox();
+  await renderAlignedComparison();
+  await renderSandbox();
 };
 
-const handleSandboxValuesChange = (newValues) => {
+const handleSandboxValuesChange = async (newValues) => {
   state.values = newValues;
   state.selectedPreset = null;
   buildPresetChips(
@@ -144,8 +145,8 @@ const handleSandboxValuesChange = (newValues) => {
     handlePresetSelect
   );
   setSliderValues($("[data-values-sliders]"), state.values);
-  renderAlignedComparison();
-  renderSandbox();
+  await renderAlignedComparison();
+  await renderSandbox();
 };
 
 const applyStaggerToSliders = (container) => {
@@ -171,7 +172,7 @@ const revealSection = async (sectionName) => {
     state.baselineShown = true;
     const card = $("[data-baseline-card]");
     await simulateThinking(card, 500);
-    renderBaselineCard(card);
+    await renderBaselineCard(card);
   }
 
   if (sectionName === "values") {
@@ -222,12 +223,12 @@ const initValues = () => {
   );
 };
 
-const initAligned = () => {
-  renderStickyBaseline();
-  renderAlignedComparison();
+const initAligned = async () => {
+  await renderStickyBaseline();
+  await renderAlignedComparison();
 };
 
-const initSandbox = () => {
+const initSandbox = async () => {
   buildScenarioSelector(
     $("[data-sandbox-scenarios]"),
     state.selectedScenario,
@@ -243,17 +244,22 @@ const initSandbox = () => {
     state.values,
     handleSandboxValuesChange
   );
-  renderSandbox();
+  await renderSandbox();
 };
 
-const init = () => {
+const init = async () => {
   renderHero();
-  renderBaselineCard($("[data-baseline-card]"));
+  await renderBaselineCard($("[data-baseline-card]"));
   initValues();
-  initAligned();
-  initSandbox();
+  await initAligned();
+  await initSandbox();
   setupRevealElements();
   setupObserver();
 };
 
-init();
+ready.then(() => {
+  state.selectedScenario = SCENARIOS[0].id;
+  state.selectedPreset = PRESETS[0].id;
+  state.values = { ...PRESETS[0].values };
+  init();
+});
