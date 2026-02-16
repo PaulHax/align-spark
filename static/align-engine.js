@@ -34,7 +34,7 @@ function levelToNumeric(level) {
   return LEVELS[level] ?? 0.5;
 }
 
-export async function decide(scenarioId, _decider, values) {
+export async function decide(scenarioId, decider, values) {
   const scenario = manifest.scenarios[scenarioId];
   if (!scenario) throw new Error(`Unknown scenario: ${scenarioId}`);
 
@@ -42,11 +42,14 @@ export async function decide(scenarioId, _decider, values) {
   const targetValue = values ? levelToNumeric(values[kdmaType]) : 0.0;
 
   const expKeys = manifest.indices.by_scenario[scenarioId] || [];
+  const isBaseline = decider === "baseline";
 
   let bestKey = null;
   let bestDist = Infinity;
   for (const key of expKeys) {
     const exp = manifest.experiments[key];
+    const admName = exp.parameters.adm.name;
+    if (isBaseline !== admName.includes("baseline")) continue;
     const kdmaVal = exp.parameters.kdma_values.find((kv) => kv.kdma === kdmaType);
     if (!kdmaVal) continue;
     const dist = Math.abs(kdmaVal.value - targetValue);
