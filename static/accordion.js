@@ -4,13 +4,13 @@ import {
   decide,
   ready,
   simulateThinking,
-  modelBadgeHTML,
   buildPresetChips,
   buildValueControls,
   setSliderValues,
   getCurrentValues,
   buildScenarioSelector,
   renderDecisionComparison,
+  getDetailsOpenState,
   renderScenarioDescription,
   getScenario,
   getPreset,
@@ -32,18 +32,24 @@ const renderScenario = () => {
 
 const renderBaselineResult = (result) => {
   const body = $("#baseline-body");
+  const scenario = getScenario(state.selectedScenario);
+  const idx = scenario.choices.findIndex((c) => c.id === result.choiceId);
+  const letterHTML = idx >= 0 ? `<span class="choice-letter decision-choice-letter">${String.fromCharCode(65 + idx)}</span>` : "";
+  const llm = result.llmBackbone?.split("/").pop() || "";
   body.innerHTML = `
     <div class="baseline-result">
-      <div class="eyebrow">Baseline Language Model ${modelBadgeHTML()}</div>
-      <div class="decision-choice">${result.decision}</div>
-      <div class="decision-rationale">${result.justification}</div>
+      <div class="eyebrow">Baseline Language Model</div>
+      <div class="decision-model-info">${llm}</div>
+      <div class="decision-choice">${letterHTML}${result.decision}</div>
+      <wa-details summary="Justification" appearance="plain" class="decision-rationale-details"><div class="decision-rationale">${result.justification}</div></wa-details>
     </div>
   `;
 };
 
 const renderAlignedResult = (baseline, aligned) => {
   const body = $("#aligned-body");
-  renderDecisionComparison(body, baseline, aligned, getScenario(state.selectedScenario));
+  const openState = getDetailsOpenState(body);
+  renderDecisionComparison(body, baseline, aligned, getScenario(state.selectedScenario), openState);
 };
 
 const handleScenarioSelect = async (scenarioId) => {
@@ -92,11 +98,12 @@ const runAligned = async () => {
 
 const runExplore = async () => {
   const container = $("#explore-results");
+  const openState = getDetailsOpenState(container);
   await simulateThinking(container);
 
   const baseline = await decide(state.selectedScenario, "baseline");
   const aligned = await decide(state.selectedScenario, "aligned", state.values);
-  renderDecisionComparison(container, baseline, aligned, getScenario(state.selectedScenario));
+  renderDecisionComparison(container, baseline, aligned, getScenario(state.selectedScenario), openState);
 };
 
 const handleExploreScenarioSelect = (scenarioId) => {
@@ -156,9 +163,11 @@ const initExplorePanel = async () => {
     handleExploreValuesChanged
   );
 
+  const exploreContainer = $("#explore-results");
+  const openState = getDetailsOpenState(exploreContainer);
   const baseline = await decide(state.selectedScenario, "baseline");
   const aligned = await decide(state.selectedScenario, "aligned", state.values);
-  renderDecisionComparison($("#explore-results"), baseline, aligned, getScenario(state.selectedScenario));
+  renderDecisionComparison(exploreContainer, baseline, aligned, getScenario(state.selectedScenario), openState);
 };
 
 const init = async () => {

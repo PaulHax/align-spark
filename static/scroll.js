@@ -9,6 +9,7 @@ import {
   setSliderValues,
   buildScenarioSelector,
   renderDecisionComparison,
+  getDetailsOpenState,
   renderScenarioDescription,
   getScenario,
   getPreset,
@@ -38,10 +39,15 @@ const renderHero = () => {
 
 const renderBaselineCard = async (container) => {
   const result = await decide(state.selectedScenario, "baseline");
+  const scenario = getScenario(state.selectedScenario);
+  const idx = scenario.choices.findIndex((c) => c.id === result.choiceId);
+  const letterHTML = idx >= 0 ? `<span class="choice-letter decision-choice-letter">${String.fromCharCode(65 + idx)}</span>` : "";
+  const llm = result.llmBackbone?.split("/").pop() || "";
   container.innerHTML = `
     <div class="eyebrow">Baseline Language Model</div>
-    <div class="decision-choice">${result.decision}</div>
-    <div class="decision-rationale">${result.justification}</div>
+    <div class="decision-model-info">${llm}</div>
+    <div class="decision-choice">${letterHTML}${result.decision}</div>
+    <wa-details summary="Justification" appearance="plain" class="decision-rationale-details"><div class="decision-rationale">${result.justification}</div></wa-details>
   `;
 };
 
@@ -54,15 +60,19 @@ const renderStickyBaseline = async () => {
 };
 
 const renderAlignedComparison = async () => {
+  const container = $("[data-aligned-comparison]");
+  const openState = getDetailsOpenState(container);
   const baseline = await decide(state.selectedScenario, "baseline");
   const aligned = await decide(state.selectedScenario, "aligned", state.values);
-  renderDecisionComparison($("[data-aligned-comparison]"), baseline, aligned, getScenario(state.selectedScenario));
+  renderDecisionComparison(container, baseline, aligned, getScenario(state.selectedScenario), openState);
 };
 
 const renderSandbox = async () => {
+  const container = $("[data-sandbox-results]");
+  const openState = getDetailsOpenState(container);
   const baseline = await decide(state.selectedScenario, "baseline");
   const aligned = await decide(state.selectedScenario, "aligned", state.values);
-  renderDecisionComparison($("[data-sandbox-results]"), baseline, aligned, getScenario(state.selectedScenario));
+  renderDecisionComparison(container, baseline, aligned, getScenario(state.selectedScenario), openState);
 };
 
 const handleScenarioChange = async (id) => {

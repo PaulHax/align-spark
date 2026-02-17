@@ -7,7 +7,9 @@ import "https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.2.1/dist-cdn/compo
 import "https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.2.1/dist-cdn/components/button/button.js";
 import "https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.2.1/dist-cdn/components/badge/badge.js";
 
-import { SCENARIOS, PRESETS, DIMENSIONS, decide, ready } from "./align-engine.js";
+import { decide, ready } from "./align-engine.js";
+
+const { scenarios: SCENARIOS, presets: PRESETS, dimensions: DIMENSIONS } = await ready;
 
 export { SCENARIOS, PRESETS, DIMENSIONS, decide, ready };
 
@@ -22,10 +24,6 @@ export function simulateThinking(container, ms = 500) {
     </div>
   `;
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-export function modelBadgeHTML() {
-  return `<span class="model-badge"><wa-tag size="small">ALIGN-ADM v0.3</wa-tag></span>`;
 }
 
 export function sliderValueToLevel(value) {
@@ -100,9 +98,11 @@ export function getCurrentValues(sliderContainer) {
 export function buildScenarioSelector(container, currentId, onSelect) {
   container.innerHTML = "";
   SCENARIOS.forEach((scenario) => {
+    const dim = DIMENSIONS.find((d) => d.id === scenario.kdmaType);
+    const kdmaLabel = dim ? dim.label : "";
     const card = document.createElement("div");
     card.className = `scenario-card${scenario.id === currentId ? " active" : ""}`;
-    card.innerHTML = `<div class="scenario-card-title">${scenario.title}</div>`;
+    card.innerHTML = `<div class="scenario-card-title">${scenario.title}${kdmaLabel ? `<span class="scenario-card-kdma">${kdmaLabel}</span>` : ""}</div>`;
     card.addEventListener("click", () => onSelect(scenario.id));
     container.appendChild(card);
   });
@@ -226,6 +226,11 @@ export function renderScenarioDescription(container, scenario) {
         </div>
       </div>` : ""}
   `;
+}
+
+export function getDetailsOpenState(container) {
+  const details = container.querySelectorAll(".decision-rationale-details");
+  return [details[0]?.open ?? false, details[1]?.open ?? false];
 }
 
 export function getScenario(id) {

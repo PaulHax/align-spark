@@ -192,10 +192,22 @@ body {
 }
 
 .scenario-card-title {
+  display: flex;
+  align-items: center;
   font-family: "Space Grotesk", "Segoe UI", sans-serif;
   font-weight: 600;
   font-size: 0.95rem;
   margin-bottom: 4px;
+}
+
+.scenario-card-kdma {
+  margin-left: auto;
+  padding-left: 12px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  opacity: 0.7;
 }
 
 .scenario-card-desc {

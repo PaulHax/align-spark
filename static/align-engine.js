@@ -1,22 +1,16 @@
 export const LEVELS = { low: 0.0, medium: 0.5, high: 1.0 };
 
-let manifest = null;
-
-export let DIMENSIONS = [];
-export let SCENARIOS = [];
-export let PRESETS = [];
-
 async function loadManifest() {
   const response = await fetch("./data/manifest.json");
-  manifest = await response.json();
+  const manifest = await response.json();
 
-  DIMENSIONS = manifest.config.dimensions.map((d) => ({
+  const dimensions = manifest.config.dimensions.map((d) => ({
     id: d.id,
     label: d.label,
     description: d.description || "",
   }));
 
-  SCENARIOS = Object.entries(manifest.scenarios).map(([id, s]) => ({
+  const scenarios = Object.entries(manifest.scenarios).map(([id, s]) => ({
     id,
     title: s.title,
     description: s.description,
@@ -25,7 +19,9 @@ async function loadManifest() {
     kdmaType: s.kdma_type,
   }));
 
-  PRESETS = manifest.config.presets || [];
+  const presets = manifest.config.presets || [];
+
+  return { manifest, dimensions, scenarios, presets };
 }
 
 export const ready = loadManifest();
@@ -35,6 +31,7 @@ function levelToNumeric(level) {
 }
 
 export async function decide(scenarioId, decider, values) {
+  const { manifest } = await ready;
   const scenario = manifest.scenarios[scenarioId];
   if (!scenario) throw new Error(`Unknown scenario: ${scenarioId}`);
 

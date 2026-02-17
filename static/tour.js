@@ -10,6 +10,7 @@ import {
   getCurrentValues,
   buildScenarioAccordion,
   renderDecisionComparison,
+  getDetailsOpenState,
   getScenario,
   getPreset,
 } from "./shared.js";
@@ -69,13 +70,8 @@ const buildValuesPanel = () => {
   );
 };
 
-const getDetailsOpenState = () => {
-  const details = decisionsZone.querySelectorAll(".decision-rationale-details");
-  return [details[0]?.open ?? false, details[1]?.open ?? false];
-};
-
 const renderDecisions = async (showSpinner = true) => {
-  const openState = getDetailsOpenState();
+  const openState = getDetailsOpenState(decisionsZone);
   decisionsZone.innerHTML = `
     <div class="tour-decisions-content">
       <div class="decisions-heading">Decision Comparison</div>

@@ -4,12 +4,12 @@ import {
   decide,
   ready,
   simulateThinking,
-  modelBadgeHTML,
   buildPresetChips,
   buildValueControls,
   setSliderValues,
   buildScenarioSelector,
   renderDecisionComparison,
+  getDetailsOpenState,
   renderScenarioDescription,
   getScenario,
   getPreset,
@@ -60,11 +60,16 @@ const renderSceneSelector = () => {
 
 const renderBaselineDecision = async (container) => {
   const result = await decide(state.scenarioId, "baseline");
+  const scenario = getScenario(state.scenarioId);
+  const idx = scenario.choices.findIndex((c) => c.id === result.choiceId);
+  const letterHTML = idx >= 0 ? `<span class="choice-letter decision-choice-letter">${String.fromCharCode(65 + idx)}</span>` : "";
+  const llm = result.llmBackbone?.split("/").pop() || "";
   container.innerHTML = `
     <div class="baseline-decision-card">
-      <div class="eyebrow">Baseline Language Model ${modelBadgeHTML()}</div>
-      <div class="decision-choice">${result.decision}</div>
-      <div class="decision-rationale">${result.justification}</div>
+      <div class="eyebrow">Baseline Language Model</div>
+      <div class="decision-model-info">${llm}</div>
+      <div class="decision-choice">${letterHTML}${result.decision}</div>
+      <wa-details summary="Justification" appearance="plain" class="decision-rationale-details"><div class="decision-rationale">${result.justification}</div></wa-details>
     </div>
   `;
 };
@@ -87,9 +92,10 @@ const renderValuesSliders = () => {
 };
 
 const renderComparison = async (container) => {
+  const openState = getDetailsOpenState(container);
   const baseline = await decide(state.scenarioId, "baseline");
   const aligned = await decide(state.scenarioId, "aligned", state.values);
-  renderDecisionComparison(container, baseline, aligned, getScenario(state.scenarioId));
+  renderDecisionComparison(container, baseline, aligned, getScenario(state.scenarioId), openState);
 };
 
 const renderSandbox = async () => {
