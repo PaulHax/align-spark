@@ -113,9 +113,11 @@ export function buildScenarioAccordion(container, scenarios, currentId, onSelect
 
   scenarios.forEach((scenario) => {
     const details = document.createElement("wa-details");
-    details.setAttribute("summary", scenario.title);
     details.dataset.scenarioId = scenario.id;
     if (scenario.id === currentId) details.setAttribute("open", "");
+
+    const dim = DIMENSIONS.find((d) => d.id === scenario.kdmaType);
+    const kdmaLabel = dim ? dim.label : "";
 
     const descHtml = scenario.description
       .split("\n")
@@ -131,6 +133,7 @@ export function buildScenarioAccordion(container, scenarios, currentId, onSelect
       .join("");
 
     details.innerHTML = `
+      <span slot="summary" class="accordion-summary">${scenario.title}${kdmaLabel ? `<span class="accordion-kdma-tag">${kdmaLabel}</span>` : ""}</span>
       <div class="accordion-scenario-body">
         <div class="accordion-scenario-description">${descHtml}</div>
         ${choicesHtml ? `<div class="scenario-choices">${choicesHtml}</div>` : ""}
