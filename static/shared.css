@@ -261,6 +261,8 @@ body {
 
 .decision-rationale-details {
   margin-top: 8px;
+  --border-color: transparent;
+  --border-radius: 0;
 }
 
 .decision-rationale-details::part(header) {
