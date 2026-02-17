@@ -3,10 +3,7 @@ set -euo pipefail
 
 mkdir -p static/data
 
-if [ -z "${MANIFEST_URL:-}" ]; then
-  echo "Error: MANIFEST_URL environment variable is not set"
-  exit 1
-fi
+MANIFEST_URL="${MANIFEST_URL:-https://github.com/PaulHax/align-spark/releases/download/data/manifest.json}"
 
-curl -fsSL "$MANIFEST_URL" -o static/data/manifest.json
-echo "Fetched manifest.json from MANIFEST_URL"
+curl -fsSL -L "$MANIFEST_URL" -o static/data/manifest.json
+echo "Fetched manifest.json from $MANIFEST_URL"
