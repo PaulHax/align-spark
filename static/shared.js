@@ -108,7 +108,7 @@ export function buildScenarioSelector(container, currentId, onSelect) {
   });
 }
 
-export function buildScenarioAccordion(container, scenarios, currentId, onSelect) {
+export function buildScenarioAccordion(container, scenarios, currentId, onSelect, { showKdmaTag = true } = {}) {
   container.innerHTML = "";
 
   scenarios.forEach((scenario) => {
@@ -132,8 +132,9 @@ export function buildScenarioAccordion(container, scenarios, currentId, onSelect
       )
       .join("");
 
+    const tagHtml = showKdmaTag && kdmaLabel ? `<span class="accordion-kdma-tag">${kdmaLabel}</span>` : "";
     details.innerHTML = `
-      <span slot="summary" class="accordion-summary">${scenario.title}${kdmaLabel ? `<span class="accordion-kdma-tag">${kdmaLabel}</span>` : ""}</span>
+      <span slot="summary" class="accordion-summary">${scenario.title}${tagHtml}</span>
       <div class="accordion-scenario-body">
         <div class="accordion-scenario-description">${descHtml}</div>
         ${choicesHtml ? `<div class="scenario-choices">${choicesHtml}</div>` : ""}

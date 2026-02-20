@@ -31,8 +31,7 @@ const renderBaselineCard = async (container) => {
   const letterHTML = idx >= 0 ? `<span class="choice-letter decision-choice-letter">${String.fromCharCode(65 + idx)}</span>` : "";
   const llm = result.llmBackbone?.split("/").pop() || "";
   container.innerHTML = `
-    <div class="eyebrow">Baseline Language Model</div>
-    <div class="decision-model-info">${llm}</div>
+    <div class="eyebrow">Baseline Language Model <span class="decision-model-info">${llm}</span></div>
     <div class="decision-choice">${letterHTML}${result.decision}</div>
     <wa-details summary="Justification" appearance="plain" class="decision-rationale-details"><div class="decision-rationale">${result.justification}</div></wa-details>
   `;
@@ -83,6 +82,7 @@ const handleSandboxScenarioChange = async (id) => {
     SCENARIOS,
     state.scenarioId,
     handleScenarioChange,
+    { showKdmaTag: false },
   );
   await renderBaselineCard($("[data-baseline-card]"));
   await renderComparison();
@@ -199,6 +199,7 @@ const initScenario = () => {
     SCENARIOS,
     state.scenarioId,
     handleScenarioChange,
+    { showKdmaTag: false },
   );
 };
 
