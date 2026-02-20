@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ALIGN Design Showcase — Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.2.1/dist-cdn/styles/webawesome.css"
+    />
+    <link rel="stylesheet" href="./shared.css" />
+    <link rel="stylesheet" href="./guide.css" />
+  </head>
+  <body>
+    <nav class="showcase-nav">
+      <div class="nav-brand">ALIGN <span>Design Showcase</span></div>
+      <div class="nav-tabs">
+        <a href="guide.html" class="nav-tab active">Guide</a>
+        <a href="tour.html" class="nav-tab">Tour</a>
+        <a href="wizard.html" class="nav-tab">Wizard</a>
+        <a href="scroll.html" class="nav-tab">Scroll</a>
+        <a href="accordion.html" class="nav-tab">Accordion</a>
+        <a href="slides.html" class="nav-tab">Slide Deck</a>
+      </div>
+    </nav>
+
+    <div class="guide-layout">
+      <aside class="guide-toc">
+        <div class="toc-items">
+          <button class="toc-pill active" data-toc="scenario">Scenario</button>
+          <button class="toc-pill" data-toc="baseline">Baseline</button>
+          <button class="toc-pill" data-toc="values">Values</button>
+          <button class="toc-pill" data-toc="comparison">Comparison</button>
+          <button class="toc-pill" data-toc="sandbox">Sandbox</button>
+        </div>
+      </aside>
+
+      <main class="guide-content">
+        <section class="guide-section" data-section="scenario">
+          <div class="section-inner">
+            <div class="section-eyebrow">Scenario</div>
+            <h2 class="section-heading">Choose a Scenario</h2>
+            <p class="section-subtitle">Select a dilemma to explore how AI alignment affects decisions.</p>
+            <div class="scenario-accordion-container" data-scenario-accordion></div>
+          </div>
+        </section>
+
+        <section class="guide-section" data-section="baseline">
+          <div class="section-inner">
+            <div class="section-eyebrow">Step 1</div>
+            <h2 class="section-heading">Baseline Decision</h2>
+            <p class="section-subtitle">What the unaligned language model decides.</p>
+            <div class="baseline-card" data-baseline-card></div>
+          </div>
+        </section>
+
+        <section class="guide-section" data-section="values">
+          <div class="section-inner">
+            <div class="section-eyebrow">Step 2</div>
+            <h2 class="section-heading">Set Your Values</h2>
+            <p class="section-subtitle">Choose a preset or fine-tune the value dimensions.</p>
+            <div class="values-presets" data-values-presets></div>
+            <div class="values-sliders" data-values-sliders></div>
+          </div>
+        </section>
+
+        <section class="guide-section" data-section="comparison">
+          <div class="section-inner">
+            <div class="section-eyebrow">Step 3</div>
+            <h2 class="section-heading">Aligned Decision</h2>
+            <p class="section-subtitle">See how your value alignment changes the outcome.</p>
+            <div class="comparison-container" data-comparison></div>
+          </div>
+        </section>
+
+        <section class="guide-section" data-section="sandbox">
+          <div class="section-inner">
+            <div class="section-eyebrow">Explore</div>
+            <h2 class="section-heading">Sandbox</h2>
+            <p class="section-subtitle">Change scenarios and values to see decisions update in real-time.</p>
+            <div class="sandbox-grid">
+              <div class="sandbox-scenario">
+                <div class="sandbox-zone-label">Scenario</div>
+                <div data-sandbox-scenarios></div>
+              </div>
+              <div class="sandbox-values">
+                <div class="sandbox-zone-label">Value Profile</div>
+                <div data-sandbox-presets></div>
+                <div data-sandbox-sliders></div>
+              </div>
+              <div class="sandbox-decisions">
+                <div class="sandbox-zone-label">Decision Comparison</div>
+                <div data-sandbox-results></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./guide.js"></script>
+  </body>
+</html>

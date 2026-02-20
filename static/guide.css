@@ -1,0 +1,284 @@
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: radial-gradient(circle at top, #f5fafc, #eef2f6 45%, #e6edf3 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.guide-layout {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+}
+
+.guide-toc {
+  align-self: start;
+  position: sticky;
+  top: 56px;
+  height: calc(100vh - 56px);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.toc-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.toc-pill {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 38px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.toc-pill:hover {
+  border-color: var(--accent);
+}
+
+.toc-pill.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 2px 12px var(--accent-light);
+}
+
+.guide-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.guide-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  scroll-margin-top: 56px;
+}
+
+.guide-section .section-inner {
+  width: 100%;
+  max-width: 1080px;
+  padding: 80px 0;
+}
+
+.section-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+.section-heading {
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.section-subtitle {
+  font-size: 1.05rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 40px;
+  max-width: 600px;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+
+.slider-row-reveal {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.slider-row-reveal.visible {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.scenario-accordion-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.guide-section wa-details {
+  display: block;
+  --border-color: var(--border);
+  --border-radius: 14px;
+  --header-padding: 16px 20px;
+  --content-padding: 0 20px 20px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.guide-section wa-details:hover {
+  border-color: var(--accent);
+}
+
+.guide-section wa-details[open] {
+  border-color: var(--accent);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.guide-section wa-details::part(header) {
+  padding: var(--header-padding);
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.guide-section wa-details::part(content) {
+  padding: var(--content-padding);
+}
+
+.guide-section .scenario-choice-card {
+  border: none;
+  background: none;
+  padding: 4px 0;
+}
+
+.baseline-card {
+  background: var(--surface);
+  border-radius: 18px;
+  padding: 36px 40px;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 32px rgba(8, 31, 56, 0.06);
+}
+
+.baseline-card .eyebrow {
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.baseline-card .decision-choice {
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+
+.baseline-card .decision-rationale {
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.values-presets {
+  margin-bottom: 28px;
+}
+
+.values-sliders {
+  max-width: 520px;
+}
+
+.sandbox-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: min-content 1fr;
+  grid-template-areas:
+    "scenario values"
+    "scenario decisions";
+  gap: 24px;
+}
+
+.sandbox-scenario {
+  grid-area: scenario;
+  grid-row: 1 / -1;
+}
+
+.sandbox-values {
+  grid-area: values;
+}
+
+.sandbox-decisions {
+  grid-area: decisions;
+}
+
+.sandbox-zone-label {
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+}
+
+.sandbox-decisions .sandbox-zone-label {
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 768px) {
+  .guide-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .guide-toc {
+    display: none;
+  }
+
+  .guide-section .section-inner {
+    padding: 60px 0;
+  }
+
+  .section-heading {
+    font-size: 1.6rem;
+  }
+
+  .baseline-card {
+    padding: 24px;
+  }
+
+  .sandbox-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "scenario"
+      "values"
+      "decisions";
+  }
+
+  .sandbox-scenario {
+    grid-row: auto;
+  }
+}
