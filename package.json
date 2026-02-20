@@ -1,0 +1,7 @@
+{
+  "name": "align-spark",
+  "private": true,
+  "scripts": {
+    "start": "npx serve static -p 8000"
+  }
+}
