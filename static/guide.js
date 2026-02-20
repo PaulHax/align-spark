@@ -231,6 +231,16 @@ const CHEVRON_SVG = `<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/
 
 const setupNextButtons = () => {
   const sections = $$("[data-section]");
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const btn = entry.target.querySelector(".section-next");
+        if (btn) btn.classList.toggle("hidden", !entry.isIntersecting);
+      });
+    },
+    { threshold: 0.5 },
+  );
+
   sections.forEach((section, i) => {
     if (i === sections.length - 1) return;
     const nextSection = sections[i + 1];
@@ -240,7 +250,8 @@ const setupNextButtons = () => {
     btn.addEventListener("click", () => {
       nextSection.scrollIntoView({ behavior: "smooth", block: "start" });
     });
-    section.querySelector(".section-inner").appendChild(btn);
+    section.appendChild(btn);
+    observer.observe(section);
   });
 };
 

@@ -97,7 +97,7 @@ body {
 }
 
 .guide-section {
-  min-height: 100vh;
+  min-height: calc(100vh - 56px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -368,17 +368,29 @@ body {
   border-top: 1px solid var(--border);
 }
 
+.guide-section {
+  position: relative;
+}
+
 .section-next {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  margin-top: 48px;
   cursor: pointer;
   border: none;
   background: none;
   color: var(--muted);
-  transition: color 0.3s;
+  transition: color 0.3s, opacity 0.4s;
+}
+
+.section-next.hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .section-next:hover {
@@ -393,23 +405,6 @@ body {
   letter-spacing: 0.1em;
 }
 
-.section-next-chevron {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 1.5px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: bounce-down 2s ease-in-out infinite;
-  transition: border-color 0.3s, background 0.3s;
-}
-
-.section-next:hover .section-next-chevron {
-  border-color: var(--accent);
-  background: var(--accent-light);
-}
-
 .section-next-chevron svg {
   width: 16px;
   height: 16px;
@@ -418,11 +413,6 @@ body {
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
-}
-
-@keyframes bounce-down {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(6px); }
 }
 
 @media (max-width: 768px) {
