@@ -26,38 +26,59 @@ body {
 .toc-items {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  width: 100%;
+  align-items: flex-start;
+  gap: 0;
+  position: relative;
 }
 
 .toc-pill {
   display: flex;
   align-items: center;
-  width: 100%;
-  height: 38px;
-  padding: 0 18px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
+  gap: 12px;
+  padding: 12px 0;
+  border: none;
   background: transparent;
   color: var(--muted);
   font-family: "Space Grotesk", "Segoe UI", sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 500;
   line-height: 1;
   cursor: pointer;
   text-align: left;
-  transition: background 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  position: relative;
+  transition: color 0.3s;
 }
 
+.toc-dot {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--bg, #fff);
+  position: relative;
+  z-index: 1;
+  transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+}
+
+
 .toc-pill:hover {
+  color: var(--ink);
+}
+
+.toc-pill:hover .toc-dot {
   border-color: var(--accent);
 }
 
 .toc-pill.active {
-  background: var(--accent);
-  color: #fff;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.toc-pill.active .toc-dot {
   border-color: var(--accent);
-  box-shadow: 0 2px 12px var(--accent-light);
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-light);
 }
 
 .guide-content {
@@ -237,6 +258,11 @@ body {
 
 .sandbox-values {
   grid-area: values;
+}
+
+.sandbox-values .preset-chip {
+  padding: 6px 12px;
+  font-size: 0.78rem;
 }
 
 .sandbox-decisions {
