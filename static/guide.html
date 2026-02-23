@@ -36,6 +36,7 @@
           <button class="toc-pill active" data-toc="scenario"><span class="toc-dot"></span>Scenario</button>
           <button class="toc-pill" data-toc="baseline"><span class="toc-dot"></span>Baseline</button>
           <button class="toc-pill" data-toc="values"><span class="toc-dot"></span>Values</button>
+          <button class="toc-pill" data-toc="alignment"><span class="toc-dot"></span>Alignment</button>
           <button class="toc-pill" data-toc="comparison"><span class="toc-dot"></span>Comparison</button>
           <button class="toc-pill" data-toc="sandbox"><span class="toc-dot"></span>Sandbox</button>
         </div>
@@ -63,7 +64,16 @@
         <section class="guide-section" data-section="values">
           <div class="section-inner">
             <h2 class="section-heading">Set Your Values</h2>
-            <p class="section-subtitle">Choose a preset or fine-tune the value dimensions, then see how alignment changes the decision.</p>
+            <p class="section-subtitle">Choose a preset or fine-tune the value dimensions that guide aligned decisions.</p>
+            <div class="values-presets" data-simple-presets></div>
+            <div class="values-sliders" data-simple-sliders></div>
+          </div>
+        </section>
+
+        <section class="guide-section" data-section="alignment">
+          <div class="section-inner">
+            <h2 class="section-heading">Aligned Decision</h2>
+            <p class="section-subtitle">See how your values and the scenario feed into the aligned decider.</p>
             <div class="values-flow">
               <div class="values-flow-inputs">
                 <div class="values-flow-left">
@@ -92,8 +102,8 @@
 
         <section class="guide-section" data-section="comparison">
           <div class="section-inner">
-            <h2 class="section-heading">Aligned Decision</h2>
-            <p class="section-subtitle">See how your value alignment changes the outcome.</p>
+            <h2 class="section-heading">Comparison</h2>
+            <p class="section-subtitle">See how alignment changes the outcome side by side.</p>
             <div class="comparison-container" data-comparison></div>
           </div>
         </section>

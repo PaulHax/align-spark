@@ -156,12 +156,18 @@ const handleScenarioChange = async (id) => {
   await renderComparison();
 };
 
+const syncAllValueControls = () => {
+  buildPresetChips($("[data-simple-presets]"), state.presetId, handleSimplePresetSelect);
+  setSliderValues($("[data-simple-sliders]"), state.values);
+  buildPresetChips($("[data-values-presets]"), state.presetId, handlePresetSelect);
+  setSliderValues($("[data-values-sliders]"), state.values);
+};
+
 const handlePresetSelect = async (presetId) => {
   state.presetId = presetId;
   const preset = getPreset(presetId);
   state.values = { ...preset.values };
-  buildPresetChips($("[data-values-presets]"), state.presetId, handlePresetSelect);
-  setSliderValues($("[data-values-sliders]"), state.values);
+  syncAllValueControls();
   await updateValuesFlow();
   await renderComparison();
 };
@@ -169,7 +175,24 @@ const handlePresetSelect = async (presetId) => {
 const handleValuesChange = async (newValues) => {
   state.values = newValues;
   state.presetId = null;
-  buildPresetChips($("[data-values-presets]"), state.presetId, handlePresetSelect);
+  syncAllValueControls();
+  await updateValuesFlow();
+  await renderComparison();
+};
+
+const handleSimplePresetSelect = async (presetId) => {
+  state.presetId = presetId;
+  const preset = getPreset(presetId);
+  state.values = { ...preset.values };
+  syncAllValueControls();
+  await updateValuesFlow();
+  await renderComparison();
+};
+
+const handleSimpleValuesChange = async (newValues) => {
+  state.values = newValues;
+  state.presetId = null;
+  syncAllValueControls();
   await updateValuesFlow();
   await renderComparison();
 };
@@ -204,8 +227,7 @@ const handleSandboxPresetSelect = async (presetId) => {
   state.values = { ...preset.values };
   buildPresetChips($("[data-sandbox-presets]"), state.presetId, handleSandboxPresetSelect);
   setSliderValues($("[data-sandbox-sliders]"), state.values);
-  buildPresetChips($("[data-values-presets]"), state.presetId, handlePresetSelect);
-  setSliderValues($("[data-values-sliders]"), state.values);
+  syncAllValueControls();
   await updateValuesFlow();
   await renderComparison();
   await renderSandbox();
@@ -215,8 +237,7 @@ const handleSandboxValuesChange = async (newValues) => {
   state.values = newValues;
   state.presetId = null;
   buildPresetChips($("[data-sandbox-presets]"), state.presetId, handleSandboxPresetSelect);
-  buildPresetChips($("[data-values-presets]"), state.presetId, handlePresetSelect);
-  setSliderValues($("[data-values-sliders]"), state.values);
+  syncAllValueControls();
   await updateValuesFlow();
   await renderComparison();
   await renderSandbox();
@@ -247,6 +268,10 @@ const revealSection = async (sectionName) => {
   }
 
   if (sectionName === "values") {
+    applyStaggerToSliders($("[data-simple-sliders]"));
+  }
+
+  if (sectionName === "alignment") {
     applyStaggerToSliders($("[data-values-sliders]"));
   }
 };
@@ -342,7 +367,12 @@ const initScenario = () => {
   );
 };
 
-const initValues = async () => {
+const initSimpleValues = () => {
+  buildPresetChips($("[data-simple-presets]"), state.presetId, handleSimplePresetSelect);
+  buildValueControls($("[data-simple-sliders]"), state.values, handleSimpleValuesChange);
+};
+
+const initAlignment = async () => {
   buildPresetChips($("[data-values-presets]"), state.presetId, handlePresetSelect);
   buildValueControls($("[data-values-sliders]"), state.values, handleValuesChange);
   await updateValuesFlow();
@@ -364,7 +394,8 @@ const init = async () => {
   initScenario();
   await renderDeciderCard($("[data-decider-card]"));
   await renderBaselineCard($("[data-baseline-card]"));
-  await initValues();
+  initSimpleValues();
+  await initAlignment();
   await renderComparison();
   await initSandbox();
   setupNextButtons();
