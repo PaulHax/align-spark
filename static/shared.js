@@ -230,7 +230,7 @@ export function renderScenarioDescription(container, scenario) {
 }
 
 export function getDetailsOpenState(container) {
-  const details = container.querySelectorAll(".decision-rationale-details");
+  const details = container.querySelectorAll(".decision-panel, .decision-rationale-details");
   return [details[0]?.open ?? false, details[1]?.open ?? false];
 }
 

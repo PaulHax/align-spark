@@ -99,7 +99,7 @@
                 </div>
                 <div class="values-flow-right">
                   <div class="flow-input-label">Value Profile</div>
-                  <wa-details class="values-accordion" open>
+                  <wa-details class="values-accordion">
                     <span slot="summary" class="values-presets" data-values-presets></span>
                     <div class="values-sliders" data-values-sliders></div>
                   </wa-details>
@@ -163,20 +163,36 @@
           <div class="section-inner">
             <h2 class="section-heading">Sandbox</h2>
             <p class="section-subtitle">Change scenarios and values to see decisions update in real-time.</p>
-            <div class="sandbox-grid">
-              <div class="sandbox-scenario">
-                <div class="sandbox-zone-label">Scenario</div>
-                <div data-sandbox-scenarios></div>
+            <div class="comparison-flow">
+              <div class="comparison-flow-inputs">
+                <div class="comparison-input-col">
+                  <div class="sandbox-scenario-accordion" data-sandbox-scenarios></div>
+                </div>
+                <div class="comparison-input-col">
+                  <wa-details class="values-accordion" open data-sandbox-values>
+                    <span slot="summary" class="values-presets" data-sandbox-presets></span>
+                    <div class="values-sliders" data-sandbox-sliders></div>
+                  </wa-details>
+                </div>
               </div>
-              <div class="sandbox-values">
-                <div class="sandbox-zone-label">Value Profile</div>
-                <div data-sandbox-presets></div>
-                <div data-sandbox-sliders></div>
+
+              <div class="comparison-connectors">
+                <div class="comparison-stem-cell"><div class="comparison-stem"></div></div>
+                <div class="comparison-stem-cell"><div class="comparison-stem"></div></div>
               </div>
-              <div class="sandbox-decisions">
-                <div class="sandbox-zone-label">Decision Comparison</div>
-                <div data-sandbox-results></div>
+              <svg class="comparison-crossarm" data-sandbox-crossarm></svg>
+
+              <div class="comparison-flow-deciders">
+                <div class="comparison-decider-cell" data-sandbox-baseline-decider></div>
+                <div class="comparison-decider-cell" data-sandbox-aligned-decider></div>
               </div>
+
+              <div class="comparison-flow-stems">
+                <div class="comparison-stem-cell"><div class="comparison-stem"></div></div>
+                <div class="comparison-stem-cell"><div class="comparison-stem"></div></div>
+              </div>
+
+              <div class="comparison-flow-decisions" data-sandbox-results></div>
             </div>
           </div>
         </section>

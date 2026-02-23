@@ -133,9 +133,13 @@ const renderAlignedDecision = async (container) => {
   const scenario = getScenario(state.scenarioId);
   const idx = scenario.choices.findIndex((c) => c.id === result.choiceId);
   const letterHTML = idx >= 0 ? `<span class="choice-letter decision-choice-letter">${String.fromCharCode(65 + idx)}</span>` : "";
+  const wasOpen = container.querySelector(".decision-panel")?.open;
   container.innerHTML = `
-    <wa-details class="aligned-decision-panel">
-      <span slot="summary" class="decision-choice"><span class="panel-eyebrow">Decision</span><span class="decision-choice-row">${letterHTML}${result.decision}</span></span>
+    <wa-details class="decision-panel"${wasOpen ? " open" : ""}>
+      <span slot="summary" class="decision-panel-summary">
+        <span class="decision-panel-choice">${letterHTML}${result.decision}</span>
+        <span class="decision-panel-justification-preview">${result.justification}</span>
+      </span>
       <div class="decision-rationale">${result.justification}</div>
     </wa-details>
   `;
@@ -211,15 +215,25 @@ const renderComparisonDecisions = (container, aligned, baseline, scenario) => {
   container.innerHTML = `
     <div class="decision-comparison">
       <div class="decision-col">
-        <div class="decision-choice">${baselineLetter}${baseline.decision}</div>
-        <wa-details summary="Justification" appearance="plain" class="decision-rationale-details"${baselineOpen}><div class="decision-rationale">${baseline.justification}</div></wa-details>
+        <wa-details class="decision-panel"${baselineOpen}>
+          <span slot="summary" class="decision-panel-summary">
+            <span class="decision-panel-choice">${baselineLetter}${baseline.decision}</span>
+            <span class="decision-panel-justification-preview">${baseline.justification}</span>
+          </span>
+          <div class="decision-rationale">${baseline.justification}</div>
+        </wa-details>
       </div>
       <div class="comparison-divider">
         <div class="comparison-badge ${changed ? "changed" : "same"}">${changed ? "≠" : "=="}</div>
       </div>
       <div class="decision-col">
-        <div class="decision-choice">${alignedLetter}${aligned.decision}</div>
-        <wa-details summary="Justification" appearance="plain" class="decision-rationale-details"${alignedOpen}><div class="decision-rationale">${aligned.justification}</div></wa-details>
+        <wa-details class="decision-panel"${alignedOpen}>
+          <span slot="summary" class="decision-panel-summary">
+            <span class="decision-panel-choice">${alignedLetter}${aligned.decision}</span>
+            <span class="decision-panel-justification-preview">${aligned.justification}</span>
+          </span>
+          <div class="decision-rationale">${aligned.justification}</div>
+        </wa-details>
       </div>
     </div>
   `;
@@ -289,6 +303,8 @@ const syncAllValueControls = () => {
   setSliderValues($("[data-values-sliders]"), state.values);
   buildPresetChips($("[data-comparison-presets]"), state.presetId, handleComparisonPresetSelect);
   setSliderValues($("[data-comparison-sliders]"), state.values);
+  buildPresetChips($("[data-sandbox-presets]"), state.presetId, handleSandboxPresetSelect);
+  setSliderValues($("[data-sandbox-sliders]"), state.values);
 };
 
 const handlePresetSelect = async (presetId) => {
@@ -329,8 +345,6 @@ const handleComparisonPresetSelect = async (presetId) => {
   state.presetId = presetId;
   const preset = getPreset(presetId);
   state.values = { ...preset.values };
-  buildPresetChips($("[data-sandbox-presets]"), state.presetId, handleSandboxPresetSelect);
-  setSliderValues($("[data-sandbox-sliders]"), state.values);
   syncAllValueControls();
   await updateValuesFlow();
   await renderComparison();
@@ -340,19 +354,86 @@ const handleComparisonPresetSelect = async (presetId) => {
 const handleComparisonValuesChange = async (newValues) => {
   state.values = newValues;
   state.presetId = null;
-  buildPresetChips($("[data-sandbox-presets]"), state.presetId, handleSandboxPresetSelect);
   syncAllValueControls();
   await updateValuesFlow();
   await renderComparison();
   await renderSandbox();
 };
 
+const drawSandboxCrossarm = () => {
+  const svg = $("[data-sandbox-crossarm]");
+  const flow = svg.closest(".comparison-flow");
+  const scenarioAccordion = flow.querySelector("[data-sandbox-scenarios]");
+  const activeDetails = scenarioAccordion?.querySelector("wa-details[open]");
+  const alignedDecider = flow.querySelector("[data-sandbox-aligned-decider] .aligned-decider-node");
+  if (!activeDetails || !alignedDecider) return;
+
+  const fr = flow.getBoundingClientRect();
+  const sr = activeDetails.getBoundingClientRect();
+  const ar = alignedDecider.getBoundingClientRect();
+
+  const x1 = sr.right - fr.left;
+  const y1 = (sr.top + sr.bottom) / 2 - fr.top;
+  const y2 = (ar.top + ar.bottom) / 2 - fr.top;
+  const x2 = ar.left - fr.left;
+  const xDrop = x1 + 16;
+  const r = 8;
+
+  const d = [
+    `M ${x1 + 6} ${y1}`,
+    `H ${xDrop - r}`,
+    `Q ${xDrop} ${y1} ${xDrop} ${y1 + r}`,
+    `V ${y2 - r}`,
+    `Q ${xDrop} ${y2} ${xDrop + r} ${y2}`,
+    `H ${x2 - 6}`,
+  ].join(" ");
+  svg.innerHTML = `<path d="${d}" fill="none" stroke="var(--border)" stroke-width="2" />`;
+};
+
+const scheduleDrawSandboxCrossarm = () => {
+  requestAnimationFrame(() => requestAnimationFrame(drawSandboxCrossarm));
+};
+
+const renderSandboxDeciders = async () => {
+  const baseline = await decide(state.scenarioId, "baseline");
+  const aligned = await decide(state.scenarioId, "aligned", state.values);
+
+  const baselineLlm = baseline.llmBackbone?.split("/").pop() || "Language Model";
+  $("[data-sandbox-baseline-decider]").innerHTML = `
+    <div class="decider-node">
+      <div class="decider-node-icon">&#x1F916;</div>
+      <div class="decider-node-text">
+        <div class="decider-label">Baseline Language Model</div>
+        <div class="decider-model-name">${baselineLlm}</div>
+      </div>
+    </div>
+  `;
+
+  const adm = aligned.admName?.replace(/_/g, " ") || "Aligned Decider";
+  const displayAdm = {
+    phase2_pipeline_zeroshot_comparative_regression: "Comparative Regression",
+  }[aligned.admName] || adm;
+  const alignedLlm = aligned.llmBackbone?.split("/").pop() || "";
+  $("[data-sandbox-aligned-decider]").innerHTML = `
+    <div class="aligned-decider-node">
+      <div class="decider-node-icon">&#x1F9ED;</div>
+      <div class="decider-node-text">
+        <div class="decider-label">Value-Aligned Decider</div>
+        <div class="decider-model-name">${displayAdm}${alignedLlm ? ` · ${alignedLlm}` : ""}</div>
+      </div>
+    </div>
+  `;
+};
+
 const renderSandbox = async () => {
+  await renderSandboxDeciders();
   const container = $("[data-sandbox-results]");
   const openState = getDetailsOpenState(container);
   const baseline = await decide(state.scenarioId, "baseline");
   const aligned = await decide(state.scenarioId, "aligned", state.values);
-  renderDecisionComparison(container, baseline, aligned, getScenario(state.scenarioId), openState);
+  const scenario = getScenario(state.scenarioId);
+  renderComparisonDecisions(container, aligned, baseline, scenario);
+  scheduleDrawSandboxCrossarm();
 };
 
 const handleSandboxScenarioChange = async (id) => {
@@ -369,14 +450,13 @@ const handleSandboxScenarioChange = async (id) => {
   await updateValuesFlow();
   await renderComparison();
   await renderSandbox();
+  scheduleDrawSandboxCrossarm();
 };
 
 const handleSandboxPresetSelect = async (presetId) => {
   state.presetId = presetId;
   const preset = getPreset(presetId);
   state.values = { ...preset.values };
-  buildPresetChips($("[data-sandbox-presets]"), state.presetId, handleSandboxPresetSelect);
-  setSliderValues($("[data-sandbox-sliders]"), state.values);
   syncAllValueControls();
   await updateValuesFlow();
   await renderComparison();
@@ -386,7 +466,6 @@ const handleSandboxPresetSelect = async (presetId) => {
 const handleSandboxValuesChange = async (newValues) => {
   state.values = newValues;
   state.presetId = null;
-  buildPresetChips($("[data-sandbox-presets]"), state.presetId, handleSandboxPresetSelect);
   syncAllValueControls();
   await updateValuesFlow();
   await renderComparison();
@@ -545,6 +624,9 @@ const initSandbox = async () => {
   );
   buildPresetChips($("[data-sandbox-presets]"), state.presetId, handleSandboxPresetSelect);
   buildValueControls($("[data-sandbox-sliders]"), state.values, handleSandboxValuesChange);
+  $("[data-sandbox-values]").addEventListener("wa-after-show", drawSandboxCrossarm);
+  $("[data-sandbox-values]").addEventListener("wa-after-hide", drawSandboxCrossarm);
+  $("[data-sandbox-scenarios]").addEventListener("wa-after-show", scheduleDrawSandboxCrossarm);
   await renderSandbox();
 };
 
@@ -561,7 +643,10 @@ const init = async () => {
   setupRevealObserver();
   setupTocObserver();
   setupTocClicks();
-  window.addEventListener("resize", drawComparisonCrossarm);
+  window.addEventListener("resize", () => {
+    drawComparisonCrossarm();
+    drawSandboxCrossarm();
+  });
 };
 
 ready.then(() => {

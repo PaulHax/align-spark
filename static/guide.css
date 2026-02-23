@@ -556,86 +556,18 @@ body {
   max-width: 640px;
 }
 
-.aligned-decision-card .aligned-decision-panel {
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: var(--surface);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+.aligned-decision-card .decision-panel {
+  min-width: 0;
 }
 
-.aligned-decision-card .aligned-decision-panel:hover {
-  border-color: var(--accent);
-}
-
-.aligned-decision-card .aligned-decision-panel[open] {
-  border-color: var(--accent);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-}
-
-.aligned-decision-panel .decision-choice {
+.sandbox-scenario-accordion {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-}
-
-.aligned-decision-panel .decision-choice-row {
-  display: flex;
-  align-items: center;
   gap: 8px;
-  font-family: "Space Grotesk", "Segoe UI", sans-serif;
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--ink);
 }
 
-.aligned-decision-panel .decision-rationale {
-  font-size: 0.92rem;
-  line-height: 1.7;
-  color: var(--muted);
-}
-
-.sandbox-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: min-content 1fr;
-  grid-template-areas:
-    "scenario values"
-    "scenario decisions";
-  gap: 24px;
-}
-
-.sandbox-scenario {
-  grid-area: scenario;
-  grid-row: 1 / -1;
-}
-
-.sandbox-values {
-  grid-area: values;
-}
-
-.sandbox-values .preset-chip {
-  padding: 6px 12px;
-  font-size: 0.78rem;
-}
-
-.sandbox-decisions {
-  grid-area: decisions;
-}
-
-.sandbox-zone-label {
-  font-family: "Space Grotesk", "Segoe UI", sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-bottom: 12px;
-}
-
-.sandbox-decisions .sandbox-zone-label {
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
+[data-sandbox-values] {
+  margin-top: auto;
 }
 
 .comparison-flow {
@@ -659,7 +591,7 @@ body {
   flex-direction: column;
 }
 
-.comparison-input-col wa-details {
+[data-section="comparison"] .comparison-input-col wa-details {
   flex: 1;
 }
 
@@ -739,6 +671,45 @@ body {
   width: 100%;
 }
 
+.comparison-flow-decisions .decision-col {
+  align-items: stretch;
+  min-width: 0;
+}
+
+.comparison-flow-decisions .decision-panel {
+  min-width: 0;
+}
+
+.decision-panel .decision-panel-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.decision-panel-choice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.decision-panel-justification-preview {
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.decision-panel[open] .decision-panel-justification-preview {
+  display: none;
+}
+
 .guide-section {
   position: relative;
 }
@@ -805,19 +776,6 @@ body {
 
   .baseline-card {
     padding: 24px;
-  }
-
-  .sandbox-grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    grid-template-areas:
-      "scenario"
-      "values"
-      "decisions";
-  }
-
-  .sandbox-scenario {
-    grid-row: auto;
   }
 
   .comparison-flow-inputs,
