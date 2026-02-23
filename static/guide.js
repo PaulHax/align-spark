@@ -45,6 +45,10 @@ const renderBaselineScenario = (container, scenario) => {
     .map((p) => `<p>${p}</p>`)
     .join("");
 
+  const choiceLetters = scenario.choices
+    .map((c, i) => `<span class="summary-choice-item"><span class="choice-letter">${String.fromCharCode(65 + i)}</span><span class="summary-choice-label">${c.label}</span></span>`)
+    .join("");
+
   const choicesHtml = scenario.choices
     .map(
       (c, i) =>
@@ -54,7 +58,10 @@ const renderBaselineScenario = (container, scenario) => {
 
   container.innerHTML = `
     <wa-details class="baseline-scenario-panel">
-      <span slot="summary" class="accordion-summary"><span class="panel-eyebrow">Scenario</span>${scenario.title}</span>
+      <span slot="summary" class="accordion-summary">
+        <span class="accordion-summary-title">${scenario.title}</span>
+        <span class="accordion-summary-choices">${choiceLetters}</span>
+      </span>
       <div class="accordion-scenario-body">
         <div class="accordion-scenario-description">${descHtml}</div>
         ${choicesHtml ? `<div class="scenario-choices">${choicesHtml}</div>` : ""}
@@ -94,7 +101,7 @@ const renderValuesScenario = (container, scenario) => {
 
   container.innerHTML = `
     <wa-details class="baseline-scenario-panel">
-      <span slot="summary" class="accordion-summary"><span class="panel-eyebrow">Scenario</span>${scenario.title}</span>
+      <span slot="summary" class="accordion-summary">${scenario.title}</span>
       <div class="accordion-scenario-body">
         <div class="accordion-scenario-description">${descHtml}</div>
         ${choicesHtml ? `<div class="scenario-choices">${choicesHtml}</div>` : ""}
@@ -150,7 +157,7 @@ const renderComparisonScenario = (container, scenario) => {
 
   container.innerHTML = `
     <wa-details class="baseline-scenario-panel">
-      <span slot="summary" class="accordion-summary"><span class="panel-eyebrow">Scenario</span>${scenario.title}</span>
+      <span slot="summary" class="accordion-summary">${scenario.title}</span>
       <div class="accordion-scenario-body">
         <div class="accordion-scenario-description">${descHtml}</div>
         ${choicesHtml ? `<div class="scenario-choices">${choicesHtml}</div>` : ""}

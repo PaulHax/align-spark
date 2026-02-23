@@ -325,6 +325,38 @@ body {
   gap: 4px;
 }
 
+.accordion-summary-title {
+  flex: 1;
+}
+
+.accordion-summary-choices {
+  display: flex;
+  gap: 10px;
+  transition: opacity 0.3s;
+}
+
+[data-baseline-scenario] wa-details[open] .accordion-summary-choices {
+  opacity: 0;
+}
+
+.summary-choice-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.summary-choice-label {
+  font-size: 0.82rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+[data-baseline-scenario] .accordion-summary {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
 .panel-eyebrow {
   text-transform: uppercase;
   font-size: 0.62rem;
@@ -663,17 +695,19 @@ body {
   flex-direction: column;
   align-items: center;
   padding: 8px 0;
+  overflow: visible;
 }
 
 .comparison-merge-arms {
   position: relative;
   width: 100%;
   height: 24px;
+  overflow: visible;
 }
 
 .comparison-merge-arm-left {
   position: absolute;
-  left: 0;
+  left: -50%;
   right: 50%;
   top: 0;
   bottom: 0;
@@ -697,16 +731,6 @@ body {
   width: 2px;
   height: 12px;
   background: var(--border);
-}
-
-.comparison-cross-arm {
-  position: absolute;
-  left: calc(25% - 8px);
-  right: calc(50% - 14px);
-  top: 8px;
-  height: 2px;
-  background: var(--border);
-  pointer-events: none;
 }
 
 .comparison-flow-deciders {
