@@ -189,7 +189,6 @@ body {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  align-self: start;
 }
 
 .guide-viewport:is([data-step="4"], [data-step="5"], [data-step="6"]) .zone-values {
@@ -198,7 +197,17 @@ body {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  align-self: start;
+}
+
+.guide-viewport:is([data-step="4"], [data-step="5"], [data-step="6"]) .zone-scenario::after,
+.guide-viewport:is([data-step="4"], [data-step="5"], [data-step="6"]) .zone-values::after {
+  content: '';
+  flex: 1;
+  width: 2px;
+  min-height: 20px;
+  margin-top: 12px;
+  background: var(--border);
+  align-self: center;
 }
 
 .guide-viewport:is([data-step="4"], [data-step="5"], [data-step="6"]) .zone-decider-baseline {
@@ -239,8 +248,9 @@ body {
   background: var(--border);
 }
 
+.guide-viewport:is([data-step="4"], [data-step="5"], [data-step="6"]) .decider-card::before,
 .guide-viewport:is([data-step="4"], [data-step="5"], [data-step="6"]) .aligned-decider-card::before {
-  margin-bottom: 16px;
+  display: none;
 }
 
 .guide-viewport:is([data-step="4"], [data-step="5"], [data-step="6"]) .aligned-decider-card::after {

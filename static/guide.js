@@ -810,13 +810,29 @@ const setupNav = () => {
   });
 
   let wheelCooldown = false;
+  let edgeCount = 0;
+  let lastEdgeDir = 0;
+  const content = $(".step-content");
   $(".guide-viewport").addEventListener("wheel", (e) => {
     if (wheelCooldown) return;
     const threshold = 30;
     if (Math.abs(e.deltaY) < threshold) return;
+    const dir = e.deltaY > 0 ? 1 : -1;
+    const atTop = content.scrollTop <= 0;
+    const atBottom = content.scrollTop + content.clientHeight >= content.scrollHeight - 1;
+    const atEdge = (dir > 0 && atBottom) || (dir < 0 && atTop);
+    const isScrollable = content.scrollHeight > content.clientHeight + 2;
+    if (!atEdge) { edgeCount = 0; lastEdgeDir = 0; return; }
+    if (isScrollable && (dir !== lastEdgeDir || edgeCount < 1)) {
+      edgeCount = dir === lastEdgeDir ? edgeCount + 1 : 1;
+      lastEdgeDir = dir;
+      return;
+    }
+    edgeCount = 0;
+    lastEdgeDir = 0;
     wheelCooldown = true;
     setTimeout(() => { wheelCooldown = false; }, 600);
-    goToStep(state.step + (e.deltaY > 0 ? 1 : -1));
+    goToStep(state.step + dir);
   }, { passive: true });
 };
 
