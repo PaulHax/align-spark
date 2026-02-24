@@ -50,9 +50,9 @@ const STEPS = [
   },
   {
     id: "comparison",
-    heading: "Side by Side",
-    subtitle: "See how values change the outcome.",
-    zones: { comparison: "comparison" },
+    heading: "The Shift",
+    subtitle: "Compare what the AI chooses with and without your values.",
+    zones: { scenario: "summary-labeled", values: "accordion", "decider-baseline": true, "decider-aligned": true, "decision-baseline": true, "decision-aligned": true },
   },
   {
     id: "sandbox",
@@ -654,7 +654,9 @@ const goToStep = async (index) => {
 
   const prevIndex = state.step;
   state.step = index;
-  const isMorph = (prevIndex === 4 && index === 5) || (prevIndex === 5 && index === 4);
+  const isMorph =
+    (prevIndex === 3 && index === 4) || (prevIndex === 4 && index === 3) ||
+    (prevIndex === 4 && index === 5) || (prevIndex === 5 && index === 4);
 
   const applyChanges = async () => {
     $(".guide-viewport").dataset.step = index;

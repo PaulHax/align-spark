@@ -208,7 +208,101 @@ body {
   width: 100%;
 }
 
-.guide-viewport[data-step="4"] .step-content,
+/* Step 5: Side by Side — same grid as step 3 but with baseline decider/decision */
+
+.guide-viewport[data-step="4"] .step-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 32px;
+  align-content: center;
+}
+
+.guide-viewport[data-step="4"] .step-content::before,
+.guide-viewport[data-step="4"] .step-content::after {
+  display: none;
+}
+
+.guide-viewport[data-step="4"] .step-header {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+
+.guide-viewport[data-step="4"] .zone-scenario {
+  grid-row: 2;
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  align-self: start;
+}
+
+.guide-viewport[data-step="4"] .zone-values {
+  grid-row: 2;
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  align-self: start;
+}
+
+.guide-viewport[data-step="4"] .zone-decider-baseline {
+  grid-row: 3;
+  grid-column: 1;
+  justify-self: center;
+}
+
+.guide-viewport[data-step="4"] .zone-decider-aligned {
+  grid-row: 3;
+  grid-column: 2;
+  justify-self: center;
+}
+
+.guide-viewport[data-step="4"] .zone-decision-baseline {
+  grid-row: 4;
+  grid-column: 1;
+  min-width: 0;
+}
+
+.guide-viewport[data-step="4"] .zone-decision-aligned {
+  grid-row: 4;
+  grid-column: 2;
+  max-width: none;
+  min-width: 0;
+}
+
+.guide-viewport[data-step="4"] .aligned-decider-card {
+  padding: 12px 0;
+}
+
+.guide-viewport[data-step="4"] .aligned-decider-card::before,
+.guide-viewport[data-step="4"] .aligned-decider-card::after {
+  content: "";
+  display: block;
+  width: 2px;
+  height: 20px;
+  background: var(--border);
+}
+
+.guide-viewport[data-step="4"] .aligned-decider-card::before {
+  margin-bottom: 16px;
+}
+
+.guide-viewport[data-step="4"] .aligned-decider-card::after {
+  margin-top: 16px;
+}
+
+.guide-viewport[data-step="4"] .aligned-decision-stem {
+  display: none;
+}
+
+.guide-viewport[data-step="4"] .aligned-decision-card {
+  max-width: none;
+}
+
+.guide-viewport[data-step="4"] .decision-panel {
+  min-width: 0;
+}
+
 .guide-viewport[data-step="5"] .step-content {
   display: flex;
   flex-direction: column;
