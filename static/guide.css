@@ -452,20 +452,20 @@ body {
 }
 
 .decider-label {
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.decider-model-name {
   text-transform: uppercase;
   font-size: 0.62rem;
   letter-spacing: 0.08em;
   color: var(--muted);
   font-weight: 600;
   line-height: 1;
-}
-
-.decider-model-name {
-  font-family: "Space Grotesk", "Segoe UI", sans-serif;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--ink);
-  line-height: 1.3;
 }
 
 .baseline-scenario-panel .accordion-summary {
@@ -615,20 +615,20 @@ body {
 }
 
 .aligned-decider-node .decider-label {
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.aligned-decider-node .decider-model-name {
   text-transform: uppercase;
   font-size: 0.62rem;
   letter-spacing: 0.08em;
   color: var(--muted);
   font-weight: 600;
   line-height: 1;
-}
-
-.aligned-decider-node .decider-model-name {
-  font-family: "Space Grotesk", "Segoe UI", sans-serif;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--ink);
-  line-height: 1.3;
 }
 
 /* Step 4: Alignment flow */
