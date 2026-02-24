@@ -52,13 +52,13 @@ const STEPS = [
     id: "comparison",
     heading: "The Shift",
     subtitle: "Compare what the AI chooses with and without your values.",
-    zones: { scenario: "summary-labeled", values: "accordion", "decider-baseline": true, "decider-aligned": true, "decision-baseline": true, "decision-aligned": true },
+    zones: { scenario: "summary-labeled", values: "accordion", connectors: "crossarm", "decider-baseline": true, "decider-aligned": true, "decision-baseline": true, "decision-aligned": true },
   },
   {
     id: "sandbox",
-    heading: "Explore",
-    subtitle: "Change scenarios and values to see decisions update in real time.",
-    zones: { comparison: "sandbox" },
+    heading: "Experiment",
+    subtitle: "Swap scenarios and adjust values to see when decisions shift.",
+    zones: { scenario: "radio-selector", values: "accordion-open", connectors: "crossarm", "decider-baseline": true, "decider-aligned": true, "decision-baseline": true, "decision-aligned": true },
   },
   {
     id: "learn-more",
@@ -112,6 +112,19 @@ const renderScenarioSummary = (container, { showLabel = false } = {}) => {
       </div>
     </wa-details>
   `;
+};
+
+const renderScenarioRadioSelector = (container) => {
+  container.innerHTML = `
+    <div class="flow-input-label">Scenario</div>
+    <div class="sandbox-scenario-accordion" data-sandbox-scenarios></div>
+  `;
+  buildSandboxScenarioAccordion(
+    container.querySelector("[data-sandbox-scenarios]"),
+    SCENARIOS,
+    state.scenarioId,
+    handleExploreScenarioChange,
+  );
 };
 
 const renderDeciderBaseline = async (container) => {
@@ -181,6 +194,18 @@ const renderValuesAccordion = (container) => {
   buildValueControls(container.querySelector("[data-values-sliders]"), state.values, handleValuesChange);
 };
 
+const renderValuesAccordionOpen = (container) => {
+  container.innerHTML = `
+    <div class="flow-input-label">Value Profile</div>
+    <wa-details class="values-accordion" open>
+      <span slot="summary" class="values-presets" data-values-presets></span>
+      <div class="values-sliders" data-values-sliders></div>
+    </wa-details>
+  `;
+  buildPresetChips(container.querySelector("[data-values-presets]"), state.presetId, handlePresetSelect);
+  buildValueControls(container.querySelector("[data-values-sliders]"), state.values, handleValuesChange);
+};
+
 const renderConnectors = (container) => {
   container.innerHTML = `
     <div class="values-flow-connector">
@@ -191,6 +216,10 @@ const renderConnectors = (container) => {
       <div class="connector-stem"></div>
     </div>
   `;
+};
+
+const renderCrossarmConnector = (container) => {
+  container.innerHTML = `<svg class="crossarm-overlay"></svg>`;
 };
 
 const renderAlignedDecider = async (container) => {
@@ -317,6 +346,29 @@ const scheduleDrawCrossarm = (zone) => {
       drawCrossarm(svg, flow, scenarioPanel, alignedDecider);
     }
   }));
+};
+
+const drawZoneCrossarm = () => {
+  const svg = $(".zone-connectors .crossarm-overlay");
+  if (!svg) return;
+  const content = $(".step-content");
+  const step = STEPS[state.step];
+  if (!step?.zones?.connectors) return;
+
+  let sourceEl;
+  if (step.zones.scenario === "radio-selector") {
+    sourceEl = $('[data-zone="scenario"] .scenario-radio-row.selected');
+  } else {
+    sourceEl = $('[data-zone="scenario"] wa-details');
+  }
+  const targetEl = $('[data-zone="decider-aligned"] .aligned-decider-node');
+  if (sourceEl && targetEl && content) {
+    drawCrossarm(svg, content, sourceEl, targetEl);
+  }
+};
+
+const scheduleDrawZoneCrossarm = () => {
+  requestAnimationFrame(() => requestAnimationFrame(drawZoneCrossarm));
 };
 
 const renderComparisonFlow = async (container, variant) => {
@@ -570,6 +622,17 @@ const handleValuesChange = async (newValues) => {
   await renderAlignedDecision($('[data-zone="decision-aligned"]'));
 };
 
+const handleExploreScenarioChange = async (id) => {
+  state.scenarioId = id;
+  await Promise.all([
+    renderDeciderBaseline($('[data-zone="decider-baseline"]')),
+    renderDecisionBaseline($('[data-zone="decision-baseline"]')),
+    renderAlignedDecider($('[data-zone="decider-aligned"]')),
+    renderAlignedDecision($('[data-zone="decision-aligned"]')),
+  ]);
+  scheduleDrawZoneCrossarm();
+};
+
 const handleComparisonPresetSelect = async (presetId) => {
   state.presetId = presetId;
   state.values = { ...getPreset(presetId).values };
@@ -608,6 +671,7 @@ const renderZone = async (zoneId, variant) => {
   switch (zoneId) {
     case "scenario":
       if (variant === "accordion") renderScenarioAccordion(zone);
+      else if (variant === "radio-selector") renderScenarioRadioSelector(zone);
       else renderScenarioSummary(zone, { showLabel: variant === "summary-labeled" });
       break;
     case "decider-baseline":
@@ -618,10 +682,12 @@ const renderZone = async (zoneId, variant) => {
       break;
     case "values":
       if (variant === "with-decider") renderValuesWithDecider(zone);
+      else if (variant === "accordion-open") renderValuesAccordionOpen(zone);
       else renderValuesAccordion(zone);
       break;
     case "connectors":
-      renderConnectors(zone);
+      if (variant === "crossarm") renderCrossarmConnector(zone);
+      else renderConnectors(zone);
       break;
     case "decider-aligned":
       await renderAlignedDecider(zone);
@@ -655,9 +721,14 @@ const goToStep = async (index) => {
   const prevIndex = state.step;
   state.step = index;
   const isMorph =
-    (prevIndex === 3 && index === 4) || (prevIndex === 4 && index === 3);
+    (prevIndex === 3 && index === 4) || (prevIndex === 4 && index === 3) ||
+    (prevIndex === 4 && index === 5) || (prevIndex === 5 && index === 4);
 
   const applyChanges = async () => {
+    if (isMorph) {
+      const svg = $(".zone-connectors .crossarm-overlay");
+      if (svg) svg.innerHTML = "";
+    }
     $(".guide-viewport").dataset.step = index;
     $("[data-step-heading]").textContent = nextStep.heading;
     $("[data-step-subtitle]").textContent = nextStep.subtitle;
@@ -712,6 +783,7 @@ const goToStep = async (index) => {
 
   const compZone = $('[data-zone="comparison"]');
   if (compZone.classList.contains("visible")) scheduleDrawCrossarm(compZone);
+  scheduleDrawZoneCrossarm();
 };
 
 const setupNav = () => {
@@ -749,7 +821,10 @@ const init = async () => {
   window.addEventListener("resize", () => {
     const zone = $('[data-zone="comparison"]');
     if (zone.classList.contains("visible")) scheduleDrawCrossarm(zone);
+    scheduleDrawZoneCrossarm();
   });
+  $(".step-content").addEventListener("wa-after-show", scheduleDrawZoneCrossarm);
+  $(".step-content").addEventListener("wa-after-hide", scheduleDrawZoneCrossarm);
   goToStep(0);
 };
 
