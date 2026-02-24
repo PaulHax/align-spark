@@ -199,7 +199,7 @@ body {
   min-width: 0;
 }
 
-.guide-viewport:is([data-step="4"], [data-step="5"], [data-step="6"]) .zone-scenario::after,
+.guide-viewport:is([data-step="5"], [data-step="6"]) .zone-scenario::after,
 .guide-viewport:is([data-step="4"], [data-step="5"], [data-step="6"]) .zone-values::after {
   content: '';
   flex: 1;
