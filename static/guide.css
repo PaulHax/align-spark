@@ -114,7 +114,6 @@ body {
   color: var(--muted);
   line-height: 1.6;
   margin-bottom: 0;
-  max-width: 600px;
 }
 
 /* Step content area */
@@ -174,14 +173,20 @@ body {
   grid-row: 1;
 }
 
-.guide-viewport[data-step="3"] .zone-scenario {
-  grid-column: 1;
+.guide-viewport[data-step="3"] .zone-scenario,
+.guide-viewport[data-step="3"] .zone-values {
   grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
+.guide-viewport[data-step="3"] .zone-scenario { grid-column: 1; }
+.guide-viewport[data-step="3"] .zone-values { grid-column: 2; }
+
+.guide-viewport[data-step="3"] .zone-scenario,
 .guide-viewport[data-step="3"] .zone-values {
-  grid-column: 2;
-  grid-row: 2;
+  align-self: start;
 }
 
 .guide-viewport[data-step="3"] .zone-connectors {
@@ -357,6 +362,7 @@ body {
   flex-direction: row;
   align-items: center;
   gap: 12px;
+  overflow: hidden;
 }
 
 .baseline-decision-panel .decision-choice {
@@ -367,16 +373,23 @@ body {
 }
 
 .accordion-summary-title {
-  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .accordion-summary-choices {
   display: flex;
   gap: 10px;
+  margin-left: auto;
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
   transition: opacity 0.3s;
 }
 
-[data-zone="scenario"] wa-details[open] .accordion-summary-choices {
+.baseline-scenario-panel[open] .accordion-summary-choices {
   opacity: 0;
 }
 
@@ -384,12 +397,23 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-shrink: 0;
 }
 
 .summary-choice-label {
   font-size: 0.82rem;
   color: var(--muted);
   white-space: nowrap;
+}
+
+.summary-choice-item:last-child {
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.summary-choice-item:last-child .summary-choice-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .panel-eyebrow {
@@ -641,6 +665,11 @@ body {
   flex-direction: column;
 }
 
+.comparison-input-col > wa-details,
+.comparison-input-col > [data-comp-scenario] wa-details {
+  flex: 1;
+}
+
 .guide-viewport .values-accordion {
   margin-bottom: 0;
   --header-padding: 10px 16px;
@@ -650,10 +679,11 @@ body {
 
 .values-accordion .values-presets {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 6px;
   margin: 0;
   align-items: center;
+  overflow: hidden;
 }
 
 .values-accordion .preset-chip {
@@ -830,8 +860,40 @@ body {
 .step-nav {
   padding: 16px 40px;
   display: flex;
+  align-items: center;
   justify-content: center;
   gap: 12px;
+}
+
+.scroll-hint {
+  margin-left: 12px;
+  opacity: 0.35;
+}
+
+.scroll-mouse {
+  display: block;
+  width: 18px;
+  height: 28px;
+  border: 2px solid var(--muted);
+  border-radius: 10px;
+  position: relative;
+}
+
+.scroll-mouse-wheel {
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  width: 3px;
+  height: 6px;
+  margin-left: -1.5px;
+  background: var(--muted);
+  border-radius: 2px;
+  animation: scroll-wheel-bounce 1.8s ease-in-out infinite;
+}
+
+@keyframes scroll-wheel-bounce {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  50% { transform: translateY(4px); opacity: 0.4; }
 }
 
 .step-btn {
@@ -957,6 +1019,20 @@ body {
 }
 :root.backward::view-transition-new(step-content) {
   animation: vt-slide-in-left 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+:root.morph-transition::view-transition-old(step-content) {
+  animation: vt-fade-out 0.3s ease both;
+}
+:root.morph-transition::view-transition-new(step-content) {
+  animation: vt-fade-in 0.3s ease both;
+}
+
+@keyframes vt-fade-out {
+  to { opacity: 0; }
+}
+@keyframes vt-fade-in {
+  from { opacity: 0; }
 }
 
 @keyframes vt-slide-out-left {

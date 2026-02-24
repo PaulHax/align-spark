@@ -75,7 +75,7 @@ const renderScenarioAccordion = (container) => {
     SCENARIOS,
     state.scenarioId,
     handleScenarioChange,
-    { showKdmaTag: false },
+    { showKdmaTag: false, showChoicesInSummary: true },
   );
 };
 
@@ -297,14 +297,6 @@ const drawCrossarm = (svg, flow, sourceEl, targetEl) => {
 
   svg.innerHTML = "";
   svg.appendChild(path);
-
-  const len = path.getTotalLength();
-  path.style.strokeDasharray = len;
-  path.style.strokeDashoffset = len;
-  requestAnimationFrame(() => {
-    path.style.transition = "stroke-dashoffset 0.8s ease";
-    path.style.strokeDashoffset = "0";
-  });
 };
 
 const scheduleDrawCrossarm = (zone) => {
@@ -328,6 +320,11 @@ const scheduleDrawCrossarm = (zone) => {
 };
 
 const renderComparisonFlow = async (container, variant) => {
+  const prevValuesOpen = container.querySelector("[data-comp-values]")?.open
+    ?? container.querySelector("[data-comp-sandbox-values]")?.open
+    ?? false;
+  const prevScenarioOpen = container.querySelector("[data-comp-scenario] wa-details")?.open ?? false;
+
   container.dataset.variant = variant;
   const isSandbox = variant === "sandbox";
 
@@ -353,7 +350,7 @@ const renderComparisonFlow = async (container, variant) => {
       </wa-details>
       <div class="sandbox-values-stem"></div>`
     : `<div class="flow-input-label">Value Profile</div>
-      <wa-details class="values-accordion" data-comp-values>
+      <wa-details class="values-accordion"${prevValuesOpen ? " open" : ""} data-comp-values>
         <span slot="summary" class="values-presets" data-comp-presets></span>
         <div class="values-sliders" data-comp-sliders></div>
       </wa-details>`;
@@ -415,7 +412,7 @@ const renderComparisonFlow = async (container, variant) => {
     container.querySelector("[data-comp-sandbox-scenarios]").addEventListener("wa-after-hide", () => scheduleDrawCrossarm(container));
   } else {
     const compScenario = container.querySelector("[data-comp-scenario]");
-    renderComparisonScenario(compScenario, scenario);
+    renderComparisonScenario(compScenario, scenario, prevScenarioOpen);
     buildPresetChips(container.querySelector("[data-comp-presets]"), state.presetId, handleComparisonPresetSelect);
     buildValueControls(container.querySelector("[data-comp-sliders]"), state.values, handleComparisonValuesChange);
     const compValues = container.querySelector("[data-comp-values]");
@@ -428,7 +425,7 @@ const renderComparisonFlow = async (container, variant) => {
   scheduleDrawCrossarm(container);
 };
 
-const renderComparisonScenario = (container, scenario) => {
+const renderComparisonScenario = (container, scenario, wasOpen = false) => {
   const descHtml = scenario.description
     .split("\n")
     .filter((p) => p.trim())
@@ -447,7 +444,7 @@ const renderComparisonScenario = (container, scenario) => {
     .join("");
 
   container.innerHTML = `
-    <wa-details class="baseline-scenario-panel">
+    <wa-details class="baseline-scenario-panel"${wasOpen ? " open" : ""}>
       <span slot="summary" class="accordion-summary">
         <span class="accordion-summary-title">${scenario.title}</span>
         <span class="accordion-summary-choices">${choiceLetters}</span>
@@ -655,7 +652,9 @@ const goToStep = async (index) => {
   const entering = [...nextZones].filter((z) => !prevZones.has(z));
   const staying = [...nextZones].filter((z) => prevZones.has(z));
 
+  const prevIndex = state.step;
   state.step = index;
+  const isMorph = (prevIndex === 4 && index === 5) || (prevIndex === 5 && index === 4);
 
   const applyChanges = async () => {
     $(".guide-viewport").dataset.step = index;
@@ -663,6 +662,7 @@ const goToStep = async (index) => {
     $("[data-step-subtitle]").textContent = nextStep.subtitle;
     $("[data-prev]").hidden = index === 0;
     $("[data-next]").hidden = index === STEPS.length - 1;
+    $("[data-scroll-hint]").hidden = index === STEPS.length - 1;
 
     $$(".toc-pill").forEach((pill) => {
       pill.classList.toggle("active", pill.dataset.toc === nextStep.id);
@@ -693,14 +693,18 @@ const goToStep = async (index) => {
       $(`[data-zone="${zoneId}"]`).style.viewTransitionName = `zone-${zoneId}`;
     });
 
-    document.documentElement.classList.toggle("backward", !forward);
+    if (isMorph) {
+      document.documentElement.classList.add("morph-transition");
+    } else {
+      document.documentElement.classList.toggle("backward", !forward);
+    }
     const transition = document.startViewTransition(() => applyChanges());
     await transition.finished;
 
     staying.forEach((zoneId) => {
       $(`[data-zone="${zoneId}"]`).style.viewTransitionName = "";
     });
-    document.documentElement.classList.remove("backward");
+    document.documentElement.classList.remove("backward", "morph-transition");
   } else {
     await applyChanges();
   }
