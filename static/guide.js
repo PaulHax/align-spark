@@ -47,13 +47,13 @@ const renderBaselineScenario = (container, scenario) => {
     .join("");
 
   const choiceLetters = scenario.choices
-    .map((c, i) => `<span class="summary-choice-item"><span class="choice-letter">${String.fromCharCode(65 + i)}</span><span class="summary-choice-label">${c.label}</span></span>`)
+    .map((c, i) => `<span class="summary-choice-item"><span class="choice-letter choice-${String.fromCharCode(97 + i)}">${String.fromCharCode(65 + i)}</span><span class="summary-choice-label">${c.label}</span></span>`)
     .join("");
 
   const choicesHtml = scenario.choices
     .map(
       (c, i) =>
-        `<div class="scenario-choice-card"><span class="choice-letter">${String.fromCharCode(65 + i)}</span>${c.label}</div>`,
+        `<div class="scenario-choice-card"><span class="choice-letter choice-${String.fromCharCode(97 + i)}">${String.fromCharCode(65 + i)}</span>${c.label}</div>`,
     )
     .join("");
 
@@ -76,7 +76,7 @@ const renderBaselineCard = async (container) => {
   const scenario = getScenario(state.scenarioId);
   renderBaselineScenario($("[data-baseline-scenario]"), scenario);
   const idx = scenario.choices.findIndex((c) => c.id === result.choiceId);
-  const letterHTML = idx >= 0 ? `<span class="choice-letter decision-choice-letter">${String.fromCharCode(65 + idx)}</span>` : "";
+  const letterHTML = idx >= 0 ? `<span class="choice-letter decision-choice-letter choice-${String.fromCharCode(97 + idx)}">${String.fromCharCode(65 + idx)}</span>` : "";
   const openState = getDetailsOpenState(container);
   const isOpen = openState?.[0] ? " open" : "";
   container.innerHTML = `
@@ -100,7 +100,7 @@ const renderValuesScenario = (container, scenario) => {
   const choicesHtml = scenario.choices
     .map(
       (c, i) =>
-        `<div class="scenario-choice-card"><span class="choice-letter">${String.fromCharCode(65 + i)}</span>${c.label}</div>`,
+        `<div class="scenario-choice-card"><span class="choice-letter choice-${String.fromCharCode(97 + i)}">${String.fromCharCode(65 + i)}</span>${c.label}</div>`,
     )
     .join("");
 
@@ -137,7 +137,7 @@ const renderAlignedDecision = async (container) => {
   const result = await decide(state.scenarioId, "aligned", state.values);
   const scenario = getScenario(state.scenarioId);
   const idx = scenario.choices.findIndex((c) => c.id === result.choiceId);
-  const letterHTML = idx >= 0 ? `<span class="choice-letter decision-choice-letter">${String.fromCharCode(65 + idx)}</span>` : "";
+  const letterHTML = idx >= 0 ? `<span class="choice-letter decision-choice-letter choice-${String.fromCharCode(97 + idx)}">${String.fromCharCode(65 + idx)}</span>` : "";
   const wasOpen = container.querySelector(".decision-panel")?.open;
   container.innerHTML = `
     <wa-details class="decision-panel"${wasOpen ? " open" : ""}>
@@ -160,7 +160,7 @@ const renderComparisonScenario = (container, scenario) => {
   const choicesHtml = scenario.choices
     .map(
       (c, i) =>
-        `<div class="scenario-choice-card"><span class="choice-letter">${String.fromCharCode(65 + i)}</span>${c.label}</div>`,
+        `<div class="scenario-choice-card"><span class="choice-letter choice-${String.fromCharCode(97 + i)}">${String.fromCharCode(65 + i)}</span>${c.label}</div>`,
     )
     .join("");
 
@@ -213,9 +213,9 @@ const renderComparisonDecisions = (container, aligned, baseline, scenario) => {
   const baselineOpen = openState?.[1] ? " open" : "";
 
   const alignedIdx = scenario.choices.findIndex((c) => c.id === aligned.choiceId);
-  const alignedLetter = alignedIdx >= 0 ? `<span class="choice-letter decision-choice-letter">${String.fromCharCode(65 + alignedIdx)}</span>` : "";
+  const alignedLetter = alignedIdx >= 0 ? `<span class="choice-letter decision-choice-letter choice-${String.fromCharCode(97 + alignedIdx)}">${String.fromCharCode(65 + alignedIdx)}</span>` : "";
   const baselineIdx = scenario.choices.findIndex((c) => c.id === baseline.choiceId);
-  const baselineLetter = baselineIdx >= 0 ? `<span class="choice-letter decision-choice-letter">${String.fromCharCode(65 + baselineIdx)}</span>` : "";
+  const baselineLetter = baselineIdx >= 0 ? `<span class="choice-letter decision-choice-letter choice-${String.fromCharCode(97 + baselineIdx)}">${String.fromCharCode(65 + baselineIdx)}</span>` : "";
 
   container.innerHTML = `
     <div class="decision-comparison">
@@ -227,9 +227,6 @@ const renderComparisonDecisions = (container, aligned, baseline, scenario) => {
           </span>
           <div class="decision-rationale">${baseline.justification}</div>
         </wa-details>
-      </div>
-      <div class="comparison-divider">
-        <div class="comparison-badge ${changed ? "changed" : "same"}">${changed ? "≠" : "=="}</div>
       </div>
       <div class="decision-col">
         <wa-details class="decision-panel"${alignedOpen}>
@@ -618,6 +615,8 @@ const initComparison = async () => {
   buildValueControls($("[data-comparison-sliders]"), state.values, handleComparisonValuesChange);
   $("[data-comparison-values]").addEventListener("wa-after-show", drawComparisonCrossarm);
   $("[data-comparison-values]").addEventListener("wa-after-hide", drawComparisonCrossarm);
+  $("[data-comparison-scenario]").addEventListener("wa-after-show", scheduleDrawCrossarm);
+  $("[data-comparison-scenario]").addEventListener("wa-after-hide", scheduleDrawCrossarm);
   await renderComparison();
 };
 
@@ -650,7 +649,7 @@ const buildSandboxScenarioAccordion = (container, scenarios, currentId, onSelect
     const choicesHtml = scenario.choices
       .map(
         (c, i) =>
-          `<div class="scenario-choice-card"><span class="choice-letter">${String.fromCharCode(65 + i)}</span>${c.label}</div>`,
+          `<div class="scenario-choice-card"><span class="choice-letter choice-${String.fromCharCode(97 + i)}">${String.fromCharCode(65 + i)}</span>${c.label}</div>`,
       )
       .join("");
 

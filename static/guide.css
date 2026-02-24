@@ -728,14 +728,17 @@ body {
   width: 100%;
 }
 
-.comparison-flow-decisions .comparison-divider {
-  justify-content: flex-start;
-  padding-top: 12px;
+.comparison-flow-decisions .decision-comparison {
+  grid-template-columns: 1fr 1fr;
 }
 
 .comparison-flow-decisions .decision-col {
   align-items: stretch;
   min-width: 0;
+}
+
+.choice-b {
+  background: #2a7d6a;
 }
 
 .comparison-flow-decisions .decision-panel {
@@ -817,6 +820,58 @@ body {
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+.learn-more-inner {
+  text-align: center;
+}
+
+.learn-more-links {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.learn-more-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 28px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  text-decoration: none;
+  color: var(--ink);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.learn-more-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.learn-more-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.learn-more-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.learn-more-title {
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.learn-more-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
 }
 
 @media (max-width: 768px) {

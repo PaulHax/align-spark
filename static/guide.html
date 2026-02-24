@@ -33,28 +33,29 @@
     <div class="guide-layout">
       <aside class="guide-toc">
         <div class="toc-items">
-          <button class="toc-pill active" data-toc="scenario"><span class="toc-dot"></span>Scenario</button>
-          <button class="toc-pill" data-toc="baseline"><span class="toc-dot"></span>Baseline</button>
+          <button class="toc-pill active" data-toc="scenario"><span class="toc-dot"></span>Hard Choices</button>
+          <button class="toc-pill" data-toc="baseline"><span class="toc-dot"></span>Decision</button>
           <button class="toc-pill" data-toc="values"><span class="toc-dot"></span>Values</button>
-          <button class="toc-pill" data-toc="alignment"><span class="toc-dot"></span>Alignment</button>
-          <button class="toc-pill" data-toc="comparison"><span class="toc-dot"></span>Comparison</button>
-          <button class="toc-pill" data-toc="sandbox"><span class="toc-dot"></span>Sandbox</button>
+          <button class="toc-pill" data-toc="alignment"><span class="toc-dot"></span>Aligned AI</button>
+          <button class="toc-pill" data-toc="comparison"><span class="toc-dot"></span>Side by Side</button>
+          <button class="toc-pill" data-toc="sandbox"><span class="toc-dot"></span>Explore</button>
+          <button class="toc-pill" data-toc="learn-more"><span class="toc-dot"></span>Learn More</button>
         </div>
       </aside>
 
       <main class="guide-content">
         <section class="guide-section" data-section="scenario">
           <div class="section-inner">
-            <h2 class="section-heading">Choose a Scenario</h2>
-            <p class="section-subtitle">Select a dilemma to explore how AI alignment affects decisions.</p>
+            <h2 class="section-heading">Hard Choices</h2>
+            <p class="section-subtitle">Some decisions have no right answer — only trade-offs shaped by what you value most.</p>
             <div class="scenario-accordion-container" data-scenario-accordion></div>
           </div>
         </section>
 
         <section class="guide-section" data-section="baseline">
           <div class="section-inner">
-            <h2 class="section-heading">Baseline Decision</h2>
-            <p class="section-subtitle">What the unaligned language model decides.</p>
+            <h2 class="section-heading">Scenario In, Decision Out</h2>
+            <p class="section-subtitle">Without value guidance, the AI just picks what seems best from the scenario.</p>
             <div data-baseline-scenario></div>
             <div class="decider-card" data-decider-card></div>
             <div class="baseline-card" data-baseline-card></div>
@@ -63,8 +64,8 @@
 
         <section class="guide-section" data-section="values">
           <div class="section-inner">
-            <h2 class="section-heading">Set Your Values</h2>
-            <p class="section-subtitle">Choose a preset or fine-tune the value dimensions that guide aligned decisions.</p>
+            <h2 class="section-heading">Values are Priorities</h2>
+            <p class="section-subtitle">When there's no right answer, the best choice depends on what you value most.</p>
             <div class="values-centered-flow">
               <wa-details class="values-accordion" open>
                 <span slot="summary" class="values-presets" data-simple-presets></span>
@@ -84,8 +85,8 @@
 
         <section class="guide-section" data-section="alignment">
           <div class="section-inner">
-            <h2 class="section-heading">Aligned Decision</h2>
-            <p class="section-subtitle">See how your values and the scenario feed into the aligned decider.</p>
+            <h2 class="section-heading">Value-Aligned AI</h2>
+            <p class="section-subtitle">Now the decision maker considers your values alongside the scenario — not just the facts.</p>
             <div class="values-flow">
               <div class="values-flow-inputs">
                 <div class="values-flow-left">
@@ -116,8 +117,8 @@
 
         <section class="guide-section" data-section="comparison">
           <div class="section-inner">
-            <h2 class="section-heading">Comparison</h2>
-            <p class="section-subtitle">See how alignment changes the outcome side by side.</p>
+            <h2 class="section-heading">Side by Side</h2>
+            <p class="section-subtitle">See how values change the outcome.</p>
             <div class="comparison-flow">
               <div class="comparison-flow-inputs">
                 <div class="comparison-input-col">
@@ -156,8 +157,8 @@
 
         <section class="guide-section" data-section="sandbox">
           <div class="section-inner">
-            <h2 class="section-heading">Sandbox</h2>
-            <p class="section-subtitle">Change scenarios and values to see decisions update in real-time.</p>
+            <h2 class="section-heading">Explore</h2>
+            <p class="section-subtitle">Change scenarios and values to see decisions update in real time.</p>
             <div class="comparison-flow">
               <div class="comparison-flow-inputs">
                 <div class="comparison-input-col">
@@ -189,6 +190,36 @@
               </div>
 
               <div class="comparison-flow-decisions" data-sandbox-results></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="guide-section" data-section="learn-more">
+          <div class="section-inner">
+            <h2 class="section-heading">Learn More</h2>
+            <p class="section-subtitle">Explore the research and try the full interactive system.</p>
+            <div class="learn-more-links">
+              <a href="https://arxiv.org/abs/2507.09037" target="_blank" rel="noopener" class="learn-more-card">
+                <span class="learn-more-icon">&#x1F4C4;</span>
+                <span class="learn-more-text">
+                  <span class="learn-more-title">Research Paper</span>
+                  <span class="learn-more-desc">Read the full paper on arXiv</span>
+                </span>
+              </a>
+              <a href="https://www.kitware.com/ethical-explainable-ai-in-action-darpa-itm-phase-1-contributions/" target="_blank" rel="noopener" class="learn-more-card">
+                <span class="learn-more-icon">&#x1F4DD;</span>
+                <span class="learn-more-text">
+                  <span class="learn-more-title">Blog Post</span>
+                  <span class="learn-more-desc">Ethical AI in action — DARPA ITM Phase 1</span>
+                </span>
+              </a>
+              <a href="https://paul-elliott--align-app-serve.modal.run" target="_blank" rel="noopener" class="learn-more-card">
+                <span class="learn-more-icon">&#x1F9ED;</span>
+                <span class="learn-more-text">
+                  <span class="learn-more-title">Full Sandbox App</span>
+                  <span class="learn-more-desc">Try the interactive ALIGN system</span>
+                </span>
+              </a>
             </div>
           </div>
         </section>
