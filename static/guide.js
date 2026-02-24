@@ -25,6 +25,12 @@ const $$ = (sel) => [...document.querySelectorAll(sel)];
 
 const STEPS = [
   {
+    id: "intro",
+    heading: "AI Decisions You Can Trust",
+    subtitle: "AI-powered decision makers carry bias baggage from their training.<br>Personalized values can steer them so you can trust they make the right trade-offs.",
+    zones: {},
+  },
+  {
     id: "scenario",
     heading: "Hard Choices",
     subtitle: "Some decisions have no right answer — only trade-offs shaped by what you value most.",
@@ -46,7 +52,7 @@ const STEPS = [
     id: "alignment",
     heading: "Value Aligned AI",
     subtitle: "Now the decision maker uses your values alongside the scenario — aligning its choice to your priorities.",
-    zones: { scenario: "summary-labeled", values: "accordion", connectors: true, "decider-aligned": true, "decision-aligned": true },
+    zones: { scenario: "summary-labeled", values: "accordion", connectors: "crossarm", "decider-aligned": true, "decision-aligned": true },
   },
   {
     id: "comparison",
@@ -731,7 +737,7 @@ const goToStep = async (index) => {
     }
     $(".guide-viewport").dataset.step = index;
     $("[data-step-heading]").textContent = nextStep.heading;
-    $("[data-step-subtitle]").textContent = nextStep.subtitle;
+    $("[data-step-subtitle]").innerHTML = nextStep.subtitle;
     $("[data-prev]").hidden = index === 0;
     $("[data-next]").hidden = index === STEPS.length - 1;
     $("[data-scroll-hint]").hidden = index === STEPS.length - 1;
