@@ -655,8 +655,7 @@ const goToStep = async (index) => {
   const prevIndex = state.step;
   state.step = index;
   const isMorph =
-    (prevIndex === 3 && index === 4) || (prevIndex === 4 && index === 3) ||
-    (prevIndex === 4 && index === 5) || (prevIndex === 5 && index === 4);
+    (prevIndex === 3 && index === 4) || (prevIndex === 4 && index === 3);
 
   const applyChanges = async () => {
     $(".guide-viewport").dataset.step = index;
