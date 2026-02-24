@@ -731,10 +731,8 @@ const goToStep = async (index) => {
     (prevIndex === 4 && index === 5) || (prevIndex === 5 && index === 4);
 
   const applyChanges = async () => {
-    if (isMorph) {
-      const svg = $(".zone-connectors .crossarm-overlay");
-      if (svg) svg.innerHTML = "";
-    }
+    const svg = $(".zone-connectors .crossarm-overlay");
+    if (svg) svg.innerHTML = "";
     $(".guide-viewport").dataset.step = index;
     $("[data-step-heading]").textContent = nextStep.heading;
     $("[data-step-subtitle]").innerHTML = nextStep.subtitle;
