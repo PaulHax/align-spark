@@ -58,7 +58,7 @@ export function buildValueControls(container, values, onChange) {
     row.className = "slider-row";
     row.innerHTML = `
       <div class="slider-label">${dim.label}</div>
-      <wa-slider min="0" max="100" step="50" value="${sliderVal}" data-dim="${dim.id}"></wa-slider>
+      <wa-slider min="0" max="100" step="50" value="${sliderVal}" data-dim="${dim.id}" with-markers></wa-slider>
       <div class="slider-level" data-level-label="${dim.id}">${LEVEL_LABELS[sliderVal]}</div>
     `;
     container.appendChild(row);
