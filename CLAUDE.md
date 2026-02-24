@@ -56,6 +56,17 @@ Each variant (`wizard.js`, `scroll.js`, `tour.js`, etc.) follows the same patter
 - `shared.css` — Common styles for all showcase variants (nav, typography, cards, sliders)
 - `{variant}.css` — Layout-specific styles per variant
 
+### Data: manifest.json
+
+The showcase variants are driven by `static/data/manifest.json`, which is **not checked into git**. It's hosted as a GitHub release asset and downloaded during the Netlify build via `build.sh`.
+
+- **Source of truth for display config**: `build_config.yaml` (preset labels, dimension labels, scene filters)
+- **Full rebuild** (requires experiment data): `python build.py <experiments_dir> --config build_config.yaml --output-dir static/data`
+- **Upload to GitHub release**: `gh release upload data static/data/manifest.json --repo PaulHax/align-spark --clobber`
+- **Netlify build** (`build.sh`): downloads manifest.json from `https://github.com/PaulHax/align-spark/releases/download/data/manifest.json`
+
+If you only change display config in `build_config.yaml` (labels, taglines), you also need to update the manifest.json and re-upload it to the release so Netlify picks up the changes.
+
 ### UI Components
 
 Uses [Web Awesome](https://www.webawesome.com/) v3.2.1 (`wa-card`, `wa-button`, `wa-slider`, `wa-details`, `wa-tag`, `wa-badge`, `wa-spinner`, `wa-callout`, `wa-progress-bar`) loaded from CDN as ES modules.

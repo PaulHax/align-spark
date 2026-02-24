@@ -34,18 +34,18 @@ dimensions:
 # Value presets for the frontend UI.
 presets:
   - id: medic
-    label: "By-the-Book Medic"
+    label: "By the Book"
     tagline: "Severity first, stay focused"
     values: {merit: low, affiliation: low, personal_safety: low, search: low}
   - id: brothers
-    label: "Band of Brothers"
+    label: "Loyalty First"
     tagline: "Take care of your own"
     values: {merit: low, affiliation: high, personal_safety: medium, search: low}
   - id: judge
-    label: "Moral Judge"
+    label: "Character Counts"
     tagline: "Character matters"
     values: {merit: high, affiliation: low, personal_safety: low, search: medium}
   - id: survivor
-    label: "Cautious Survivor"
+    label: "Safety First"
     tagline: "Don't be the next casualty"
     values: {merit: low, affiliation: low, personal_safety: high, search: high}

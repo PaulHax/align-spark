@@ -790,11 +790,10 @@ body {
 
 .values-accordion .values-presets {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 6px;
   margin: 0;
   align-items: center;
-  overflow: hidden;
 }
 
 .values-accordion .preset-chip {
