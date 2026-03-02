@@ -191,7 +191,7 @@ const renderScenarioSelect = (
   container.innerHTML = `
     ${showLabel ? '<div class="flow-input-label">Input Scenario</div>' : ""}
     <div class="scenario-select-card">
-      <wa-select class="scenario-select" value="${state.scenarioId}" data-scenario-select>
+      <wa-select class="scenario-select" appearance="filled" value="${state.scenarioId}" data-scenario-select>
         ${SCENARIOS.map((s) => scenarioOptionHTML(s, showKdma)).join("")}
       </wa-select>
       <div class="scenario-select-panel-wrap">${scenarioSummaryPanelHTML(scenario, { open })}</div>

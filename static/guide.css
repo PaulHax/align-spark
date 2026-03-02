@@ -385,18 +385,7 @@ body {
 }
 
 .scenario-select::part(combobox) {
-  border: 1px solid var(--border);
-  background: transparent;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.scenario-select:hover::part(combobox) {
-  border-color: var(--accent);
-}
-
-.scenario-select::part(combobox):focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-light);
+  border: none;
 }
 
 .option-kdma,
