@@ -28,6 +28,36 @@ const state = {
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => [...document.querySelectorAll(sel)];
 
+const thinkingGen = new WeakMap();
+
+const DECIDER_ZONE_MAP = {
+  "decision-baseline": "decider-baseline",
+  "decision-aligned": "decider-aligned",
+};
+
+const withThinkingDelay = async (decisionContainer, renderFn, ms = 500) => {
+  const gen = (thinkingGen.get(decisionContainer) || 0) + 1;
+  thinkingGen.set(decisionContainer, gen);
+
+  const zoneId = decisionContainer.dataset.zone;
+  const deciderZoneId = DECIDER_ZONE_MAP[zoneId];
+  const deciderNode = deciderZoneId
+    && $(`[data-zone="${deciderZoneId}"]`)?.querySelector(".decider-node, .aligned-decider-node");
+  if (deciderNode) deciderNode.classList.add("thinking");
+
+  decisionContainer.style.visibility = "hidden";
+
+  await new Promise((r) => setTimeout(r, ms));
+  if (thinkingGen.get(decisionContainer) !== gen) return;
+
+  if (deciderNode) deciderNode.classList.remove("thinking");
+  await renderFn();
+
+  decisionContainer.style.visibility = "";
+  const panel = decisionContainer.querySelector(".decision-panel-wrap, .decision-panel");
+  if (panel) panel.classList.add("decision-fade-in");
+};
+
 const STEPS = [
   {
     id: "intro",
@@ -649,7 +679,8 @@ const handleScenarioChange = async (id) => {
 
 const renderAlignedZones = async () => {
   await renderAlignedDecider($('[data-zone="decider-aligned"]'));
-  await renderAlignedDecision($('[data-zone="decision-aligned"]'));
+  const container = $('[data-zone="decision-aligned"]');
+  await withThinkingDelay(container, () => renderAlignedDecision(container));
 };
 
 const makeValuesHandler = (afterUpdate) => async (newValues) => {
@@ -676,9 +707,13 @@ const handleExploreScenarioChange = async (id) => {
   state.scenarioId = id;
   await Promise.all([
     renderDeciderBaseline($('[data-zone="decider-baseline"]')),
-    renderDecisionBaseline($('[data-zone="decision-baseline"]')),
     renderAlignedDecider($('[data-zone="decider-aligned"]')),
-    renderAlignedDecision($('[data-zone="decision-aligned"]')),
+  ]);
+  const baselineContainer = $('[data-zone="decision-baseline"]');
+  const alignedContainer = $('[data-zone="decision-aligned"]');
+  await Promise.all([
+    withThinkingDelay(baselineContainer, () => renderDecisionBaseline(baselineContainer)),
+    withThinkingDelay(alignedContainer, () => renderAlignedDecision(alignedContainer)),
   ]);
   scheduleDrawZoneCrossarm();
 };
@@ -816,12 +851,41 @@ const goToStep = async (index) => {
       }
     });
     await Promise.all(renderPromises);
+
+    const renderedZones = [
+      ...entering,
+      ...staying.filter((z) => prevStep.zones[z] !== nextStep.zones[z]),
+    ];
+    decisionZoneIds = renderedZones.filter((id) => id.startsWith("decision-"));
+    decisionZoneIds.forEach((id) => {
+      $(`[data-zone="${id}"]`).style.visibility = "hidden";
+      const deciderZoneId = DECIDER_ZONE_MAP[id];
+      const node = deciderZoneId
+        && $(`[data-zone="${deciderZoneId}"]`)?.querySelector(".decider-node, .aligned-decider-node");
+      if (node) node.classList.add("thinking");
+    });
   };
+
+  let decisionZoneIds = [];
 
   if (isInitial) {
     await applyChanges();
   } else {
     await withViewTransition(applyChanges, { staying, isMorph, forward });
+  }
+
+  if (decisionZoneIds.length) {
+    await new Promise((r) => setTimeout(r, 500));
+    decisionZoneIds.forEach((id) => {
+      const container = $(`[data-zone="${id}"]`);
+      const deciderZoneId = DECIDER_ZONE_MAP[id];
+      const node = deciderZoneId
+        && $(`[data-zone="${deciderZoneId}"]`)?.querySelector(".decider-node, .aligned-decider-node");
+      if (node) node.classList.remove("thinking");
+      container.style.visibility = "";
+      const panel = container.querySelector(".decision-panel-wrap, .decision-panel");
+      if (panel) panel.classList.add("decision-fade-in");
+    });
   }
 
   const compZone = $('[data-zone="comparison"]');

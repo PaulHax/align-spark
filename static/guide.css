@@ -1209,6 +1209,49 @@ body {
   color: var(--muted);
 }
 
+/* Decider thinking state */
+
+.decider-node.thinking .decider-node-icon,
+.aligned-decider-node.thinking .decider-node-icon {
+  position: relative;
+}
+
+.decider-node.thinking .decider-node-icon::after,
+.aligned-decider-node.thinking .decider-node-icon::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: var(--accent);
+  animation: decider-spin 0.7s linear infinite;
+}
+
+@keyframes decider-spin {
+  to { transform: rotate(360deg); }
+}
+
+.decider-node.thinking,
+.aligned-decider-node.thinking {
+  animation: decider-pulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes decider-pulse {
+  from { border-color: var(--border); box-shadow: 0 4px 16px rgba(8,31,56,0.06); }
+  to { border-color: var(--accent); box-shadow: 0 0 12px var(--accent-light); }
+}
+
+/* Decision fade-in */
+
+.decision-fade-in {
+  animation: decision-appear 0.3s ease both;
+}
+
+@keyframes decision-appear {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* SVG connector draw-in animation */
 
 .connector-draw path {
