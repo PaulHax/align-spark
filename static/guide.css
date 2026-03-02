@@ -199,7 +199,7 @@ body {
   min-width: 0;
 }
 
-.guide-viewport:is([data-step="5"], [data-step="6"]) .zone-scenario::after,
+.guide-viewport:is([data-step="4"], [data-step="5"], [data-step="6"]) .zone-scenario::after,
 .guide-viewport:is([data-step="4"], [data-step="5"], [data-step="6"]) .zone-values::after {
   content: '';
   flex: 1;
@@ -208,6 +208,10 @@ body {
   margin-top: 12px;
   background: var(--border);
   align-self: center;
+}
+
+.guide-viewport[data-step="4"] .zone-scenario::after {
+  background: transparent;
 }
 
 .guide-viewport:is([data-step="4"], [data-step="5"], [data-step="6"]) .zone-decider-baseline {
@@ -1216,6 +1220,7 @@ body {
 .showcase-nav { view-transition-name: showcase-nav; }
 .guide-toc { view-transition-name: guide-toc; }
 .step-nav { view-transition-name: step-nav; }
+.step-header { view-transition-name: step-header; }
 
 ::view-transition-old(showcase-nav),
 ::view-transition-new(showcase-nav),
@@ -1228,6 +1233,13 @@ body {
 ::view-transition-old(step-nav) {
   animation: none;
   opacity: 0;
+}
+
+::view-transition-old(step-header) {
+  animation: vt-fade-out 0.3s ease both;
+}
+::view-transition-new(step-header) {
+  animation: vt-fade-in 0.3s ease both;
 }
 
 ::view-transition-old(step-content) {

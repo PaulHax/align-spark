@@ -852,7 +852,7 @@ const setupNav = () => {
   let edgeCount = 0;
   let lastEdgeDir = 0;
   const content = $(".step-content");
-  $(".guide-viewport").addEventListener(
+  $(".guide-layout").addEventListener(
     "wheel",
     (e) => {
       if (wheelCooldown) return;
