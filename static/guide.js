@@ -43,6 +43,8 @@ const triggerComputation = async () => {
   if (fn) await fn();
 };
 
+const dotsHTML = '<span class="typing-dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>';
+
 const withThinkingDelay = async (decisionContainer, renderFn, ms = 500) => {
   const gen = (thinkingGen.get(decisionContainer) || 0) + 1;
   thinkingGen.set(decisionContainer, gen);
@@ -53,15 +55,21 @@ const withThinkingDelay = async (decisionContainer, renderFn, ms = 500) => {
     && $(`[data-zone="${deciderZoneId}"]`)?.querySelector(".decider-node, .aligned-decider-node");
   if (deciderNode) deciderNode.classList.add("thinking");
 
-  decisionContainer.style.visibility = "hidden";
+  const summary = decisionContainer.querySelector(".decision-panel-summary");
+  let savedHTML;
+  if (summary) {
+    savedHTML = summary.innerHTML;
+    summary.style.minHeight = `${summary.offsetHeight}px`;
+    summary.innerHTML = dotsHTML;
+  }
 
   await new Promise((r) => setTimeout(r, ms));
   if (thinkingGen.get(decisionContainer) !== gen) return;
 
   if (deciderNode) deciderNode.classList.remove("thinking");
+  if (summary) summary.style.minHeight = "";
   await renderFn();
 
-  decisionContainer.style.visibility = "";
   const panel = decisionContainer.querySelector(".decision-panel-wrap, .decision-panel");
   if (panel) panel.classList.add("decision-fade-in");
 };
@@ -868,12 +876,13 @@ const goToStep = async (index) => {
       ...entering,
       ...staying.filter((z) => prevStep.zones[z] !== nextStep.zones[z]),
     ];
-    decisionZoneIds = renderedZones.filter((id) => id.startsWith("decision-"));
+    decisionZoneIds = nextStep.id === "sandbox"
+      ? []
+      : renderedZones.filter((id) => id.startsWith("decision-"));
     decisionZoneIds.forEach((id) => {
       const container = $(`[data-zone="${id}"]`);
       container.classList.add("pending-decision");
       const btn = document.createElement("button");
-
       btn.className = "compute-decision-btn";
       btn.addEventListener("click", triggerComputation);
       btn.textContent = "Compute Decision";
@@ -891,8 +900,6 @@ const goToStep = async (index) => {
 
   if (decisionZoneIds.length) {
     pendingComputation = async () => {
-      const dotsHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
-
       decisionZoneIds.forEach((id) => {
         const container = $(`[data-zone="${id}"]`);
         container.querySelector(".compute-decision-btn")?.remove();
@@ -902,7 +909,7 @@ const goToStep = async (index) => {
         if (summary) {
           summary.style.minHeight = `${summary.offsetHeight}px`;
           summary.dataset.savedHTML = summary.innerHTML;
-          summary.innerHTML = `<span class="typing-dots">${dotsHTML}</span>`;
+          summary.innerHTML = dotsHTML;
         }
 
         const deciderZoneId = DECIDER_ZONE_MAP[id];
