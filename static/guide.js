@@ -35,6 +35,14 @@ const DECIDER_ZONE_MAP = {
   "decision-aligned": "decider-aligned",
 };
 
+let pendingComputation = null;
+
+const triggerComputation = async () => {
+  const fn = pendingComputation;
+  pendingComputation = null;
+  if (fn) await fn();
+};
+
 const withThinkingDelay = async (decisionContainer, renderFn, ms = 500) => {
   const gen = (thinkingGen.get(decisionContainer) || 0) + 1;
   thinkingGen.set(decisionContainer, gen);
@@ -797,6 +805,10 @@ const withViewTransition = async (
 };
 
 const goToStep = async (index) => {
+  if (pendingComputation && index > state.step) {
+    await triggerComputation();
+    return;
+  }
   if (index < 0 || index >= STEPS.length || index === state.step) return;
 
   const forward = index > state.step;
@@ -858,11 +870,14 @@ const goToStep = async (index) => {
     ];
     decisionZoneIds = renderedZones.filter((id) => id.startsWith("decision-"));
     decisionZoneIds.forEach((id) => {
-      $(`[data-zone="${id}"]`).style.visibility = "hidden";
-      const deciderZoneId = DECIDER_ZONE_MAP[id];
-      const node = deciderZoneId
-        && $(`[data-zone="${deciderZoneId}"]`)?.querySelector(".decider-node, .aligned-decider-node");
-      if (node) node.classList.add("thinking");
+      const container = $(`[data-zone="${id}"]`);
+      container.classList.add("pending-decision");
+      const btn = document.createElement("button");
+
+      btn.className = "compute-decision-btn";
+      btn.addEventListener("click", triggerComputation);
+      btn.textContent = "Compute Decision";
+      container.appendChild(btn);
     });
   };
 
@@ -875,17 +890,45 @@ const goToStep = async (index) => {
   }
 
   if (decisionZoneIds.length) {
-    await new Promise((r) => setTimeout(r, 500));
-    decisionZoneIds.forEach((id) => {
-      const container = $(`[data-zone="${id}"]`);
-      const deciderZoneId = DECIDER_ZONE_MAP[id];
-      const node = deciderZoneId
-        && $(`[data-zone="${deciderZoneId}"]`)?.querySelector(".decider-node, .aligned-decider-node");
-      if (node) node.classList.remove("thinking");
-      container.style.visibility = "";
-      const panel = container.querySelector(".decision-panel-wrap, .decision-panel");
-      if (panel) panel.classList.add("decision-fade-in");
-    });
+    pendingComputation = async () => {
+      const dotsHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
+
+      decisionZoneIds.forEach((id) => {
+        const container = $(`[data-zone="${id}"]`);
+        container.querySelector(".compute-decision-btn")?.remove();
+        container.classList.remove("pending-decision");
+
+        const summary = container.querySelector(".decision-panel-summary");
+        if (summary) {
+          summary.style.minHeight = `${summary.offsetHeight}px`;
+          summary.dataset.savedHTML = summary.innerHTML;
+          summary.innerHTML = `<span class="typing-dots">${dotsHTML}</span>`;
+        }
+
+        const deciderZoneId = DECIDER_ZONE_MAP[id];
+        const node = deciderZoneId
+          && $(`[data-zone="${deciderZoneId}"]`)?.querySelector(".decider-node, .aligned-decider-node");
+        if (node) node.classList.add("thinking");
+      });
+
+      await new Promise((r) => setTimeout(r, 700));
+
+      decisionZoneIds.forEach((id) => {
+        const container = $(`[data-zone="${id}"]`);
+
+        const summary = container.querySelector(".decision-panel-summary");
+        if (summary?.dataset.savedHTML) {
+          summary.innerHTML = summary.dataset.savedHTML;
+          summary.style.minHeight = "";
+          delete summary.dataset.savedHTML;
+        }
+
+        const deciderZoneId = DECIDER_ZONE_MAP[id];
+        const node = deciderZoneId
+          && $(`[data-zone="${deciderZoneId}"]`)?.querySelector(".decider-node, .aligned-decider-node");
+        if (node) node.classList.remove("thinking");
+      });
+    };
   }
 
   const compZone = $('[data-zone="comparison"]');
