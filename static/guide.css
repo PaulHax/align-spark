@@ -407,84 +407,38 @@ body {
   white-space: nowrap;
 }
 
-.scenario-select-card .scenario-detail-panel {
+.scenario-select-card .baseline-scenario-panel {
   --border-color: transparent;
   --border-width: 0;
   --border-radius: 0;
-  --header-padding: 8px 16px;
   border: none;
   border-radius: 0;
   background: none;
   box-shadow: none;
+  margin-bottom: 0;
 }
 
-.scenario-select-card .scenario-detail-panel::part(base) {
+.scenario-select-card .baseline-scenario-panel::part(base) {
   border: none;
 }
 
-.scenario-select-card .scenario-detail-panel:hover {
+.scenario-select-card .baseline-scenario-panel:hover {
   --border-color: transparent;
 }
 
-.scenario-select-card .scenario-detail-panel[open] {
+.scenario-select-card .baseline-scenario-panel[open] {
   --border-color: transparent;
   box-shadow: none;
 }
 
-.scenario-detail-summary {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  overflow: hidden;
-}
+/* Step 2: Hidden Bias — narrow the content */
 
-.scenario-detail-choices {
-  display: flex;
-  gap: 12px;
-}
-
-.scenario-detail-preview {
-  font-size: 0.82rem;
-  font-weight: 400;
-  color: var(--muted);
-  line-height: 1.5;
-  overflow: hidden;
-  white-space: nowrap;
-  mask-image: linear-gradient(to right, black 75%, transparent);
-  -webkit-mask-image: linear-gradient(to right, black 75%, transparent);
-}
-
-.scenario-detail-open-title {
-  display: none;
-}
-
-.scenario-detail-panel[open] .scenario-detail-open-title {
-  display: block;
-  font-weight: 600;
-  font-size: 0.88rem;
-}
-
-.scenario-detail-panel[open] .scenario-detail-preview,
-.scenario-detail-panel[open] .scenario-detail-choices {
-  display: none;
-}
-
-.scenario-detail-description {
-  font-size: 0.92rem;
-  line-height: 1.7;
-  color: var(--muted);
-}
-
-.scenario-detail-description p {
-  margin: 0 0 8px;
-}
-
-.scenario-detail-description p:last-child {
-  margin-bottom: 0;
-}
-
-.scenario-detail-panel .scenario-choices {
-  margin-top: 12px;
+.guide-viewport[data-step="2"] .zone-scenario,
+.guide-viewport[data-step="2"] .zone-decider-baseline,
+.guide-viewport[data-step="2"] .zone-decision-baseline {
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Step 2: Baseline decider + decision */
@@ -579,10 +533,7 @@ body {
 }
 
 .accordion-summary-title {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 0;
+  flex-shrink: 0;
 }
 
 .accordion-summary-choices {

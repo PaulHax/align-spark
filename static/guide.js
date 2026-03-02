@@ -121,34 +121,36 @@ const renderScenarioAccordion = (container) => {
   );
 };
 
-const scenarioDetailSummaryHTML = (scenario) => {
-  const firstParagraph =
-    scenario.description.split("\n").find((p) => p.trim()) || "";
-  const choices = scenario.choices
+const scenarioSummaryPanelHTML = (scenario, { open = false } = {}) => {
+  const descHtml = scenarioDescriptionHTML(scenario);
+  const choicesHtml = scenarioChoiceCardsHTML(scenario);
+  const choiceLetters = scenario.choices
     .map(
       (c, i) =>
         `<span class="summary-choice-item">${choiceLetterHTML(i, { colored: true })}<span class="summary-choice-label">${c.label}</span></span>`,
     )
     .join("");
+
   return `
-    <span class="scenario-detail-preview">${firstParagraph}</span>
-    <span class="scenario-detail-choices">${choices}</span>
+    <wa-details class="baseline-scenario-panel" data-scenario-panel${open ? " open" : ""}>
+      <span slot="summary" class="accordion-summary">
+        <span class="accordion-summary-title">${scenario.title}</span>
+        <span class="accordion-summary-choices">${choiceLetters}</span>
+      </span>
+      <div class="accordion-scenario-body">
+        <div class="accordion-scenario-description">${descHtml}</div>
+        ${choicesHtml ? `<div class="scenario-choices">${choicesHtml}</div>` : ""}
+      </div>
+    </wa-details>
   `;
 };
 
-const updateScenarioDetail = (container) => {
+const updateScenarioPanel = (container) => {
   const scenario = getScenario(state.scenarioId);
-  const descHtml = scenarioDescriptionHTML(scenario);
-  const choicesHtml = scenarioChoiceCardsHTML(scenario);
-
-  container.querySelector("[data-scenario-detail-summary]").innerHTML = `
-    <span class="scenario-detail-open-title">Scenario Details</span>
-    ${scenarioDetailSummaryHTML(scenario)}
-  `;
-  container.querySelector("[data-scenario-detail-body]").innerHTML = `
-    <div class="scenario-detail-description">${descHtml}</div>
-    ${choicesHtml ? `<div class="scenario-choices">${choicesHtml}</div>` : ""}
-  `;
+  const panel = container.querySelector("[data-scenario-panel]");
+  const wasOpen = panel?.open ?? false;
+  const wrapper = panel?.parentElement;
+  if (wrapper) wrapper.innerHTML = scenarioSummaryPanelHTML(scenario, { open: wasOpen });
 };
 
 const scenarioKdmaLabel = (s) => {
@@ -185,8 +187,6 @@ const renderScenarioSelect = (
   } = {},
 ) => {
   const scenario = getScenario(state.scenarioId);
-  const descHtml = scenarioDescriptionHTML(scenario);
-  const choicesHtml = scenarioChoiceCardsHTML(scenario);
 
   container.innerHTML = `
     ${showLabel ? '<div class="flow-input-label">Input Scenario</div>' : ""}
@@ -194,16 +194,7 @@ const renderScenarioSelect = (
       <wa-select class="scenario-select" value="${state.scenarioId}" data-scenario-select>
         ${SCENARIOS.map((s) => scenarioOptionHTML(s, showKdma)).join("")}
       </wa-select>
-      <wa-details class="scenario-detail-panel"${open ? " open" : ""} data-scenario-detail>
-        <span slot="summary" class="scenario-detail-summary" data-scenario-detail-summary>
-          <span class="scenario-detail-open-title">Scenario Details</span>
-          ${scenarioDetailSummaryHTML(scenario)}
-        </span>
-        <div data-scenario-detail-body>
-          <div class="scenario-detail-description">${descHtml}</div>
-          ${choicesHtml ? `<div class="scenario-choices">${choicesHtml}</div>` : ""}
-        </div>
-      </wa-details>
+      <div class="scenario-select-panel-wrap">${scenarioSummaryPanelHTML(scenario, { open })}</div>
     </div>
   `;
 
@@ -213,7 +204,7 @@ const renderScenarioSelect = (
     const newId = e.target.value;
     if (showKdma) updateSelectEndSlot(e.target, newId);
     onChange(newId);
-    updateScenarioDetail(container);
+    updateScenarioPanel(container);
   });
 };
 
@@ -222,32 +213,10 @@ const renderScenarioSummary = (
   { showLabel = false, wasOpen = false } = {},
 ) => {
   const scenario = getScenario(state.scenarioId);
-  const descHtml = scenarioDescriptionHTML(scenario);
-  const choicesHtml = scenarioChoiceCardsHTML(scenario);
-
-  const choiceLetters = scenario.choices
-    .map(
-      (c, i) =>
-        `<span class="summary-choice-item">${choiceLetterHTML(i, { colored: true })}<span class="summary-choice-label">${c.label}</span></span>`,
-    )
-    .join("");
-
   const labelHtml = showLabel
     ? `<div class="flow-input-label">Input Scenario</div>`
     : "";
-  container.innerHTML = `
-    ${labelHtml}
-    <wa-details class="baseline-scenario-panel"${wasOpen ? " open" : ""}>
-      <span slot="summary" class="accordion-summary">
-        <span class="accordion-summary-title">${scenario.title}</span>
-        <span class="accordion-summary-choices">${choiceLetters}</span>
-      </span>
-      <div class="accordion-scenario-body">
-        <div class="accordion-scenario-description">${descHtml}</div>
-        ${choicesHtml ? `<div class="scenario-choices">${choicesHtml}</div>` : ""}
-      </div>
-    </wa-details>
-  `;
+  container.innerHTML = `${labelHtml}${scenarioSummaryPanelHTML(scenario, { open: wasOpen })}`;
 };
 
 const renderDeciderBaseline = async (container) => {
