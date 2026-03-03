@@ -93,7 +93,7 @@ const STEPS = [
     id: "baseline",
     heading: "Hidden Bias",
     subtitle:
-      "When I ask the AI to make a decision, the choice reflects the biases baked into its training — not your priorities.",
+      "When an unaligned AI makes a decision, the choice reflects the biases baked into its training — not your priorities.",
     zones: {
       scenario: "summary-labeled",
       "decider-baseline": true,
@@ -702,7 +702,7 @@ const renderAlignedZones = async () => {
 const makeValuesHandler = (afterUpdate) => async (newValues) => {
   state.values = newValues;
   syncAllSliders();
-  if (afterUpdate) await afterUpdate();
+  if (afterUpdate && !pendingComputation) await afterUpdate();
 };
 
 const handleSimpleValuesChange = makeValuesHandler();
@@ -812,11 +812,12 @@ const withViewTransition = async (
   document.documentElement.classList.remove("backward", "morph-transition");
 };
 
-const goToStep = async (index) => {
-  if (pendingComputation && index > state.step) {
+const goToStep = async (index, { triggerPending = false } = {}) => {
+  if (triggerPending && pendingComputation && index > state.step) {
     await triggerComputation();
     return;
   }
+  pendingComputation = null;
   if (index < 0 || index >= STEPS.length || index === state.step) return;
 
   const forward = index > state.step;
@@ -908,7 +909,6 @@ const goToStep = async (index) => {
         const summary = container.querySelector(".decision-panel-summary");
         if (summary) {
           summary.style.minHeight = `${summary.offsetHeight}px`;
-          summary.dataset.savedHTML = summary.innerHTML;
           summary.innerHTML = dotsHTML;
         }
 
@@ -920,21 +920,18 @@ const goToStep = async (index) => {
 
       await new Promise((r) => setTimeout(r, 700));
 
-      decisionZoneIds.forEach((id) => {
-        const container = $(`[data-zone="${id}"]`);
+      await Promise.all(
+        decisionZoneIds.map(async (id) => {
+          const container = $(`[data-zone="${id}"]`);
+          if (id === "decision-baseline") await renderDecisionBaseline(container);
+          else if (id === "decision-aligned") await renderAlignedDecision(container);
 
-        const summary = container.querySelector(".decision-panel-summary");
-        if (summary?.dataset.savedHTML) {
-          summary.innerHTML = summary.dataset.savedHTML;
-          summary.style.minHeight = "";
-          delete summary.dataset.savedHTML;
-        }
-
-        const deciderZoneId = DECIDER_ZONE_MAP[id];
-        const node = deciderZoneId
-          && $(`[data-zone="${deciderZoneId}"]`)?.querySelector(".decider-node, .aligned-decider-node");
-        if (node) node.classList.remove("thinking");
-      });
+          const deciderZoneId = DECIDER_ZONE_MAP[id];
+          const node = deciderZoneId
+            && $(`[data-zone="${deciderZoneId}"]`)?.querySelector(".decider-node, .aligned-decider-node");
+          if (node) node.classList.remove("thinking");
+        }),
+      );
     };
   }
 
@@ -945,7 +942,7 @@ const goToStep = async (index) => {
 
 const setupNav = () => {
   $("[data-prev]").addEventListener("click", () => goToStep(state.step - 1));
-  $("[data-next]").addEventListener("click", () => goToStep(state.step + 1));
+  $("[data-next]").addEventListener("click", () => goToStep(state.step + 1, { triggerPending: true }));
 
   $$(".toc-pill").forEach((pill, i) => {
     pill.addEventListener("click", () => goToStep(i));
@@ -954,7 +951,7 @@ const setupNav = () => {
   document.addEventListener("keydown", (e) => {
     if (e.key === "ArrowRight" || e.key === "ArrowDown") {
       e.preventDefault();
-      goToStep(state.step + 1);
+      goToStep(state.step + 1, { triggerPending: true });
     }
     if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
       e.preventDefault();
@@ -994,7 +991,7 @@ const setupNav = () => {
       setTimeout(() => {
         wheelCooldown = false;
       }, 600);
-      goToStep(state.step + dir);
+      goToStep(state.step + dir, { triggerPending: true });
     },
     { passive: true },
   );
