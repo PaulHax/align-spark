@@ -861,7 +861,7 @@ const goToStep = async (index, { triggerPending = false } = {}) => {
 
     entering.forEach((zoneId) => {
       const zone = $(`[data-zone="${zoneId}"]`);
-      zone.innerHTML = "";
+      if (zoneId.startsWith("decision-")) zone.innerHTML = "";
       zone.classList.add("visible");
     });
 
