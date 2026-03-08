@@ -364,35 +364,38 @@ body {
 /* Scenario select card */
 
 .scenario-select-card {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
   width: 100%;
   max-width: 640px;
   margin: 0 auto;
-  padding: 8px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-  overflow: hidden;
-  transition: border-color 0.2s, box-shadow 0.2s;
 }
-
 
 .scenario-select {
   width: 100%;
-  --wa-input-border-radius-medium: 10px;
+  --wa-input-border-radius-medium: 12px;
   --wa-input-font-family: "Space Grotesk", "Segoe UI", sans-serif;
   --wa-input-font-weight-medium: 600;
-  --wa-input-font-size-medium: 0.95rem;
+  --wa-input-font-size-medium: 1rem;
+  --wa-input-height-medium: 3rem;
 }
 
 .scenario-select::part(combobox) {
-  border: none;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.guide-viewport[data-step="1"] .scenario-select-card .baseline-scenario-panel::part(icon) {
+.scenario-select:hover::part(combobox) {
+  border-color: var(--accent);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+}
+
+.scenario-select-panel-wrap {
+  width: 100%;
+  max-width: 640px;
+  margin: 12px auto 0;
+}
+
+.guide-viewport[data-step="1"] .baseline-scenario-panel::part(icon) {
   display: none;
 }
 
@@ -404,26 +407,25 @@ body {
   white-space: nowrap;
 }
 
-.scenario-select-card .baseline-scenario-panel {
+.scenario-select-panel-wrap .baseline-scenario-panel {
   --border-color: transparent;
   --border-width: 0;
-  --border-radius: 0;
   border: none;
-  border-radius: 0;
-  background: none;
-  box-shadow: none;
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   margin-bottom: 0;
 }
 
-.scenario-select-card .baseline-scenario-panel::part(base) {
+.scenario-select-panel-wrap .baseline-scenario-panel::part(base) {
   border: none;
 }
 
-.scenario-select-card .baseline-scenario-panel:hover {
+.scenario-select-panel-wrap .baseline-scenario-panel:hover {
   --border-color: transparent;
 }
 
-.scenario-select-card .baseline-scenario-panel[open] {
+.scenario-select-panel-wrap .baseline-scenario-panel[open] {
   --border-color: transparent;
   box-shadow: none;
 }

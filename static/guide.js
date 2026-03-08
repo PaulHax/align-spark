@@ -238,11 +238,11 @@ const renderScenarioSelect = (
   container.innerHTML = `
     ${showLabel ? '<div class="flow-input-label">Input Scenario</div>' : ""}
     <div class="scenario-select-card">
-      <wa-select class="scenario-select" appearance="filled" value="${state.scenarioId}" data-scenario-select>
+      <wa-select class="scenario-select" appearance="filled" value="${state.scenarioId}" data-scenario-select placeholder="Choose a scenario…">
         ${SCENARIOS.map((s) => scenarioOptionHTML(s, showKdma)).join("")}
       </wa-select>
-      <div class="scenario-select-panel-wrap">${scenarioSummaryPanelHTML(scenario, { open })}</div>
     </div>
+    <div class="scenario-select-panel-wrap">${scenarioSummaryPanelHTML(scenario, { open })}</div>
   `;
 
   const selectEl = container.querySelector("[data-scenario-select]");
@@ -511,7 +511,7 @@ const drawZoneCrossarm = () => {
 
   let sourceEl;
   if (step.zones.scenario?.startsWith("select")) {
-    sourceEl = $('[data-zone="scenario"] .scenario-select-card');
+    sourceEl = $('[data-zone="scenario"] .scenario-select-panel-wrap');
   } else {
     sourceEl = $('[data-zone="scenario"] wa-details');
   }
