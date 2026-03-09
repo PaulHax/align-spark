@@ -855,7 +855,9 @@ const goToStep = async (index, { triggerPending = false } = {}) => {
     });
 
     leaving.forEach((zoneId) => {
-      $(`[data-zone="${zoneId}"]`).classList.remove("visible");
+      const zone = $(`[data-zone="${zoneId}"]`);
+      zone.classList.remove("visible", "pending-decision");
+      zone.querySelector(".compute-decision-btn")?.remove();
     });
 
     entering.forEach((zoneId) => {
