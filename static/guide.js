@@ -16,6 +16,7 @@ import {
   decisionPanelHTML,
   formatLlm,
   formatAdm,
+  attributeInfoHTML,
 } from "./shared.js";
 
 const state = {
@@ -323,7 +324,7 @@ const renderValueSingle = (container) => {
     <div class="flow-input-label">Input Value</div>
     <div class="values-single-inline" data-single-picker>
       <div class="attribute-row">
-        <div class="attribute-label">${dim.label}</div>
+        <div class="attribute-label">${dim.label}${attributeInfoHTML(dim)}</div>
         <wa-radio-group value="${level}" data-dim="${dim.id}" orientation="horizontal">
           ${LEVELS.map((l) => `<wa-radio appearance="button" value="${l}">${LABELS[l]}</wa-radio>`).join("")}
         </wa-radio-group>

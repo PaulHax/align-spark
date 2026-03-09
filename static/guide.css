@@ -703,6 +703,13 @@ body {
 
 .values-no-summary::part(content) {
   padding: 16px 20px;
+  overflow: visible;
+}
+
+.values-accordion,
+.values-accordion::part(content),
+.values-accordion::part(base) {
+  overflow: visible;
 }
 
 /* Step 4: Alignment flow */

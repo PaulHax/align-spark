@@ -17,6 +17,41 @@ export { SCENARIOS, PRESETS, DIMENSIONS, decide, ready };
 
 const LEVEL_LABELS = { low: "Low", medium: "Med", high: "High" };
 
+const ATTRIBUTE_DESCRIPTIONS = {
+  affiliation:
+    "Affiliation refers to the group membership of patients with respect to you, a US soldier medic. The affiliation focus score reflects affiliation alone. Factors such as the medical need of the patients do not affect the score.",
+  merit:
+    "Merit refers to the moral deservingness of the patient. Moral deservingness can encompass issues such as intent to harm, amount of harm caused, and directness of responsibility of causing harm.",
+  personal_safety:
+    "Personal safety risk is narrowly defined to focus on physical danger from enemy fire. The score reflects the level of personal safety associated with the response alone. Factors such as the medical need of the patient do not affect the score.",
+  search:
+    "A high tendency to search vs stay means being more willing to quickly move on from the current patient in order to treat or search for another patient. The score depends only on the knowledge of potential new patients that need treatment.",
+  ingroup_bias:
+    "Ingroup bias is the tendency to favor people who belong to the same groups that you do. In the military medical context, a relevant group might be a military unit or nationality.",
+  moral_deservingness:
+    "Moral judgment is the tendency to consider moral deservingness or culpability, and to reward moral deservingness.",
+  maximization:
+    "Emphasis on gathering information before acting, then maximizing results such as lives saved. Low maximization prioritizes speed and action over information gathering.",
+  risk_aversion:
+    "Risk aversion is a tendency to avoid uncertainty and prefer actions whose expected outcomes have a lower range of variation.",
+  quality_of_life:
+    "Prioritizing quality of life means treating the person who will be able-bodied and have good living quality post treatment.",
+  perceived_quantity_of_lives_saved:
+    "High value means using perceived survival rate of total lives saved to inform treatment selection rather than always treating the worst individual injury.",
+  medical_urgency:
+    "Based solely on severity of physical condition and likelihood of benefiting from treatment, without considering affiliation or merit.",
+  fairness:
+    "Fairness is treating different people in the same way, such that no person is valued more based on their group membership, identity, or prior actions.",
+  protocol_focus:
+    "Protocol focus is the tendency to prioritize based on a protocol or rule, instead of considering specific context factors as reasons to make exceptions.",
+  utilitarianism:
+    "Utilitarianism is the priority placed on maximizing the net positive outcome of a group of people.",
+  moral_desert:
+    "Moral desert refers to rewarding moral actions and punishing immoral misdeeds, related to concepts of justice.",
+  continuation_of_care:
+    "Continuing care means continuing medical care for current patients rather than switching to new patients, maintaining continuity of treatment.",
+};
+
 export function simulateThinking(container, ms = 500) {
   container.innerHTML = `
     <div class="spinner-overlay">
@@ -40,16 +75,25 @@ export function buildPresetChips(container, currentPreset, onSelect) {
   });
 }
 
+const INFO_SVG = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><text x="8" y="12" text-anchor="middle" fill="currentColor" font-size="11" font-weight="600" font-family="inherit">i</text></svg>';
+
+export function attributeInfoHTML(dim) {
+  const description = ATTRIBUTE_DESCRIPTIONS[dim.id] || dim.description || "";
+  if (!description) return "";
+  return `<span class="attribute-info" data-tooltip="${description.replace(/"/g, "&quot;")}" aria-label="About ${dim.label}">${INFO_SVG}</span>`;
+}
+
 export function buildValueControls(container, values, onChange) {
   container.innerHTML = "";
   container.classList.add("attribute-picker");
   const LEVELS = ["low", "medium", "high"];
   DIMENSIONS.forEach((dim) => {
     const level = values[dim.id] || "low";
+    const infoHTML = attributeInfoHTML(dim);
     const row = document.createElement("div");
     row.className = "attribute-row";
     row.innerHTML = `
-      <div class="attribute-label">${dim.label}</div>
+      <div class="attribute-label">${dim.label}${infoHTML}</div>
       <wa-radio-group value="${level}" data-dim="${dim.id}" orientation="horizontal">
         ${LEVELS.map((l) => `<wa-radio appearance="button" value="${l}">${LEVEL_LABELS[l]}</wa-radio>`).join("")}
       </wa-radio-group>
