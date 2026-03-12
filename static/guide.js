@@ -80,7 +80,7 @@ const STEPS = [
     id: "intro",
     heading: "Aligning AI with Values",
     subtitle:
-      "AI-powered decision makers carry bias from their training.<br>Align System steers AIs to weigh trade-offs using your values.",
+      "AI-powered decision makers carry bias from their training.<br>The ALIGN System steers AIs to weigh trade-offs using your values.",
     zones: {},
   },
   {
