@@ -19,6 +19,7 @@ body {
   display: flex;
   align-items: center;
   padding: 0 16px;
+  z-index: 10;
 }
 
 .toc-items {
@@ -87,6 +88,39 @@ body {
   border-color: var(--accent);
   background: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-light);
+}
+
+.toc-pill[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--ink, #1b2533);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: 8px 12px;
+  border-radius: 8px;
+  width: max-content;
+  max-width: 260px;
+  white-space: normal;
+  z-index: 1000;
+  pointer-events: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.toc-pill[data-tooltip]:hover::before {
+  content: "";
+  position: absolute;
+  left: calc(100% + 6px);
+  top: 50%;
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-right-color: var(--ink, #1b2533);
+  z-index: 1000;
+  pointer-events: none;
 }
 
 /* Viewport */

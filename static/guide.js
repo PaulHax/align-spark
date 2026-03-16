@@ -137,7 +137,7 @@ const STEPS = [
   },
   {
     id: "sandbox",
-    heading: "Experiment",
+    heading: "Sandbox",
     subtitle: "Swap scenarios and adjust values to see when decisions shift.",
     zones: {
       scenario: "select-explore",
