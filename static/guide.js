@@ -976,37 +976,44 @@ const setupNav = () => {
   });
 
   let wheelCooldown = false;
-  let edgeCount = 0;
-  let lastEdgeDir = 0;
+  let dwell = null; /* { dir, time } — non-null while waiting at a scroll edge */
+  let prevScrollH = 0;
+  let prevClientH = 0;
   const content = $(".step-content");
+  const WHEEL_THRESHOLD = 30;
+  const EDGE_DWELL_MS = 400;
+  const BOTTOM_TOLERANCE = 5;
+
   $(".guide-layout").addEventListener(
     "wheel",
     (e) => {
       if (wheelCooldown) return;
-      const threshold = 30;
-      if (Math.abs(e.deltaY) < threshold) return;
+      if (Math.abs(e.deltaY) < WHEEL_THRESHOLD) return;
       const dir = e.deltaY > 0 ? 1 : -1;
+      const sh = content.scrollHeight;
+      const ch = content.clientHeight;
       const atTop = content.scrollTop <= 0;
-      const atBottom =
-        content.scrollTop + content.clientHeight >= content.scrollHeight - 1;
+      const atBottom = content.scrollTop + ch >= sh - BOTTOM_TOLERANCE;
       const atEdge = (dir > 0 && atBottom) || (dir < 0 && atTop);
-      const isScrollable = content.scrollHeight > content.clientHeight + 2;
-      if (!atEdge) {
-        edgeCount = 0;
-        lastEdgeDir = 0;
-        return;
+      if (!atEdge) { dwell = null; return; }
+      if (sh > ch + 2) {
+        /* Reset dwell when content/viewport size changes
+           (panel expand/collapse, window resize, step navigation). */
+        if (sh !== prevScrollH || ch !== prevClientH) {
+          prevScrollH = sh;
+          prevClientH = ch;
+          dwell = null;
+        }
+        const now = performance.now();
+        if (!dwell || dwell.dir !== dir) {
+          dwell = { dir, time: now };
+          return;
+        }
+        if (now - dwell.time < EDGE_DWELL_MS) return;
       }
-      if (isScrollable && (dir !== lastEdgeDir || edgeCount < 1)) {
-        edgeCount = dir === lastEdgeDir ? edgeCount + 1 : 1;
-        lastEdgeDir = dir;
-        return;
-      }
-      edgeCount = 0;
-      lastEdgeDir = 0;
+      dwell = null;
       wheelCooldown = true;
-      setTimeout(() => {
-        wheelCooldown = false;
-      }, 600);
+      setTimeout(() => { wheelCooldown = false; }, 600);
       goToStep(state.step + dir, { triggerPending: true });
     },
     { passive: true },
