@@ -8,6 +8,7 @@ import "https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.2.1/dist-cdn/compo
 import "https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.2.1/dist-cdn/components/option/option.js";
 import "https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.2.1/dist-cdn/components/radio-group/radio-group.js";
 import "https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.2.1/dist-cdn/components/radio/radio.js";
+import "https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.2.1/dist-cdn/components/tooltip/tooltip.js";
 
 import { decide, ready } from "./align-engine.js";
 
@@ -77,15 +78,33 @@ export function buildPresetChips(container, currentPreset, onSelect) {
 
 const INFO_SVG = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><text x="8" y="12" text-anchor="middle" fill="currentColor" font-size="11" font-weight="600" font-family="inherit">i</text></svg>';
 
+let infoUid = 0;
+const bodyTooltips = [];
+
+function cleanupBodyTooltips() {
+  bodyTooltips.forEach((tt) => tt.remove());
+  bodyTooltips.length = 0;
+}
+
+export function appendTooltipToBody(iconId, description) {
+  const tooltip = document.createElement("wa-tooltip");
+  tooltip.setAttribute("for", iconId);
+  tooltip.textContent = description;
+  document.body.appendChild(tooltip);
+  bodyTooltips.push(tooltip);
+}
+
 export function attributeInfoHTML(dim) {
   const description = ATTRIBUTE_DESCRIPTIONS[dim.id] || dim.description || "";
   if (!description) return "";
-  return `<span class="attribute-info" data-tooltip="${description.replace(/"/g, "&quot;")}" aria-label="About ${dim.label}">${INFO_SVG}</span>`;
+  const infoId = `attr-info-${dim.id}-${infoUid++}`;
+  return `<span class="attribute-info" id="${infoId}" data-description="${description.replace(/"/g, "&quot;")}" aria-label="About ${dim.label}">${INFO_SVG}</span>`;
 }
 
 export function buildValueControls(container, values, onChange) {
   container.innerHTML = "";
   container.classList.add("attribute-picker");
+  cleanupBodyTooltips();
   const LEVELS = ["low", "medium", "high"];
   DIMENSIONS.forEach((dim) => {
     const level = values[dim.id] || "low";
@@ -99,6 +118,9 @@ export function buildValueControls(container, values, onChange) {
       </wa-radio-group>
     `;
     container.appendChild(row);
+  });
+  container.querySelectorAll(".attribute-info[id]").forEach((icon) => {
+    appendTooltipToBody(icon.id, icon.dataset.description);
   });
 
   container.addEventListener("change", (e) => {

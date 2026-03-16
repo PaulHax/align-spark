@@ -27,15 +27,23 @@
     <div class="guide-layout">
       <aside class="guide-toc">
         <div class="toc-items">
-          <button class="toc-pill active" data-toc="intro" data-tooltip="AI decisions carry bias from their training."><span class="toc-dot"></span>AI and Trust</button>
-          <button class="toc-pill" data-toc="scenario" data-tooltip="Pick a scenario with tough trade-offs."><span class="toc-dot"></span>Hard Choices</button>
-          <button class="toc-pill" data-toc="baseline" data-tooltip="See what an unaligned AI decides."><span class="toc-dot"></span>Implicit Bias</button>
-          <button class="toc-pill" data-toc="values" data-tooltip="Set priorities that guide the AI."><span class="toc-dot"></span>Values</button>
-          <button class="toc-pill" data-toc="alignment" data-tooltip="The AI uses your values in its decision."><span class="toc-dot"></span>Aligned AI</button>
-          <button class="toc-pill" data-toc="comparison" data-tooltip="Compare decisions with and without values."><span class="toc-dot"></span>Compare</button>
-          <button class="toc-pill" data-toc="sandbox" data-tooltip="Swap scenarios and tweak values freely."><span class="toc-dot"></span>Sandbox</button>
-          <button class="toc-pill" data-toc="learn-more" data-tooltip="Explore the research and full system."><span class="toc-dot"></span>Learn More</button>
+          <button class="toc-pill active" id="toc-intro" data-toc="intro"><span class="toc-dot"></span>AI and Trust</button>
+          <button class="toc-pill" id="toc-scenario" data-toc="scenario"><span class="toc-dot"></span>Hard Choices</button>
+          <button class="toc-pill" id="toc-baseline" data-toc="baseline"><span class="toc-dot"></span>Implicit Bias</button>
+          <button class="toc-pill" id="toc-values" data-toc="values"><span class="toc-dot"></span>Values</button>
+          <button class="toc-pill" id="toc-alignment" data-toc="alignment"><span class="toc-dot"></span>Aligned AI</button>
+          <button class="toc-pill" id="toc-comparison" data-toc="comparison"><span class="toc-dot"></span>Compare</button>
+          <button class="toc-pill" id="toc-sandbox" data-toc="sandbox"><span class="toc-dot"></span>Sandbox</button>
+          <button class="toc-pill" id="toc-learn-more" data-toc="learn-more"><span class="toc-dot"></span>Learn More</button>
         </div>
+        <wa-tooltip for="toc-intro" placement="right">AI decisions carry bias from their training.</wa-tooltip>
+        <wa-tooltip for="toc-scenario" placement="right">Pick a scenario with tough trade-offs.</wa-tooltip>
+        <wa-tooltip for="toc-baseline" placement="right">See what an unaligned AI decides.</wa-tooltip>
+        <wa-tooltip for="toc-values" placement="right">Set priorities that guide the AI.</wa-tooltip>
+        <wa-tooltip for="toc-alignment" placement="right">The AI uses your values in its decision.</wa-tooltip>
+        <wa-tooltip for="toc-comparison" placement="right">Compare decisions with and without values.</wa-tooltip>
+        <wa-tooltip for="toc-sandbox" placement="right">Swap scenarios and tweak values freely.</wa-tooltip>
+        <wa-tooltip for="toc-learn-more" placement="right">Explore the research and full system.</wa-tooltip>
       </aside>
 
       <main class="guide-viewport" data-step="0">

@@ -17,6 +17,7 @@ import {
   formatLlm,
   formatAdm,
   attributeInfoHTML,
+  appendTooltipToBody,
 } from "./shared.js";
 
 const state = {
@@ -320,17 +321,22 @@ const renderValueSingle = (container) => {
   const LEVELS = ["low", "medium", "high"];
   const LABELS = { low: "Low", medium: "Med", high: "High" };
 
+  const infoHTML = attributeInfoHTML(dim);
+
   container.innerHTML = `
     <div class="flow-input-label">Input Value</div>
     <div class="values-single-inline" data-single-picker>
       <div class="attribute-row">
-        <div class="attribute-label">${dim.label}${attributeInfoHTML(dim)}</div>
+        <div class="attribute-label">${dim.label}${infoHTML}</div>
         <wa-radio-group value="${level}" data-dim="${dim.id}" orientation="horizontal">
           ${LEVELS.map((l) => `<wa-radio appearance="button" value="${l}">${LABELS[l]}</wa-radio>`).join("")}
         </wa-radio-group>
       </div>
     </div>
   `;
+  container.querySelectorAll(".attribute-info[id]").forEach((icon) => {
+    appendTooltipToBody(icon.id, icon.dataset.description);
+  });
 
   container.querySelector("[data-single-picker]").addEventListener("change", (e) => {
     const group = e.target.closest("wa-radio-group");

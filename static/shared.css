@@ -179,7 +179,6 @@ body {
 }
 
 .attribute-info {
-  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -193,39 +192,6 @@ body {
 .attribute-info:hover {
   opacity: 1;
   color: var(--accent);
-}
-
-.attribute-info[data-tooltip]:hover::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + 8px);
-  transform: translateX(-50%);
-  background: var(--ink, #1b2533);
-  color: #fff;
-  font-size: 0.78rem;
-  font-weight: 400;
-  line-height: 1.5;
-  padding: 8px 12px;
-  border-radius: 8px;
-  width: max-content;
-  max-width: 260px;
-  white-space: normal;
-  z-index: 1000;
-  pointer-events: none;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-}
-
-.attribute-info[data-tooltip]:hover::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + 2px);
-  transform: translateX(-50%);
-  border: 6px solid transparent;
-  border-top-color: var(--ink, #1b2533);
-  z-index: 1000;
-  pointer-events: none;
 }
 
 .attribute-row wa-radio-group {
