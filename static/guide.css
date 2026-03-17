@@ -11,7 +11,7 @@ body {
   margin: 0 auto;
 }
 
-.guide-toc wa-tooltip {
+wa-tooltip {
   --max-width: 40ch;
 }
 

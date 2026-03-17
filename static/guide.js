@@ -281,7 +281,7 @@ const renderDeciderBaseline = async (container) => {
   const llm = formatLlm(result) || "Language Model";
   container.innerHTML = `
     <div class="decider-card">
-      ${deciderNodeHTML({ icon: "&#x1F916;", label: "Unaligned Language Model", modelName: llm, description: BASELINE_DESC })}
+      ${deciderNodeHTML({ icon: "&#x1F916;", label: "Baseline Decision Maker", modelName: llm, description: BASELINE_DESC })}
     </div>
   `;
   wireDeciderTooltips(container);
@@ -310,7 +310,7 @@ const renderValuesWithDecider = async (container) => {
         <div class="attribute-picker" data-simple-picker></div>
       </wa-details>
       <div class="values-adm-stem"></div>
-      ${deciderNodeHTML({ icon: "&#x1F9ED;", label: "Value Aligned Decider", modelName: alignedModelName(result), className: "aligned-decider-node", description: ALIGNED_DESC })}
+      ${deciderNodeHTML({ icon: "&#x1F9ED;", label: "Value Aligned Decision Maker", modelName: alignedModelName(result), className: "aligned-decider-node", description: ALIGNED_DESC })}
     </div>
   `;
   container
@@ -387,7 +387,7 @@ const renderAlignedDecider = async (container) => {
   const result = await decide(state.scenarioId, "aligned", state.values);
   container.innerHTML = `
     <div class="aligned-decider-card">
-      ${deciderNodeHTML({ icon: "&#x1F9ED;", label: "Value Aligned Decider", modelName: alignedModelName(result), className: "aligned-decider-node", description: ALIGNED_DESC })}
+      ${deciderNodeHTML({ icon: "&#x1F9ED;", label: "Value Aligned Decision Maker", modelName: alignedModelName(result), className: "aligned-decider-node", description: ALIGNED_DESC })}
     </div>
   `;
   wireDeciderTooltips(container);
@@ -592,10 +592,10 @@ const renderComparisonFlow = async (container, variant) => {
       <svg class="comparison-crossarm" data-comp-crossarm></svg>
       <div class="comparison-flow-deciders">
         <div class="comparison-decider-cell" data-comp-baseline-decider>
-          ${deciderNodeHTML({ icon: "&#x1F916;", label: "Unaligned Language Model", modelName: baselineLlm, description: BASELINE_DESC })}
+          ${deciderNodeHTML({ icon: "&#x1F916;", label: "Baseline Decision Maker", modelName: baselineLlm, description: BASELINE_DESC })}
         </div>
         <div class="comparison-decider-cell" data-comp-aligned-decider>
-          ${deciderNodeHTML({ icon: "&#x1F9ED;", label: "Value Aligned Decider", modelName: alignedModelName(aligned), className: "aligned-decider-node", description: ALIGNED_DESC })}
+          ${deciderNodeHTML({ icon: "&#x1F9ED;", label: "Value Aligned Decision Maker", modelName: alignedModelName(aligned), className: "aligned-decider-node", description: ALIGNED_DESC })}
         </div>
       </div>
       <div class="comparison-flow-stems">
