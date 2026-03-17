@@ -91,7 +91,7 @@ const STEPS = [
     heading: "Aligning AI with Values",
     subtitle:
       "AI-powered decision makers carry bias from their training.<br>The ALIGN System steers AIs to weigh trade-offs using your values.",
-    zones: {},
+    zones: { "intro-pillars": true },
   },
   {
     id: "scenario",
@@ -796,6 +796,7 @@ const renderZone = async (zoneId, variant) => {
     case "comparison":
       await renderComparisonFlow(zone, variant);
       break;
+    case "intro-pillars":
     case "learn-more":
       break;
   }

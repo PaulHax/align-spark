@@ -100,6 +100,68 @@ wa-tooltip {
   box-shadow: 0 0 0 3px var(--accent-light);
 }
 
+/* Intro pillars */
+
+.intro-pillars {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.intro-pillar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pillar-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pillar-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.pillar-title {
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0;
+}
+
+.pillar-desc {
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--muted);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .intro-pillars {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .intro-pillars {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Viewport */
 
 .guide-viewport {
