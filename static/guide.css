@@ -11,6 +11,10 @@ body {
   margin: 0 auto;
 }
 
+.guide-toc wa-tooltip {
+  --max-width: 40ch;
+}
+
 .guide-toc {
   align-self: start;
   position: sticky;
@@ -27,6 +31,15 @@ body {
   align-items: flex-start;
   gap: 0;
   position: relative;
+}
+
+.toc-section-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  padding: 4px 0 2px 0;
+  white-space: nowrap;
 }
 
 .toc-pill {
@@ -59,15 +72,12 @@ body {
   transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
 }
 
-.toc-pill:not(:last-child) .toc-dot::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: calc(100% + 2px);
-  width: 2px;
-  height: calc(100% + 20px);
-  background: var(--border);
-  transform: translateX(-50%);
+.toc-section {
+  padding-left: 22px;
+}
+
+.toc-section > .toc-section-label {
+  margin-left: -22px;
 }
 
 .toc-pill:hover {
