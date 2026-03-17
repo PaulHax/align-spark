@@ -301,7 +301,8 @@ const renderDecisionBaseline = async (container) => {
   });
 };
 
-const renderValuesWithDecider = (container) => {
+const renderValuesWithDecider = async (container) => {
+  const result = await decide(state.scenarioId, "aligned", state.values);
   container.innerHTML = `
     <div class="values-centered-flow">
       <div class="flow-input-label">Input Values</div>
@@ -309,7 +310,7 @@ const renderValuesWithDecider = (container) => {
         <div class="attribute-picker" data-simple-picker></div>
       </wa-details>
       <div class="values-adm-stem"></div>
-      ${deciderNodeHTML({ icon: "&#x1F9ED;", label: "Value Aligned Decider", modelName: "Alignment Algorithm", className: "aligned-decider-node", description: ALIGNED_DESC })}
+      ${deciderNodeHTML({ icon: "&#x1F9ED;", label: "Value Aligned Decider", modelName: alignedModelName(result), className: "aligned-decider-node", description: ALIGNED_DESC })}
     </div>
   `;
   container
