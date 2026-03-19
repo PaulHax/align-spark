@@ -104,8 +104,8 @@ wa-tooltip {
 
 .intro-pillars {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
   width: 100%;
   max-width: 960px;
   margin: 0 auto;
@@ -116,6 +116,12 @@ wa-tooltip {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.intro-pillar .pillar-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .pillar-icon {
