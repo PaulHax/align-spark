@@ -1,6 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap");
 @import url("https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.2.1/dist-cdn/styles/webawesome.css");
 
+wa-tooltip:not(:defined) {
+  display: none;
+}
+
 :root {
   color-scheme: light;
   --kitware-blue: #0b4a6e;
